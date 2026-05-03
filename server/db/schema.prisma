@@ -1,0 +1,70 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+}
+
+model User {
+  id           Int       @id @default(autoincrement())
+  username     String    @unique
+  email        String    @unique
+  phone        String?
+  passwordHash String
+  isVerified   Boolean   @default(false)
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+  blogs        Blog[]
+  comments     Comment[]
+}
+
+model Category {
+  id          Int      @id @default(autoincrement())
+  name        String   @unique
+  description String?
+  createdAt   DateTime @default(now())
+  blogs       Blog[]
+}
+
+model Blog {
+  id         Int       @id @default(autoincrement())
+  title      String
+  slug       String    @unique
+  content    String
+  status     String    @default("draft")
+  creatorId  Int
+  categoryId Int?
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+  creator    User      @relation(fields: [creatorId], references: [id])
+  category   Category? @relation(fields: [categoryId], references: [id])
+  comments   Comment[]
+  media      Media[]
+
+  @@index([status])
+  @@index([createdAt])
+}
+
+model Comment {
+  id              Int       @id @default(autoincrement())
+  blogId          Int
+  userId          Int
+  comment         String
+  parentCommentId Int?
+  createdAt       DateTime  @default(now())
+  blog            Blog      @relation(fields: [blogId], references: [id])
+  user            User      @relation(fields: [userId], references: [id])
+  parentComment   Comment?  @relation("CommentReplies", fields: [parentCommentId], references: [id])
+  replies         Comment[] @relation("CommentReplies")
+}
+
+model Media {
+  id         Int      @id @default(autoincrement())
+  blogId     Int
+  mediaUrl   String
+  mediaType  String?
+  altText    String?
+  uploadedAt DateTime @default(now())
+  blog       Blog     @relation(fields: [blogId], references: [id])
+}
