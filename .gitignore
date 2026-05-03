@@ -1,0 +1,17 @@
+# Python
+*__pycache__/
+*.py[c|o|d]
+
+# Environment Variables
+.env
+venv/
+
+# Database Variables
+db.sqlite3
+migrations/
+Database.session.sql
+
+# Etc
+.vscode
+
+.venv
