@@ -1,5 +1,7 @@
 import "server-only";
 import { prisma } from "@/server/db/prisma";
+import { ADMIN_PERMISSIONS } from "@/server/auth/admin-permissions";
+import { notifyAdminsWithPermission } from "@/server/services/notification-service";
 import { SAFETY_REPORT_PRIORITIES, SAFETY_REPORT_TYPES, type SafetyReportPriority, type SafetyReportType } from "@/features/admin/data/report-management";
 
 function normalizeText(value: string, maxLength = 2000) {
@@ -28,7 +30,7 @@ export async function createSafetyReport(input: {
   const type = ensureReportType(input.type);
   const priority = ensurePriority(input.priority);
 
-  return prisma.$transaction(async (tx) => {
+  const report = await prisma.$transaction(async (tx) => {
     const report = await tx.safetyReport.create({
       data: {
         reporterUserId: input.reporterUserId ?? null,
@@ -54,5 +56,27 @@ export async function createSafetyReport(input: {
     });
 
     return report;
+  });
+
+  if (type === "AI_RESPONSE_REPORT" || type === "SAFETY_INCIDENT" || priority === "HIGH" || priority === "CRITICAL") {
+    await notifyAdminsAboutSafetyReport({ reportId: report.id, type, title: report.title, priority }).catch((error) =>
+      console.error("Failed to notify admins about safety report", error)
+    );
+  }
+
+  return report;
+}
+
+export async function notifyAdminsAboutSafetyReport(input: { reportId: number; type: SafetyReportType | string; title: string; priority?: SafetyReportPriority | string }) {
+  const priority = ensurePriority(input.priority);
+  const notificationPriority = priority === "CRITICAL" ? "CRITICAL" : priority === "HIGH" ? "HIGH" : "NORMAL";
+
+  return notifyAdminsWithPermission(ADMIN_PERMISSIONS.MANAGE_REPORTS, {
+    type: input.type === "AI_RESPONSE_REPORT" ? "AI_RESPONSE_REPORTED" : "SAFETY_REPORT_SUBMITTED",
+    title: input.type === "AI_RESPONSE_REPORT" ? "AI response report submitted" : "Safety report submitted",
+    message: `${input.title} requires review in the safety center.`,
+    priority: notificationPriority,
+    targetType: "SafetyReport",
+    targetId: input.reportId
   });
 }

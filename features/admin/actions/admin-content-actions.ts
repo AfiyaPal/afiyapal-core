@@ -8,6 +8,7 @@ import { requireAnyAdminPermission } from "@/server/auth/admin-guard";
 import { ADMIN_PERMISSIONS, hasAdminPermission } from "@/server/auth/admin-permissions";
 import { ARTICLE_CATEGORIES, ARTICLE_LANGUAGES, ARTICLE_STATUSES, MEDICAL_REVIEW_STATUSES } from "@/features/admin/data/content-management";
 import { buildAdminAuditLogData } from "@/server/services/admin-audit-log-service";
+import { notifyAdminsContentPendingReview } from "@/server/services/notification-service";
 
 type ArticleFormData = {
   title: string;
@@ -156,11 +157,17 @@ export async function submitArticleForReviewAction(formData: FormData) {
   const actor = await requireAnyAdminPermission([ADMIN_PERMISSIONS.MANAGE_CONTENT]);
   ensureCanManageContent(actor.role);
   const articleId = parseArticleId(formData);
+  const article = await prisma.blog.findUnique({ where: { id: articleId }, select: { title: true } });
+  if (!article) redirect(routes.adminContent);
 
   await prisma.blog.update({
     where: { id: articleId },
     data: { status: "PENDING_REVIEW", medicalReviewStatus: "PENDING", reviewedById: null, reviewedAt: null }
   });
+
+  await notifyAdminsContentPendingReview({ articleId, title: article.title }).catch((error) =>
+    console.error("Failed to notify medical reviewers about pending content", error)
+  );
 
   revalidatePath(routes.adminContent);
   revalidatePath(`${routes.adminContent}/${articleId}`);

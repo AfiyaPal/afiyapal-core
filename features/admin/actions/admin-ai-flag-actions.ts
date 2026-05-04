@@ -8,6 +8,7 @@ import { requireAnyAdminPermission } from "@/server/auth/admin-guard";
 import { ADMIN_PERMISSIONS } from "@/server/auth/admin-permissions";
 import { AI_FLAG_PRIORITIES, AI_FLAG_STATUSES, type AiFlagPriority, type AiFlagStatus } from "@/server/services/ai-safety-flag-service";
 import { buildAdminAuditLogData } from "@/server/services/admin-audit-log-service";
+import { notifyAdminsUrgentConsultation } from "@/server/services/notification-service";
 
 function parseFlagId(formData: FormData) {
   const flagId = Number(formData.get("flagId"));
@@ -183,6 +184,14 @@ export async function escalateAiFlagToConsultationAction(formData: FormData) {
         `Escalated from AI safety flag #${flag.id}. Category: ${flag.category}. Priority: ${flag.priority}. Reviewed by admin user #${actor.id}.`
     }
   });
+
+  if (["HIGH", "EMERGENCY"].includes(urgencyLevel)) {
+    await notifyAdminsUrgentConsultation({
+      consultationRequestId: consultation.id,
+      urgencyLevel,
+      specialty: requestedSpecialty
+    }).catch((error) => console.error("Failed to notify admins about urgent consultation", error));
+  }
 
   await Promise.all([
     prisma.aiInteractionFlag.update({

@@ -431,3 +431,37 @@ Platform setting updates and health resource changes are audit-backed through th
 - `HEALTH_RESOURCE_STATUS_CHANGED`
 
 This keeps safety-critical operational settings traceable.
+
+## Phase 16: Notifications
+
+AFIYAPAL now has a database-backed notification foundation for Stage 2 operational workflows.
+
+Notifications are stored as privacy-safe summaries in the `Notification` table. They do not store raw health conversations. Each notification records the recipient user, type, title, message, priority, target type/id, read status, and timestamp.
+
+### Admin notifications
+
+Admins are notified based on the permissions attached to their role:
+
+- Doctor Managers and Super Admins are notified when a doctor application is submitted.
+- Medical Reviewers and Super Admins are notified when a critical AI flag is created.
+- Support/Admin consultation handlers are notified when an urgent consultation request needs attention.
+- Medical Reviewers are notified when content is submitted for review.
+- Report handlers are notified when important safety reports are submitted.
+
+Admins can review their own notification history at `/admin/notifications` and mark notifications as read.
+
+### Doctor notifications
+
+Doctors receive notifications when:
+
+- Their provider verification is approved.
+- Their provider verification is rejected.
+- They are assigned a consultation request.
+
+### User notifications
+
+Users receive notifications when:
+
+- Their consultation request is assigned to a verified doctor.
+- A doctor/status update is recorded for their consultation.
+- Their safety report is resolved.

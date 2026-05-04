@@ -1,6 +1,7 @@
 import "server-only";
 import { prisma } from "@/server/db/prisma";
 import { type SymptomRiskLevel } from "@/server/services/symptom-check-logging-service";
+import { notifyAdminsAiResponseReported, notifyAdminsCriticalAiFlag } from "@/server/services/notification-service";
 
 export const AI_FLAG_STATUSES = ["OPEN", "IN_REVIEW", "RESOLVED", "ESCALATED"] as const;
 export type AiFlagStatus = (typeof AI_FLAG_STATUSES)[number];
@@ -197,19 +198,30 @@ async function createFlagIfMissing(input: {
 
   if (existing) return existing;
 
-  return prisma.aiInteractionFlag.create({
+  const priority = priorityForCategory(input.category, input.riskLevel);
+  const title = titleForCategory(input.category);
+
+  const flag = await prisma.aiInteractionFlag.create({
     data: {
       symptomCheckLogId: input.symptomCheckLogId ?? null,
       mentalHealthInteractionId: input.mentalHealthInteractionId ?? null,
       userId: input.userId ?? null,
-      title: titleForCategory(input.category),
+      title,
       summary: truncate(input.summary),
       category: input.category,
       trigger: input.trigger ?? "AUTOMATIC_RISK_RULE",
-      priority: priorityForCategory(input.category, input.riskLevel),
+      priority,
       status: "OPEN"
     }
   });
+
+  if (priority === "CRITICAL") {
+    await notifyAdminsCriticalAiFlag({ flagId: flag.id, title, category: input.category }).catch((error) =>
+      console.error("Failed to notify admins about critical AI flag", error)
+    );
+  }
+
+  return flag;
 }
 
 export async function createAutomaticAiSafetyFlagsForSymptomCheck(input: {
@@ -297,7 +309,7 @@ export async function createUserReportedWrongAnswerFlag(input: {
   userId?: number | null;
   summary?: string | null;
 }) {
-  return createFlagIfMissing({
+  const flag = await createFlagIfMissing({
     symptomCheckLogId: input.symptomCheckLogId ?? null,
     mentalHealthInteractionId: input.mentalHealthInteractionId ?? null,
     userId: input.userId ?? null,
@@ -306,4 +318,10 @@ export async function createUserReportedWrongAnswerFlag(input: {
     riskLevel: "MEDIUM",
     summary: input.summary ?? "A user reported that an AI health response may be wrong or unsafe."
   });
+
+  await notifyAdminsAiResponseReported({ flagId: flag.id, userId: input.userId }).catch((error) =>
+    console.error("Failed to notify admins about reported AI response", error)
+  );
+
+  return flag;
 }

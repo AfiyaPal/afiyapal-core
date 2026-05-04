@@ -7,6 +7,7 @@ import { requireAnyAdminPermission } from "@/server/auth/admin-guard";
 import { ADMIN_PERMISSIONS } from "@/server/auth/admin-permissions";
 import { CONSULTATION_STATUSES, type ConsultationStatus } from "@/features/admin/data/consultation-management";
 import { buildAdminAuditLogData } from "@/server/services/admin-audit-log-service";
+import { notifyDoctorAssignedConsultation, notifyUserConsultationAssigned, notifyUserDoctorResponded } from "@/server/services/notification-service";
 
 function parseRequestId(formData: FormData) {
   const requestId = Number(formData.get("requestId"));
@@ -38,7 +39,7 @@ function readOptionalText(value: FormDataEntryValue | null, maxLength = 1600) {
 async function ensureConsultationExists(requestId: number) {
   const request = await prisma.consultationRequest.findUnique({
     where: { id: requestId },
-    select: { id: true, status: true, assignedDoctorId: true }
+    select: { id: true, status: true, assignedDoctorId: true, urgencyLevel: true }
   });
 
   if (!request) throw new Error("Consultation request not found.");
@@ -51,13 +52,16 @@ export async function assignConsultationDoctorAction(formData: FormData) {
   const doctorId = parseOptionalDoctorId(formData.get("assignedDoctorId"));
   const existing = await ensureConsultationExists(requestId);
 
+  let assignedDoctorName: string | null = null;
+
   if (doctorId) {
     const doctor = await prisma.doctorProfile.findFirst({
       where: { id: doctorId, verificationStatus: "VERIFIED" },
-      select: { id: true }
+      select: { id: true, fullName: true }
     });
 
     if (!doctor) throw new Error("Only verified doctors can be assigned to consultation requests.");
+    assignedDoctorName = doctor.fullName;
   }
 
   await prisma.$transaction([
@@ -80,6 +84,13 @@ export async function assignConsultationDoctorAction(formData: FormData) {
       })
     })
   ]);
+
+  if (doctorId) {
+    await Promise.allSettled([
+      notifyDoctorAssignedConsultation({ doctorProfileId: doctorId, consultationRequestId: requestId, urgencyLevel: existing.urgencyLevel }),
+      notifyUserConsultationAssigned({ consultationRequestId: requestId, doctorName: assignedDoctorName })
+    ]);
+  }
 
   revalidatePath(routes.adminConsultations);
   revalidatePath(routes.adminAuditLogs);
@@ -107,6 +118,12 @@ export async function updateConsultationStatusAction(formData: FormData) {
       })
     })
   ]);
+
+  if (["ASSIGNED", "ACCEPTED_BY_DOCTOR", "COMPLETED", "CANCELLED"].includes(status)) {
+    await notifyUserDoctorResponded({ consultationRequestId: requestId, status }).catch((error) =>
+      console.error("Failed to notify user about consultation status update", error)
+    );
+  }
 
   revalidatePath(routes.adminConsultations);
   revalidatePath(routes.adminAuditLogs);

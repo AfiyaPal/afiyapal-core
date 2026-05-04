@@ -6,6 +6,7 @@ import { prisma } from "@/server/db/prisma";
 import { requireAnyAdminPermission } from "@/server/auth/admin-guard";
 import { ADMIN_PERMISSIONS } from "@/server/auth/admin-permissions";
 import { buildAdminAuditLogData } from "@/server/services/admin-audit-log-service";
+import { notifyDoctorApproved, notifyDoctorRejected } from "@/server/services/notification-service";
 
 function parseDoctorId(formData: FormData) {
   const doctorId = Number(formData.get("doctorId"));
@@ -53,6 +54,8 @@ export async function approveDoctorAction(formData: FormData) {
     })
   ]);
 
+  await notifyDoctorApproved(doctorId).catch((error) => console.error("Failed to notify approved doctor", error));
+
   revalidatePath(routes.adminDoctors);
   revalidatePath(routes.adminAuditLogs);
 }
@@ -77,6 +80,8 @@ export async function rejectDoctorAction(formData: FormData) {
       })
     })
   ]);
+
+  await notifyDoctorRejected(doctorId, reason).catch((error) => console.error("Failed to notify rejected doctor", error));
 
   revalidatePath(routes.adminDoctors);
   revalidatePath(routes.adminAuditLogs);

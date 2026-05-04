@@ -343,3 +343,23 @@ model HealthResource {
   @@index([createdAt])
 }
 
+model Notification {
+  id              Int       @id @default(autoincrement())
+  recipientUserId Int
+  type            String
+  title           String
+  message         String
+  priority        String    @default("NORMAL")
+  targetType      String?
+  targetId        String?
+  status          String    @default("UNREAD")
+  readAt          DateTime?
+  createdAt       DateTime  @default(now())
+
+  @@index([recipientUserId])
+  @@index([type])
+  @@index([priority])
+  @@index([status])
+  @@index([targetType, targetId])
+  @@index([createdAt])
+}

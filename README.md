@@ -297,3 +297,27 @@ npx prisma generate
 npm run dev
 ```
 
+
+## Stage 2 Phase 16: Notifications
+
+Phase 16 adds a database-backed notification system for AFIYAPAL operations.
+
+New notification workflows include:
+
+- Admin alerts for doctor applications, critical AI flags, urgent consultations, reported AI responses, content pending medical review, and important safety reports.
+- Doctor alerts for verification approval/rejection and consultation assignment.
+- User alerts for consultation assignment, consultation status updates, and resolved reports.
+
+Admins can view their notifications at:
+
+```txt
+/admin/notifications
+```
+
+After extracting this phase, run:
+
+```bash
+npx prisma db push
+npx prisma generate
+npm run dev
+```

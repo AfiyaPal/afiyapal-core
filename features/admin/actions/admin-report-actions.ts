@@ -12,6 +12,7 @@ import {
   type SafetyReportStatus
 } from "@/features/admin/data/report-management";
 import { buildAdminAuditLogData } from "@/server/services/admin-audit-log-service";
+import { notifyUserReportResolved } from "@/server/services/notification-service";
 
 function parseReportId(formData: FormData) {
   const reportId = Number(formData.get("reportId"));
@@ -104,6 +105,10 @@ export async function updateSafetyReportStatusAction(formData: FormData) {
         ]
       : [])
   ]);
+
+  if (status === "RESOLVED") {
+    await notifyUserReportResolved(reportId).catch((error) => console.error("Failed to notify reporter about resolved report", error));
+  }
 
   revalidateReport(reportId);
 }
