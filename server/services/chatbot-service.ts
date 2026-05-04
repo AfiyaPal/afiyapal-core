@@ -3,6 +3,7 @@ import { generateGeminiResponse } from "@/server/ai/gemini-client";
 import { getCurrentUser } from "@/server/auth/session";
 import { logMentalHealthInteraction, isMentalHealthCompanionMessage } from "@/server/services/mental-health-logging-service";
 import { logSymptomCheckRequest } from "@/server/services/symptom-check-logging-service";
+import { ensureAssistantSafetyGuidance } from "@/server/services/ai-assistant-safety-service";
 
 const SYSTEM_PROMPT = `You are AfiyaPal, a careful AI health assistant serving underserved communities in Kenya.
 Provide evidence-aware first-step guidance, explain when professional care is needed, and keep language clear.
@@ -12,7 +13,8 @@ Always end with: "This is informational guidance. For medical emergencies, visit
 
 export async function generateChatbotReply(userMessage: string) {
   const currentUser = await getCurrentUser();
-  const reply = await generateGeminiResponse({ systemPrompt: SYSTEM_PROMPT, userMessage });
+  const rawReply = await generateGeminiResponse({ systemPrompt: SYSTEM_PROMPT, userMessage });
+  const reply = ensureAssistantSafetyGuidance({ message: userMessage, aiResponse: rawReply });
 
   const logPayload = {
     userId: currentUser?.id ?? null,

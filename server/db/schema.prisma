@@ -291,3 +291,20 @@ model AdminAuditLog {
   @@index([targetId])
   @@index([createdAt])
 }
+
+
+model AdminSensitiveHealthAccessGrant {
+  id          Int      @id @default(autoincrement())
+  adminUserId Int
+  targetType  String
+  targetId    String
+  reason      String
+  expiresAt   DateTime
+  createdAt   DateTime @default(now())
+
+  @@index([adminUserId])
+  @@index([targetType])
+  @@index([targetId])
+  @@index([expiresAt])
+  @@index([createdAt])
+}

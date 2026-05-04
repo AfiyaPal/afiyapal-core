@@ -4,7 +4,13 @@ import { notFound } from "next/navigation";
 import { routes } from "@/lib/routes";
 import { AdminSectionHeader } from "@/features/admin/components/admin-section-header";
 import { AdminStatusBadge } from "@/features/admin/components/admin-status-badge";
+import { SensitiveHealthAccessPanel } from "@/features/admin/components/sensitive-health-access-panel";
 import { getAdminSymptomCheckDetail } from "@/features/admin/queries/get-admin-symptom-checks";
+import { ADMIN_PERMISSIONS, hasAdminPermission } from "@/server/auth/admin-permissions";
+import { hasActiveSensitiveHealthAccess } from "@/server/services/sensitive-health-access-service";
+import type { UserRole } from "@/server/auth/roles";
+
+type AdminUserContext = { id: number; role: UserRole | string; username: string; email: string; status: string };
 
 function formatDateTime(date: Date) {
   return new Intl.DateTimeFormat("en-US", { dateStyle: "full", timeStyle: "short" }).format(date);
@@ -38,11 +44,23 @@ function DetailCard({ title, children }: { title: string; children: ReactNode })
   );
 }
 
-export async function AdminSymptomCheckDetailPage({ logId }: { logId: number }) {
+export async function AdminSymptomCheckDetailPage({
+  logId,
+  adminUser,
+  sensitiveRequested
+}: {
+  logId: number;
+  adminUser: AdminUserContext;
+  sensitiveRequested?: boolean;
+}) {
   const data = await getAdminSymptomCheckDetail(logId);
   if (!data) notFound();
 
   const { log, user, flags } = data;
+  const canRequestSensitiveAccess = hasAdminPermission(adminUser.role, ADMIN_PERMISSIONS.VIEW_SENSITIVE_HEALTH_DETAILS);
+  const activeGrant = sensitiveRequested
+    ? await hasActiveSensitiveHealthAccess({ adminUserId: adminUser.id, targetType: "SymptomCheckLog", targetId: log.id })
+    : null;
 
   return (
     <div className="space-y-6">
@@ -50,11 +68,16 @@ export async function AdminSymptomCheckDetailPage({ logId }: { logId: number }) 
         <AdminSectionHeader
           eyebrow="Privacy-safe symptom check summary"
           title={`Symptom check #${log.id}`}
-          description="This page shows summarized health content only. Full raw health conversations are intentionally not exposed by default."
+          description="Admin tables and default detail views avoid raw/private health content. Sensitive summaries require Medical Reviewer or Super Admin access, a reason, and an audit log entry."
         />
         <Link href={routes.adminSymptomChecks} className="rounded-full border border-emerald-100 px-4 py-2 text-sm font-black text-slate-700 transition hover:border-brand-600 hover:text-brand-700">
           Back to logs
         </Link>
+      </div>
+
+      <div className="rounded-3xl border border-amber-200 bg-amber-50 p-5 text-sm leading-6 text-amber-900">
+        <p className="font-black text-amber-950">Privacy and safety rule</p>
+        <p className="mt-1">AFIYAPAL stores a summarized symptom-check record for safety review. Full raw health conversations are not stored by default. Viewing the sensitive summary below requires a reason and is audited.</p>
       </div>
 
       <div className="grid gap-4 md:grid-cols-4">
@@ -78,51 +101,59 @@ export async function AdminSymptomCheckDetailPage({ logId }: { logId: number }) 
 
       <div className="grid gap-6 xl:grid-cols-[1.4fr_0.8fr]">
         <div className="space-y-6">
-          <DetailCard title="Symptoms submitted summary">
-            <p>{log.symptomsSummary}</p>
+          <DetailCard title="Safe overview">
+            <dl className="grid gap-4 md:grid-cols-2">
+              <div><dt className="font-black text-slate-950">Category</dt><dd>{log.symptomCategory ?? "General symptoms"}</dd></div>
+              <div><dt className="font-black text-slate-950">Recommended next step</dt><dd>{log.recommendedNextStep || "No next step was recorded."}</dd></div>
+            </dl>
           </DetailCard>
-          <DetailCard title="AI response summary">
-            <p>{log.aiResponseSummary || "No AI response summary was captured."}</p>
-          </DetailCard>
-          <DetailCard title="Recommended next step">
-            <p>{log.recommendedNextStep || "No next step was recorded."}</p>
+
+          <DetailCard title="Sensitive health summary access">
+            <SensitiveHealthAccessPanel targetType="SymptomCheckLog" targetId={log.id} canRequestAccess={canRequestSensitiveAccess} activeGrant={activeGrant}>
+              <div className="space-y-4">
+                <div className="rounded-2xl bg-slate-50 p-4">
+                  <p className="font-black text-slate-950">Symptoms submitted summary</p>
+                  <p className="mt-2">{log.symptomsSummary}</p>
+                </div>
+                <div className="rounded-2xl bg-slate-50 p-4">
+                  <p className="font-black text-slate-950">AI response summary</p>
+                  <p className="mt-2">{log.aiResponseSummary || "No AI response summary was captured."}</p>
+                </div>
+              </div>
+            </SensitiveHealthAccessPanel>
           </DetailCard>
         </div>
 
         <div className="space-y-6">
           <DetailCard title="Request metadata">
             <dl className="space-y-3">
-              <div><dt className="font-black text-slate-950">Category</dt><dd>{log.symptomCategory ?? "General symptoms"}</dd></div>
               <div><dt className="font-black text-slate-950">Created</dt><dd>{formatDateTime(log.createdAt)}</dd></div>
               <div><dt className="font-black text-slate-950">Updated</dt><dd>{formatDateTime(log.updatedAt)}</dd></div>
             </dl>
           </DetailCard>
 
-          <DetailCard title="User">
+          <DetailCard title="User context">
             {user ? (
-              <div>
-                <Link href={`${routes.adminUsers}/${user.id}`} className="font-black text-slate-950 transition hover:text-brand-700">{user.username}</Link>
-                <p className="mt-1 text-slate-500">{user.email}</p>
-                <p className="mt-2 text-xs font-bold uppercase tracking-wide text-slate-500">{user.role} · {user.status}</p>
-              </div>
-            ) : (
-              <p>Guest request or user no longer available.</p>
-            )}
+              <dl className="space-y-3">
+                <div><dt className="font-black text-slate-950">Name</dt><dd><Link href={`${routes.adminUsers}/${user.id}`} className="text-brand-700 hover:text-brand-600">{user.username}</Link></dd></div>
+                <div><dt className="font-black text-slate-950">Email</dt><dd>{user.email}</dd></div>
+                <div><dt className="font-black text-slate-950">Preferred language</dt><dd>{languageLabel(user.preferredLanguage)}</dd></div>
+                <div><dt className="font-black text-slate-950">Account status</dt><dd>{user.status}</dd></div>
+              </dl>
+            ) : <p className="text-slate-500">This log is linked to a guest or unavailable user.</p>}
           </DetailCard>
 
-          <DetailCard title="Related AI flags">
-            {flags.length > 0 ? (
+          <DetailCard title="Linked AI safety flags">
+            {flags.length ? (
               <div className="space-y-3">
                 {flags.map((flag) => (
-                  <div key={flag.id} className="rounded-2xl border border-emerald-100 p-3">
-                    <Link href={`${routes.adminAiFlags}/${flag.id}`} className="font-black text-slate-950 transition hover:text-brand-700">{flag.title}</Link>
-                    <p className="mt-1 text-xs font-bold uppercase tracking-wide text-slate-500">{flag.category} · {flag.priority} · {flag.status}</p>
-                  </div>
+                  <Link key={flag.id} href={`${routes.adminAiFlags}/${flag.id}`} className="block rounded-2xl border border-emerald-100 p-4 transition hover:border-brand-600">
+                    <p className="font-black text-slate-950">{flag.title}</p>
+                    <p className="mt-1 text-xs text-slate-500">{flag.category} · {flag.priority} · {flag.status}</p>
+                  </Link>
                 ))}
               </div>
-            ) : (
-              <p>No AI safety flags are attached to this symptom check yet.</p>
-            )}
+            ) : <p className="text-slate-500">No AI safety flags are linked to this symptom check.</p>}
           </DetailCard>
         </div>
       </div>

@@ -16,9 +16,9 @@ export const MENTAL_HEALTH_MOOD_CATEGORIES = [
 ] as const;
 export type MentalHealthMoodCategory = (typeof MENTAL_HEALTH_MOOD_CATEGORIES)[number];
 
-const MAX_INTERACTION_SUMMARY_LENGTH = 900;
-const MAX_AI_SUMMARY_LENGTH = 900;
-const MAX_RESOURCE_SUMMARY_LENGTH = 900;
+const MAX_INTERACTION_SUMMARY_LENGTH = 700;
+const MAX_AI_SUMMARY_LENGTH = 700;
+const MAX_RESOURCE_SUMMARY_LENGTH = 700;
 
 function compact(value: string) {
   return value.replace(/\s+/g, " ").trim();

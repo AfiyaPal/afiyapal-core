@@ -278,3 +278,7 @@ npx prisma db push
 npx prisma generate
 npm run dev
 ```
+
+### Phase 14 privacy and safety notes
+
+The admin system now enforces privacy-forward health review rules. AI assistant flows show medical disclaimers and critical-risk emergency guidance. Admin tables minimize health data. Sensitive health summaries are hidden by default and can only be viewed by a Super Admin or Medical Reviewer after entering a reason. That access is temporary and recorded in the Super Admin audit log. The system intentionally avoids storing full raw health conversations by default.

@@ -13,7 +13,8 @@ export const ADMIN_AUDIT_ACTIONS = [
   "AI_FLAG_ESCALATED",
   "CONSULTATION_ASSIGNED",
   "CONSULTATION_STATUS_CHANGED",
-  "REPORT_RESOLVED"
+  "REPORT_RESOLVED",
+  "SENSITIVE_HEALTH_DETAILS_VIEWED"
 ] as const;
 
 export type AdminAuditAction = (typeof ADMIN_AUDIT_ACTIONS)[number];
@@ -24,7 +25,9 @@ export const ADMIN_AUDIT_TARGET_TYPES = [
   "Blog",
   "AiInteractionFlag",
   "ConsultationRequest",
-  "SafetyReport"
+  "SafetyReport",
+  "SymptomCheckLog",
+  "MentalHealthInteraction"
 ] as const;
 
 export type AdminAuditTargetType = (typeof ADMIN_AUDIT_TARGET_TYPES)[number];
@@ -44,7 +47,8 @@ export const adminAuditActionLabels: Record<AdminAuditAction, string> = {
   AI_FLAG_ESCALATED: "AI flag escalated",
   CONSULTATION_ASSIGNED: "Consultation assigned",
   CONSULTATION_STATUS_CHANGED: "Consultation status changed",
-  REPORT_RESOLVED: "Report resolved"
+  REPORT_RESOLVED: "Report resolved",
+  SENSITIVE_HEALTH_DETAILS_VIEWED: "Sensitive health details viewed"
 };
 
 export const adminAuditTargetLabels: Record<AdminAuditTargetType, string> = {
@@ -53,5 +57,7 @@ export const adminAuditTargetLabels: Record<AdminAuditTargetType, string> = {
   Blog: "Article",
   AiInteractionFlag: "AI safety flag",
   ConsultationRequest: "Consultation request",
-  SafetyReport: "Safety report"
+  SafetyReport: "Safety report",
+  SymptomCheckLog: "Symptom check log",
+  MentalHealthInteraction: "Mental health interaction"
 };

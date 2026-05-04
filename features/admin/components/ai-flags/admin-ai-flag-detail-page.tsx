@@ -3,9 +3,15 @@ import Link from "next/link";
 import { routes } from "@/lib/routes";
 import { AdminStatusBadge } from "@/features/admin/components/admin-status-badge";
 import { AdminSectionHeader } from "@/features/admin/components/admin-section-header";
+import { SensitiveHealthAccessPanel } from "@/features/admin/components/sensitive-health-access-panel";
 import { getAdminAiFlagDetail } from "@/features/admin/queries/get-admin-ai-flags";
 import { assignAiFlagReviewerAction, escalateAiFlagToConsultationAction, updateAiFlagNotesAction, updateAiFlagStatusAction } from "@/features/admin/actions/admin-ai-flag-actions";
 import { AI_FLAG_PRIORITIES, AI_FLAG_STATUSES } from "@/server/services/ai-safety-flag-service";
+import { ADMIN_PERMISSIONS, hasAdminPermission } from "@/server/auth/admin-permissions";
+import { hasActiveSensitiveHealthAccess } from "@/server/services/sensitive-health-access-service";
+import type { UserRole } from "@/server/auth/roles";
+
+type AdminUserContext = { id: number; role: UserRole | string; username: string; email: string; status: string };
 
 function formatDateTime(date: Date | null | undefined) {
   if (!date) return "Not set";
@@ -31,6 +37,13 @@ function priorityTone(priority: string) {
   return "slate" as const;
 }
 
+function riskTone(riskLevel: string) {
+  if (riskLevel === "EMERGENCY") return "red" as const;
+  if (riskLevel === "HIGH") return "amber" as const;
+  if (riskLevel === "MEDIUM") return "blue" as const;
+  return "green" as const;
+}
+
 function DetailCard({ title, children }: { title: string; children: ReactNode }) {
   return <section className="rounded-3xl border border-emerald-100 bg-white p-6 shadow-sm"><h2 className="text-lg font-black text-slate-950">{title}</h2><div className="mt-4 space-y-4 text-sm leading-6 text-slate-700">{children}</div></section>;
 }
@@ -39,7 +52,15 @@ function Field({ label, value }: { label: string; value: ReactNode }) {
   return <div><p className="text-xs font-black uppercase tracking-wide text-slate-400">{label}</p><div className="mt-1 font-semibold text-slate-800">{value}</div></div>;
 }
 
-export async function AdminAiFlagDetailPage({ flagId }: { flagId: number }) {
+export async function AdminAiFlagDetailPage({
+  flagId,
+  adminUser,
+  sensitiveRequested
+}: {
+  flagId: number;
+  adminUser: AdminUserContext;
+  sensitiveRequested?: boolean;
+}) {
   const data = await getAdminAiFlagDetail(flagId);
 
   if (!data) {
@@ -53,13 +74,17 @@ export async function AdminAiFlagDetailPage({ flagId }: { flagId: number }) {
   }
 
   const { flag, user, assignedReviewer, symptomCheck, mentalHealthInteraction, consultation, eligibleReviewers } = data;
+  const canRequestSensitiveAccess = hasAdminPermission(adminUser.role, ADMIN_PERMISSIONS.VIEW_SENSITIVE_HEALTH_DETAILS);
+  const activeGrant = sensitiveRequested
+    ? await hasActiveSensitiveHealthAccess({ adminUserId: adminUser.id, targetType: "AiInteractionFlag", targetId: flag.id })
+    : null;
 
   return (
     <div className="space-y-6">
       <div className="rounded-3xl border border-emerald-100 bg-white p-6 shadow-sm">
         <Link href={routes.adminAiFlags} className="text-sm font-bold text-brand-700 hover:text-brand-600">← Back to AI flags</Link>
         <div className="mt-6 flex flex-wrap items-start justify-between gap-4">
-          <AdminSectionHeader eyebrow="AI safety review" title={flag.title} description="This page shows a privacy-safe summary for review. It avoids exposing raw full conversations by default while still giving reviewers enough context to act." />
+          <AdminSectionHeader eyebrow="AI safety review" title={flag.title} description="Default review context is minimized. Sensitive health summaries require Medical Reviewer or Super Admin access, a reason, and an audit log entry." />
           <div className="flex flex-wrap gap-2">
             <AdminStatusBadge tone={priorityTone(flag.priority)}>{flag.priority}</AdminStatusBadge>
             <AdminStatusBadge tone={statusTone(flag.status)}>{label(flag.status)}</AdminStatusBadge>
@@ -69,7 +94,7 @@ export async function AdminAiFlagDetailPage({ flagId }: { flagId: number }) {
 
       <div className="grid gap-6 xl:grid-cols-[1.1fr_0.9fr]">
         <div className="space-y-6">
-          <DetailCard title="Flag summary">
+          <DetailCard title="Flag overview">
             <div className="grid gap-4 md:grid-cols-2">
               <Field label="Category" value={label(flag.category)} />
               <Field label="Trigger" value={label(flag.trigger)} />
@@ -78,42 +103,53 @@ export async function AdminAiFlagDetailPage({ flagId }: { flagId: number }) {
               <Field label="Resolved" value={formatDateTime(flag.resolvedAt)} />
               <Field label="Reviewer" value={assignedReviewer ? `${assignedReviewer.username} (${assignedReviewer.role})` : "Unassigned"} />
             </div>
-            {flag.summary ? <p className="rounded-2xl bg-emerald-50 p-4 text-slate-700">{flag.summary}</p> : null}
+            <p className="rounded-2xl bg-emerald-50 p-4 text-slate-700">Sensitive flag summaries are hidden by default. Request sensitive access below when medical review requires more context.</p>
           </DetailCard>
 
-          <DetailCard title="Privacy-safe symptom check context">
-            {symptomCheck ? (
-              <div className="space-y-4">
-                <div className="grid gap-4 md:grid-cols-2">
-                  <Field label="Language" value={symptomCheck.language === "sw" ? "Swahili" : "English"} />
-                  <Field label="Symptom category" value={symptomCheck.symptomCategory ?? "General symptoms"} />
-                  <Field label="Risk level" value={<AdminStatusBadge tone={symptomCheck.riskLevel === "EMERGENCY" ? "red" : symptomCheck.riskLevel === "HIGH" ? "amber" : symptomCheck.riskLevel === "MEDIUM" ? "blue" : "green"}>{symptomCheck.riskLevel}</AdminStatusBadge>} />
-                  <Field label="Escalation suggested" value={symptomCheck.escalationSuggested ? "Yes" : "No"} />
-                </div>
-                <Field label="Symptoms summary" value={<p className="rounded-2xl bg-slate-50 p-4 font-medium leading-7 text-slate-700">{symptomCheck.symptomsSummary}</p>} />
-                <Field label="AI response summary" value={<p className="rounded-2xl bg-slate-50 p-4 font-medium leading-7 text-slate-700">{symptomCheck.aiResponseSummary ?? "No AI summary stored."}</p>} />
-                <Field label="Recommended next step" value={symptomCheck.recommendedNextStep ?? "No next step stored."} />
-                <Link href={`${routes.adminSymptomChecks}/${symptomCheck.id}`} className="inline-flex rounded-full border border-emerald-100 px-4 py-2 text-sm font-black text-slate-700 transition hover:border-brand-600 hover:text-brand-700">Open symptom-check summary</Link>
+          <DetailCard title="Sensitive health context access">
+            <SensitiveHealthAccessPanel targetType="AiInteractionFlag" targetId={flag.id} canRequestAccess={canRequestSensitiveAccess} activeGrant={activeGrant}>
+              <div className="space-y-6">
+                {flag.summary ? (
+                  <div className="rounded-2xl bg-emerald-50 p-4">
+                    <p className="font-black text-slate-950">Flag summary</p>
+                    <p className="mt-2">{flag.summary}</p>
+                  </div>
+                ) : null}
+
+                {symptomCheck ? (
+                  <div className="space-y-4 rounded-2xl bg-slate-50 p-4">
+                    <p className="font-black text-slate-950">Symptom-check context</p>
+                    <div className="grid gap-4 md:grid-cols-2">
+                      <Field label="Language" value={symptomCheck.language === "sw" ? "Swahili" : "English"} />
+                      <Field label="Symptom category" value={symptomCheck.symptomCategory ?? "General symptoms"} />
+                      <Field label="Risk level" value={<AdminStatusBadge tone={riskTone(symptomCheck.riskLevel)}>{symptomCheck.riskLevel}</AdminStatusBadge>} />
+                      <Field label="Escalation suggested" value={symptomCheck.escalationSuggested ? "Yes" : "No"} />
+                    </div>
+                    <Field label="Symptoms summary" value={<p className="rounded-2xl bg-white p-4 font-medium leading-7 text-slate-700">{symptomCheck.symptomsSummary}</p>} />
+                    <Field label="AI response summary" value={<p className="rounded-2xl bg-white p-4 font-medium leading-7 text-slate-700">{symptomCheck.aiResponseSummary ?? "No AI summary stored."}</p>} />
+                    <Field label="Recommended next step" value={symptomCheck.recommendedNextStep ?? "No next step stored."} />
+                    <Link href={`${routes.adminSymptomChecks}/${symptomCheck.id}`} className="inline-flex rounded-full border border-emerald-100 px-4 py-2 text-sm font-black text-slate-700 transition hover:border-brand-600 hover:text-brand-700">Open symptom-check summary</Link>
+                  </div>
+                ) : null}
+
+                {mentalHealthInteraction ? (
+                  <div className="space-y-4 rounded-2xl bg-slate-50 p-4">
+                    <p className="font-black text-slate-950">Mental health companion context</p>
+                    <div className="grid gap-4 md:grid-cols-2">
+                      <Field label="Language" value={mentalHealthInteraction.language === "sw" ? "Swahili" : "English"} />
+                      <Field label="Mood category" value={label(mentalHealthInteraction.moodCategory)} />
+                      <Field label="Risk level" value={<AdminStatusBadge tone={riskTone(mentalHealthInteraction.riskLevel)}>{mentalHealthInteraction.riskLevel}</AdminStatusBadge>} />
+                      <Field label="Escalation suggested" value={mentalHealthInteraction.escalationSuggested ? "Yes" : "No"} />
+                    </div>
+                    <Field label="Interaction summary" value={<p className="rounded-2xl bg-white p-4 font-medium leading-7 text-slate-700">{mentalHealthInteraction.interactionSummary}</p>} />
+                    <Field label="AI response summary" value={<p className="rounded-2xl bg-white p-4 font-medium leading-7 text-slate-700">{mentalHealthInteraction.aiResponseSummary ?? "No AI summary stored."}</p>} />
+                    <Field label="Support resources shown" value={<p className="rounded-2xl bg-emerald-50 p-4 font-medium leading-7 text-slate-700">{mentalHealthInteraction.supportResourcesShown ?? "No support resource summary stored."}</p>} />
+                  </div>
+                ) : null}
+
+                {!symptomCheck && !mentalHealthInteraction ? <p className="text-slate-500">No sensitive health context is attached to this flag.</p> : null}
               </div>
-            ) : <p className="text-slate-500">No symptom-check log is attached to this flag.</p>}
-          </DetailCard>
-
-
-
-          <DetailCard title="Privacy-safe mental health context">
-            {mentalHealthInteraction ? (
-              <div className="space-y-4">
-                <div className="grid gap-4 md:grid-cols-2">
-                  <Field label="Language" value={mentalHealthInteraction.language === "sw" ? "Swahili" : "English"} />
-                  <Field label="Mood category" value={label(mentalHealthInteraction.moodCategory)} />
-                  <Field label="Risk level" value={<AdminStatusBadge tone={mentalHealthInteraction.riskLevel === "EMERGENCY" ? "red" : mentalHealthInteraction.riskLevel === "HIGH" ? "amber" : mentalHealthInteraction.riskLevel === "MEDIUM" ? "blue" : "green"}>{mentalHealthInteraction.riskLevel}</AdminStatusBadge>} />
-                  <Field label="Escalation suggested" value={mentalHealthInteraction.escalationSuggested ? "Yes" : "No"} />
-                </div>
-                <Field label="Interaction summary" value={<p className="rounded-2xl bg-slate-50 p-4 font-medium leading-7 text-slate-700">{mentalHealthInteraction.interactionSummary}</p>} />
-                <Field label="AI response summary" value={<p className="rounded-2xl bg-slate-50 p-4 font-medium leading-7 text-slate-700">{mentalHealthInteraction.aiResponseSummary ?? "No AI summary stored."}</p>} />
-                <Field label="Support resources shown" value={<p className="rounded-2xl bg-emerald-50 p-4 font-medium leading-7 text-slate-700">{mentalHealthInteraction.supportResourcesShown ?? "No support resource summary stored."}</p>} />
-              </div>
-            ) : <p className="text-slate-500">No mental health companion log is attached to this flag.</p>}
+            </SensitiveHealthAccessPanel>
           </DetailCard>
 
           <DetailCard title="User context">

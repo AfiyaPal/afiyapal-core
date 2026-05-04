@@ -377,3 +377,17 @@ Only users with `VIEW_AUDIT_SENSITIVE_ADMIN_DATA` can view the audit log. In the
 ### Privacy rule
 
 Audit logs record operational deltas and summarized reasons. They do not store full raw health conversations by default.
+
+## Phase 14: Privacy and safety rules
+
+Phase 14 makes the admin system privacy-first and medically safer:
+
+- The AI assistant displays a medical disclaimer in the chat UI and appends safety guidance to AI responses.
+- Critical/emergency terms trigger additional emergency guidance telling users to seek urgent local care.
+- Admin tables continue to show operational metadata only, not full health-message bodies.
+- Symptom-check and AI-flag detail pages show safe overview metadata first.
+- Sensitive health summaries require `VIEW_SENSITIVE_HEALTH_DETAILS` permission, currently available to `SUPER_ADMIN` and `MEDICAL_REVIEWER`.
+- Before viewing sensitive health summaries, an admin must provide a reason.
+- Sensitive access grants expire after 15 minutes.
+- Every sensitive health access request writes an `AdminAuditLog` entry using `SENSITIVE_HEALTH_DETAILS_VIEWED`.
+- Full raw health conversations are not stored by default; AFIYAPAL stores bounded summaries only for safety review and care coordination.

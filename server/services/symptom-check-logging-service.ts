@@ -5,8 +5,8 @@ import { createAutomaticAiSafetyFlagsForSymptomCheck } from "@/server/services/a
 export const SYMPTOM_RISK_LEVELS = ["LOW", "MEDIUM", "HIGH", "EMERGENCY"] as const;
 export type SymptomRiskLevel = (typeof SYMPTOM_RISK_LEVELS)[number];
 
-const MAX_SYMPTOMS_SUMMARY_LENGTH = 900;
-const MAX_AI_SUMMARY_LENGTH = 900;
+const MAX_SYMPTOMS_SUMMARY_LENGTH = 700;
+const MAX_AI_SUMMARY_LENGTH = 700;
 const MAX_NEXT_STEP_LENGTH = 500;
 
 function compact(value: string) {
