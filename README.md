@@ -47,7 +47,7 @@ Core admin user story:
 
 > As an AFIYAPAL admin, I want to manage users, doctors, AI health interactions, health content, consultation requests, and safety reports so that the platform remains safe, trustworthy, and medically responsible.
 
-The first admin roles are Super Admin, Support Admin, Medical Reviewer, Doctor Manager, and Content Manager. The Stage 2 MVP dashboard modules are Overview Dashboard, User Management, Doctor Verification, Symptom Checker Logs, Flagged AI Interactions, Blog / Content Management, Consultation Requests, and Reports / Safety Center.
+The first admin roles are Super Admin, Support Admin, Medical Reviewer, Doctor Manager, and Content Manager. The Stage 2 MVP dashboard modules are Overview Dashboard, User Management, Doctor Verification, Symptom Checker Logs, Flagged AI Interactions, Blog / Content Management, Consultation Requests, Reports / Safety Center, and Super Admin Audit Logs.
 
 The source of truth for this scope lives in `features/admin/data/admin-scope.ts`, with a human-readable copy in `docs/ADMIN_SCOPE.md`. The `/admin` route currently renders the scope definition and will be expanded in later phases with route protection, permissions, and database-backed workflows.
 
@@ -252,6 +252,26 @@ Included workflow fields:
 - Action history for status, priority, assignment, and resolution updates
 
 After extracting this phase, run:
+
+```bash
+npx prisma db push
+npx prisma generate
+npm run dev
+```
+
+### Phase 13: Admin audit logs
+
+Phase 13 adds Super Admin-only governance auditing at `/admin/audit-logs`.
+
+Included:
+
+- `AdminAuditLog` Prisma model/table.
+- Read-only Super Admin audit log dashboard.
+- Filters by search, admin user, action type, target type, and date range.
+- Logging for important admin actions including user suspension/status changes, role changes, doctor approval/rejection/suspension, article publication, AI flag resolution/escalation, consultation assignment/status changes, and safety report resolution.
+- Audit entries store admin user, action type, target type, target ID, old value, new value, reason, and timestamp.
+
+After updating from Phase 12, run:
 
 ```bash
 npx prisma db push

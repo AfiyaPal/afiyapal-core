@@ -345,3 +345,35 @@ Care coordination rule:
 Phase 12 turns `/admin/reports` into a real safety operations area. It supports AI response reports, doctor reports, user reports, content reports, platform issues, and safety incidents. Each report has a status (`OPEN`, `IN_REVIEW`, `RESOLVED`, `DISMISSED`), priority (`LOW`, `MEDIUM`, `HIGH`, `CRITICAL`), assigned admin, resolution notes, and action history.
 
 The safety center is intentionally privacy-aware: the default report detail view shows summaries and operational metadata, not full private health conversations. Admin changes to status, priority, assignment, and resolution notes are recorded in `SafetyReportActionHistory` for traceability.
+
+## Phase 13: Admin audit logs
+
+Phase 13 adds a Super Admin-only audit trail at `/admin/audit-logs`.
+
+### Stored audit fields
+
+- Admin user
+- Action type
+- Target type
+- Target ID
+- Old value
+- New value
+- Reason
+- Timestamp
+
+### Logged governance actions
+
+- User activated, suspended, status changed, or role changed
+- Doctor approved, rejected, or suspended
+- Article published, unpublished, or archived
+- AI flag resolved or escalated
+- Consultation assigned or status changed
+- Safety report resolved
+
+### Access rule
+
+Only users with `VIEW_AUDIT_SENSITIVE_ADMIN_DATA` can view the audit log. In the current role map, this is effectively Super Admin-only.
+
+### Privacy rule
+
+Audit logs record operational deltas and summarized reasons. They do not store full raw health conversations by default.

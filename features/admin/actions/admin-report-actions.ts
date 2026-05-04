@@ -11,6 +11,7 @@ import {
   type SafetyReportPriority,
   type SafetyReportStatus
 } from "@/features/admin/data/report-management";
+import { buildAdminAuditLogData } from "@/server/services/admin-audit-log-service";
 
 function parseReportId(formData: FormData) {
   const reportId = Number(formData.get("reportId"));
@@ -59,6 +60,7 @@ async function ensureReport(reportId: number) {
 function revalidateReport(reportId: number) {
   revalidatePath(routes.adminReports);
   revalidatePath(`${routes.adminReports}/${reportId}`);
+  revalidatePath(routes.adminAuditLogs);
 }
 
 export async function updateSafetyReportStatusAction(formData: FormData) {
@@ -85,7 +87,22 @@ export async function updateSafetyReportStatusAction(formData: FormData) {
         toStatus: status,
         note
       }
-    })
+    }),
+    ...(status === "RESOLVED"
+      ? [
+          prisma.adminAuditLog.create({
+            data: buildAdminAuditLogData({
+              adminUserId: actor.id,
+              actionType: "REPORT_RESOLVED",
+              targetType: "SafetyReport",
+              targetId: reportId,
+              oldValue: { status: existing.status },
+              newValue: { status },
+              reason: note ?? "Safety report resolved from safety center."
+            })
+          })
+        ]
+      : [])
   ]);
 
   revalidateReport(reportId);

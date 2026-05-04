@@ -272,3 +272,22 @@ model MentalHealthResource {
   @@index([isActive])
   @@index([createdAt])
 }
+
+
+model AdminAuditLog {
+  id          Int      @id @default(autoincrement())
+  adminUserId Int?
+  actionType  String
+  targetType  String
+  targetId    String
+  oldValue    String?
+  newValue    String?
+  reason      String?
+  createdAt   DateTime @default(now())
+
+  @@index([adminUserId])
+  @@index([actionType])
+  @@index([targetType])
+  @@index([targetId])
+  @@index([createdAt])
+}

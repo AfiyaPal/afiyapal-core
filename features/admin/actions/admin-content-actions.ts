@@ -7,6 +7,7 @@ import { prisma } from "@/server/db/prisma";
 import { requireAnyAdminPermission } from "@/server/auth/admin-guard";
 import { ADMIN_PERMISSIONS, hasAdminPermission } from "@/server/auth/admin-permissions";
 import { ARTICLE_CATEGORIES, ARTICLE_LANGUAGES, ARTICLE_STATUSES, MEDICAL_REVIEW_STATUSES } from "@/features/admin/data/content-management";
+import { buildAdminAuditLogData } from "@/server/services/admin-audit-log-service";
 
 type ArticleFormData = {
   title: string;
@@ -147,6 +148,7 @@ export async function updateArticleAction(formData: FormData) {
 
   revalidatePath(routes.adminContent);
   revalidatePath(`${routes.adminContent}/${articleId}`);
+  revalidatePath(routes.adminAuditLogs);
   redirect(`${routes.adminContent}/${articleId}`);
 }
 
@@ -162,6 +164,7 @@ export async function submitArticleForReviewAction(formData: FormData) {
 
   revalidatePath(routes.adminContent);
   revalidatePath(`${routes.adminContent}/${articleId}`);
+  revalidatePath(routes.adminAuditLogs);
 }
 
 export async function approveArticleForPublishingAction(formData: FormData) {
@@ -182,6 +185,7 @@ export async function approveArticleForPublishingAction(formData: FormData) {
 
   revalidatePath(routes.adminContent);
   revalidatePath(`${routes.adminContent}/${articleId}`);
+  revalidatePath(routes.adminAuditLogs);
 }
 
 export async function requestArticleChangesAction(formData: FormData) {
@@ -203,41 +207,88 @@ export async function requestArticleChangesAction(formData: FormData) {
 
   revalidatePath(routes.adminContent);
   revalidatePath(`${routes.adminContent}/${articleId}`);
+  revalidatePath(routes.adminAuditLogs);
 }
 
 export async function publishArticleAction(formData: FormData) {
   const actor = await requireAnyAdminPermission([ADMIN_PERMISSIONS.MANAGE_CONTENT]);
   ensureCanManageContent(actor.role);
   const articleId = parseArticleId(formData);
-  const article = await prisma.blog.findUnique({ where: { id: articleId }, select: { medicalReviewStatus: true } });
+  const article = await prisma.blog.findUnique({ where: { id: articleId }, select: { status: true, medicalReviewStatus: true, publishedAt: true } });
   if (!article) redirect(routes.adminContent);
   if (article.medicalReviewStatus !== "APPROVED" && !hasAdminPermission(actor.role, ADMIN_PERMISSIONS.REVIEW_MEDICAL_CONTENT)) {
     throw new Error("Article must be medically approved before publishing.");
   }
 
-  await prisma.blog.update({ where: { id: articleId }, data: { status: "PUBLISHED", publishedAt: new Date(), archivedAt: null } });
+  await prisma.$transaction([
+    prisma.blog.update({ where: { id: articleId }, data: { status: "PUBLISHED", publishedAt: new Date(), archivedAt: null } }),
+    prisma.adminAuditLog.create({
+      data: buildAdminAuditLogData({
+        adminUserId: actor.id,
+        actionType: "ARTICLE_PUBLISHED",
+        targetType: "Blog",
+        targetId: articleId,
+        oldValue: { status: article.status, publishedAt: article.publishedAt },
+        newValue: { status: "PUBLISHED" },
+        reason: "Article published from content management workflow."
+      })
+    })
+  ]);
   revalidatePath(routes.adminContent);
   revalidatePath(`${routes.adminContent}/${articleId}`);
+  revalidatePath(routes.adminAuditLogs);
 }
 
 export async function unpublishArticleAction(formData: FormData) {
   const actor = await requireAnyAdminPermission([ADMIN_PERMISSIONS.MANAGE_CONTENT]);
   ensureCanManageContent(actor.role);
   const articleId = parseArticleId(formData);
+  const article = await prisma.blog.findUnique({ where: { id: articleId }, select: { status: true, publishedAt: true } });
+  if (!article) redirect(routes.adminContent);
 
-  await prisma.blog.update({ where: { id: articleId }, data: { status: "DRAFT", publishedAt: null } });
+  await prisma.$transaction([
+    prisma.blog.update({ where: { id: articleId }, data: { status: "DRAFT", publishedAt: null } }),
+    prisma.adminAuditLog.create({
+      data: buildAdminAuditLogData({
+        adminUserId: actor.id,
+        actionType: "ARTICLE_UNPUBLISHED",
+        targetType: "Blog",
+        targetId: articleId,
+        oldValue: { status: article.status, publishedAt: article.publishedAt },
+        newValue: { status: "DRAFT", publishedAt: null },
+        reason: "Article unpublished from content management workflow."
+      })
+    })
+  ]);
   revalidatePath(routes.adminContent);
   revalidatePath(`${routes.adminContent}/${articleId}`);
+  revalidatePath(routes.adminAuditLogs);
 }
 
 export async function archiveArticleAction(formData: FormData) {
   const actor = await requireAnyAdminPermission([ADMIN_PERMISSIONS.MANAGE_CONTENT]);
   ensureCanManageContent(actor.role);
   const articleId = parseArticleId(formData);
+  const article = await prisma.blog.findUnique({ where: { id: articleId }, select: { status: true, publishedAt: true, archivedAt: true } });
+  if (!article) redirect(routes.adminContent);
 
-  await prisma.blog.update({ where: { id: articleId }, data: { status: "ARCHIVED", archivedAt: new Date(), publishedAt: null } });
+  await prisma.$transaction([
+    prisma.blog.update({ where: { id: articleId }, data: { status: "ARCHIVED", archivedAt: new Date(), publishedAt: null } }),
+    prisma.adminAuditLog.create({
+      data: buildAdminAuditLogData({
+        adminUserId: actor.id,
+        actionType: "ARTICLE_ARCHIVED",
+        targetType: "Blog",
+        targetId: articleId,
+        oldValue: { status: article.status, publishedAt: article.publishedAt, archivedAt: article.archivedAt },
+        newValue: { status: "ARCHIVED" },
+        reason: "Article archived from content management workflow."
+      })
+    })
+  ]);
   revalidatePath(routes.adminContent);
   revalidatePath(`${routes.adminContent}/${articleId}`);
+  revalidatePath(routes.adminAuditLogs);
 }
 
 export async function updateArticleReviewStatusAction(formData: FormData) {
@@ -260,4 +311,5 @@ export async function updateArticleReviewStatusAction(formData: FormData) {
 
   revalidatePath(routes.adminContent);
   revalidatePath(`${routes.adminContent}/${articleId}`);
+  revalidatePath(routes.adminAuditLogs);
 }

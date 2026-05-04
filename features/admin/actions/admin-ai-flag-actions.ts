@@ -7,6 +7,7 @@ import { prisma } from "@/server/db/prisma";
 import { requireAnyAdminPermission } from "@/server/auth/admin-guard";
 import { ADMIN_PERMISSIONS } from "@/server/auth/admin-permissions";
 import { AI_FLAG_PRIORITIES, AI_FLAG_STATUSES, type AiFlagPriority, type AiFlagStatus } from "@/server/services/ai-safety-flag-service";
+import { buildAdminAuditLogData } from "@/server/services/admin-audit-log-service";
 
 function parseFlagId(formData: FormData) {
   const flagId = Number(formData.get("flagId"));
@@ -51,6 +52,7 @@ async function ensureFlagExists(flagId: number) {
       category: true,
       priority: true,
       status: true,
+      assignedReviewerId: true,
       escalatedConsultationRequestId: true
     }
   });
@@ -63,19 +65,37 @@ export async function updateAiFlagStatusAction(formData: FormData) {
   const actor = await requireAnyAdminPermission([ADMIN_PERMISSIONS.REVIEW_HEALTH_FLAGS]);
   const flagId = parseFlagId(formData);
   const status = parseStatus(formData.get("status"));
-  await ensureFlagExists(flagId);
+  const existing = await ensureFlagExists(flagId);
 
-  await prisma.aiInteractionFlag.update({
-    where: { id: flagId },
-    data: {
-      status,
-      assignedReviewerId: actor.id,
-      resolvedAt: status === "RESOLVED" ? new Date() : null
-    }
-  });
+  await prisma.$transaction([
+    prisma.aiInteractionFlag.update({
+      where: { id: flagId },
+      data: {
+        status,
+        assignedReviewerId: actor.id,
+        resolvedAt: status === "RESOLVED" ? new Date() : null
+      }
+    }),
+    ...(status === "RESOLVED"
+      ? [
+          prisma.adminAuditLog.create({
+            data: buildAdminAuditLogData({
+              adminUserId: actor.id,
+              actionType: "AI_FLAG_RESOLVED",
+              targetType: "AiInteractionFlag",
+              targetId: flagId,
+              oldValue: { status: existing.status, assignedReviewerId: existing.assignedReviewerId },
+              newValue: { status, assignedReviewerId: actor.id },
+              reason: "AI safety flag resolved by reviewer."
+            })
+          })
+        ]
+      : [])
+  ]);
 
   revalidatePath(routes.adminAiFlags);
   revalidatePath(`${routes.adminAiFlags}/${flagId}`);
+  revalidatePath(routes.adminAuditLogs);
 }
 
 export async function assignAiFlagReviewerAction(formData: FormData) {
@@ -96,6 +116,7 @@ export async function assignAiFlagReviewerAction(formData: FormData) {
   await prisma.aiInteractionFlag.update({ where: { id: flagId }, data: { assignedReviewerId: reviewerId, status: reviewerId ? "IN_REVIEW" : "OPEN" } });
   revalidatePath(routes.adminAiFlags);
   revalidatePath(`${routes.adminAiFlags}/${flagId}`);
+  revalidatePath(routes.adminAuditLogs);
 }
 
 export async function updateAiFlagNotesAction(formData: FormData) {
@@ -116,6 +137,7 @@ export async function updateAiFlagNotesAction(formData: FormData) {
 
   revalidatePath(routes.adminAiFlags);
   revalidatePath(`${routes.adminAiFlags}/${flagId}`);
+  revalidatePath(routes.adminAuditLogs);
 }
 
 export async function escalateAiFlagToConsultationAction(formData: FormData) {
@@ -127,6 +149,7 @@ export async function escalateAiFlagToConsultationAction(formData: FormData) {
 
   if (flag.escalatedConsultationRequestId) {
     revalidatePath(`${routes.adminAiFlags}/${flagId}`);
+  revalidatePath(routes.adminAuditLogs);
     return;
   }
 
@@ -176,10 +199,23 @@ export async function escalateAiFlagToConsultationAction(formData: FormData) {
       : Promise.resolve(),
     flag.mentalHealthInteractionId
       ? prisma.mentalHealthInteraction.update({ where: { id: flag.mentalHealthInteractionId }, data: { status: "ESCALATED", escalationSuggested: true } })
-      : Promise.resolve()
+      : Promise.resolve(),
+    prisma.adminAuditLog.create({
+      data: buildAdminAuditLogData({
+        adminUserId: actor.id,
+        actionType: "AI_FLAG_ESCALATED",
+        targetType: "AiInteractionFlag",
+        targetId: flagId,
+        oldValue: { status: flag.status, escalatedConsultationRequestId: flag.escalatedConsultationRequestId },
+        newValue: { status: "ESCALATED", escalatedConsultationRequestId: consultation.id },
+        reason: adminNotes ?? "AI safety flag escalated into consultation request."
+      })
+    })
   ]);
 
   revalidatePath(routes.adminAiFlags);
   revalidatePath(`${routes.adminAiFlags}/${flagId}`);
+  revalidatePath(routes.adminAuditLogs);
   revalidatePath(routes.adminConsultations);
+  revalidatePath(routes.adminAuditLogs);
 }

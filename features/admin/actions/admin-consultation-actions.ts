@@ -6,6 +6,7 @@ import { prisma } from "@/server/db/prisma";
 import { requireAnyAdminPermission } from "@/server/auth/admin-guard";
 import { ADMIN_PERMISSIONS } from "@/server/auth/admin-permissions";
 import { CONSULTATION_STATUSES, type ConsultationStatus } from "@/features/admin/data/consultation-management";
+import { buildAdminAuditLogData } from "@/server/services/admin-audit-log-service";
 
 function parseRequestId(formData: FormData) {
   const requestId = Number(formData.get("requestId"));
@@ -45,10 +46,10 @@ async function ensureConsultationExists(requestId: number) {
 }
 
 export async function assignConsultationDoctorAction(formData: FormData) {
-  await requireAnyAdminPermission([ADMIN_PERMISSIONS.MANAGE_CONSULTATIONS]);
+  const actor = await requireAnyAdminPermission([ADMIN_PERMISSIONS.MANAGE_CONSULTATIONS]);
   const requestId = parseRequestId(formData);
   const doctorId = parseOptionalDoctorId(formData.get("assignedDoctorId"));
-  await ensureConsultationExists(requestId);
+  const existing = await ensureConsultationExists(requestId);
 
   if (doctorId) {
     const doctor = await prisma.doctorProfile.findFirst({
@@ -59,28 +60,58 @@ export async function assignConsultationDoctorAction(formData: FormData) {
     if (!doctor) throw new Error("Only verified doctors can be assigned to consultation requests.");
   }
 
-  await prisma.consultationRequest.update({
-    where: { id: requestId },
-    data: {
-      assignedDoctorId: doctorId,
-      status: doctorId ? "ASSIGNED" : "AWAITING_ASSIGNMENT"
-    }
-  });
+  await prisma.$transaction([
+    prisma.consultationRequest.update({
+      where: { id: requestId },
+      data: {
+        assignedDoctorId: doctorId,
+        status: doctorId ? "ASSIGNED" : "AWAITING_ASSIGNMENT"
+      }
+    }),
+    prisma.adminAuditLog.create({
+      data: buildAdminAuditLogData({
+        adminUserId: actor.id,
+        actionType: "CONSULTATION_ASSIGNED",
+        targetType: "ConsultationRequest",
+        targetId: requestId,
+        oldValue: { assignedDoctorId: existing.assignedDoctorId, status: existing.status },
+        newValue: { assignedDoctorId: doctorId, status: doctorId ? "ASSIGNED" : "AWAITING_ASSIGNMENT" },
+        reason: doctorId ? "Consultation assigned to a verified doctor." : "Consultation doctor assignment cleared."
+      })
+    })
+  ]);
 
   revalidatePath(routes.adminConsultations);
+  revalidatePath(routes.adminAuditLogs);
   revalidatePath(`${routes.adminConsultations}/${requestId}`);
+  revalidatePath(routes.adminAuditLogs);
 }
 
 export async function updateConsultationStatusAction(formData: FormData) {
-  await requireAnyAdminPermission([ADMIN_PERMISSIONS.MANAGE_CONSULTATIONS]);
+  const actor = await requireAnyAdminPermission([ADMIN_PERMISSIONS.MANAGE_CONSULTATIONS]);
   const requestId = parseRequestId(formData);
   const status = parseStatus(formData.get("status"));
-  await ensureConsultationExists(requestId);
+  const existing = await ensureConsultationExists(requestId);
 
-  await prisma.consultationRequest.update({ where: { id: requestId }, data: { status } });
+  await prisma.$transaction([
+    prisma.consultationRequest.update({ where: { id: requestId }, data: { status } }),
+    prisma.adminAuditLog.create({
+      data: buildAdminAuditLogData({
+        adminUserId: actor.id,
+        actionType: "CONSULTATION_STATUS_CHANGED",
+        targetType: "ConsultationRequest",
+        targetId: requestId,
+        oldValue: { status: existing.status },
+        newValue: { status },
+        reason: "Consultation request status changed from admin queue."
+      })
+    })
+  ]);
 
   revalidatePath(routes.adminConsultations);
+  revalidatePath(routes.adminAuditLogs);
   revalidatePath(`${routes.adminConsultations}/${requestId}`);
+  revalidatePath(routes.adminAuditLogs);
 }
 
 export async function updateConsultationNotesAction(formData: FormData) {
@@ -94,5 +125,7 @@ export async function updateConsultationNotesAction(formData: FormData) {
   });
 
   revalidatePath(routes.adminConsultations);
+  revalidatePath(routes.adminAuditLogs);
   revalidatePath(`${routes.adminConsultations}/${requestId}`);
+  revalidatePath(routes.adminAuditLogs);
 }

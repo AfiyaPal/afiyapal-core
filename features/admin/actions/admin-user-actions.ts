@@ -7,6 +7,7 @@ import { prisma } from "@/server/db/prisma";
 import { requireAnyAdminPermission } from "@/server/auth/admin-guard";
 import { ADMIN_PERMISSIONS, canCreateAdmin } from "@/server/auth/admin-permissions";
 import { USER_ROLES, USER_STATUSES, type UserRole, type UserStatus, isAdminRole } from "@/server/auth/roles";
+import { buildAdminAuditLogData } from "@/server/services/admin-audit-log-service";
 
 function parseUserId(formData: FormData) {
   const userId = Number(formData.get("userId"));
@@ -39,11 +40,25 @@ async function ensureTargetExists(userId: number) {
 export async function activateUserAction(formData: FormData) {
   const actor = await requireAnyAdminPermission([ADMIN_PERMISSIONS.MANAGE_USERS]);
   const userId = parseUserId(formData);
-  await ensureTargetExists(userId);
+  const target = await ensureTargetExists(userId);
 
-  await prisma.user.update({ where: { id: userId }, data: { status: "ACTIVE" } });
+  await prisma.$transaction([
+    prisma.user.update({ where: { id: userId }, data: { status: "ACTIVE" } }),
+    prisma.adminAuditLog.create({
+      data: buildAdminAuditLogData({
+        adminUserId: actor.id,
+        actionType: "USER_ACTIVATED",
+        targetType: "User",
+        targetId: userId,
+        oldValue: { status: target.status },
+        newValue: { status: "ACTIVE" },
+        reason: "User account activated from admin user management."
+      })
+    })
+  ]);
   revalidatePath(routes.adminUsers);
   revalidatePath(`${routes.adminUsers}/${userId}`);
+  revalidatePath(routes.adminAuditLogs);
 
   if (actor.id === userId) revalidatePath(routes.admin);
 }
@@ -56,10 +71,24 @@ export async function suspendUserAction(formData: FormData) {
     throw new Error("You cannot suspend your own admin account.");
   }
 
-  await ensureTargetExists(userId);
-  await prisma.user.update({ where: { id: userId }, data: { status: "SUSPENDED" } });
+  const target = await ensureTargetExists(userId);
+  await prisma.$transaction([
+    prisma.user.update({ where: { id: userId }, data: { status: "SUSPENDED" } }),
+    prisma.adminAuditLog.create({
+      data: buildAdminAuditLogData({
+        adminUserId: actor.id,
+        actionType: "USER_SUSPENDED",
+        targetType: "User",
+        targetId: userId,
+        oldValue: { status: target.status },
+        newValue: { status: "SUSPENDED" },
+        reason: "User account suspended from admin user management."
+      })
+    })
+  ]);
   revalidatePath(routes.adminUsers);
   revalidatePath(`${routes.adminUsers}/${userId}`);
+  revalidatePath(routes.adminAuditLogs);
 }
 
 export async function updateUserStatusAction(formData: FormData) {
@@ -71,10 +100,24 @@ export async function updateUserStatusAction(formData: FormData) {
     throw new Error("You cannot deactivate your own admin account.");
   }
 
-  await ensureTargetExists(userId);
-  await prisma.user.update({ where: { id: userId }, data: { status } });
+  const target = await ensureTargetExists(userId);
+  await prisma.$transaction([
+    prisma.user.update({ where: { id: userId }, data: { status } }),
+    prisma.adminAuditLog.create({
+      data: buildAdminAuditLogData({
+        adminUserId: actor.id,
+        actionType: status === "SUSPENDED" ? "USER_SUSPENDED" : status === "ACTIVE" ? "USER_ACTIVATED" : "USER_STATUS_CHANGED",
+        targetType: "User",
+        targetId: userId,
+        oldValue: { status: target.status },
+        newValue: { status },
+        reason: "User account status changed from admin user management."
+      })
+    })
+  ]);
   revalidatePath(routes.adminUsers);
   revalidatePath(`${routes.adminUsers}/${userId}`);
+  revalidatePath(routes.adminAuditLogs);
 }
 
 export async function updateUserRoleAction(formData: FormData) {
@@ -94,7 +137,21 @@ export async function updateUserRoleAction(formData: FormData) {
     throw new Error("You cannot remove your own Super Admin access.");
   }
 
-  await prisma.user.update({ where: { id: userId }, data: { role } });
+  await prisma.$transaction([
+    prisma.user.update({ where: { id: userId }, data: { role } }),
+    prisma.adminAuditLog.create({
+      data: buildAdminAuditLogData({
+        adminUserId: actor.id,
+        actionType: "USER_ROLE_CHANGED",
+        targetType: "User",
+        targetId: userId,
+        oldValue: { role: target.role },
+        newValue: { role },
+        reason: "User role changed from admin user management."
+      })
+    })
+  ]);
   revalidatePath(routes.adminUsers);
   revalidatePath(`${routes.adminUsers}/${userId}`);
+  revalidatePath(routes.adminAuditLogs);
 }

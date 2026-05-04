@@ -10,6 +10,7 @@ export const adminModulePermissions = {
   content: [ADMIN_PERMISSIONS.MANAGE_CONTENT, ADMIN_PERMISSIONS.REVIEW_MEDICAL_CONTENT],
   consultations: [ADMIN_PERMISSIONS.MANAGE_CONSULTATIONS],
   reports: [ADMIN_PERMISSIONS.MANAGE_REPORTS],
+  "audit-logs": [ADMIN_PERMISSIONS.VIEW_AUDIT_SENSITIVE_ADMIN_DATA],
   settings: [ADMIN_PERMISSIONS.MANAGE_ADMIN_SETTINGS]
 } as const satisfies Record<AdminModuleKey, readonly AdminPermission[]>;
 
