@@ -1,20 +1,37 @@
 import "server-only";
-import { PrismaClient } from "@prisma/client";
+
 import { PrismaBetterSqlite3 } from "@prisma/adapter-better-sqlite3";
+import { PrismaPg } from "@prisma/adapter-pg";
+import { Pool } from "pg";
+
+import { PrismaClient as SqlitePrismaClient } from "../generated/prisma-sqlite/client";
+import { PrismaClient as PostgresPrismaClient } from "../generated/prisma-postgres/client";
 
 const globalForPrisma = globalThis as unknown as {
-  prisma?: PrismaClient;
+  prisma?: SqlitePrismaClient | PostgresPrismaClient;
 };
 
-const adapter = new PrismaBetterSqlite3({
-  url: process.env.DATABASE_URL ?? "file:./dev.db",
-});
+function createPrismaClient() {
+  if (process.env.APP_DB === "online") {
+    const adapter = new PrismaPg({
+      connectionString: process.env.DATABASE_URL!,
+    });
 
-export const prisma =
-  globalForPrisma.prisma ??
-  new PrismaClient({
+    return new PostgresPrismaClient({
+      adapter,
+    });
+  }
+
+  const adapter = new PrismaBetterSqlite3({
+    url: process.env.DATABASE_URL ?? "file:./dev.db",
+  });
+
+  return new SqlitePrismaClient({
     adapter,
   });
+}
+
+export const prisma = globalForPrisma.prisma ?? createPrismaClient();
 
 if (process.env.NODE_ENV !== "production") {
   globalForPrisma.prisma = prisma;

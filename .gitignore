@@ -2,8 +2,11 @@ node_modules
 .next
 out
 .env
+.env.offline
+.env.online
 .env.local
 .env.*.local
 .DS_Store
 coverage
 prisma/dev.db
+*.db

@@ -1,10 +1,10 @@
 generator client {
   provider = "prisma-client"
-  output   = "../generated/prisma-postgres"
+  output   = "../generated/prisma-sqlite"
 }
 
 datasource db {
-  provider = "postgresql"
+  provider = "sqlite"
 }
 
 model User {
