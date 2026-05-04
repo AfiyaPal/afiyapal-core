@@ -130,3 +130,44 @@ The admin top bar now includes a profile menu with the authenticated admin's nam
 ### Settings route
 
 `/admin/settings` is now included as a Super Admin-only module. It is intended for Stage 2 platform safety settings such as supported languages, emergency guidance, AI disclaimers, doctor verification requirements, review intervals, and support contact settings.
+
+## Phase 4 — Overview dashboard MVP
+
+Phase 4 turns `/admin` into the operational overview dashboard. The page now reads real counts where data exists and safely returns `0` for Stage 2 tables before those workflows are populated.
+
+Dashboard metrics included:
+
+- Total registered users
+- Active users today, this week, and this month
+- Total symptom checks
+- Consultation requests
+- Pending doctor verifications
+- Open/in-review flagged AI interactions
+- Emergency-risk symptom interactions
+- Published health articles
+
+Recent activity feed included:
+
+- New user registered
+- Doctor applied
+- Symptom check completed
+- Consultation requested
+- AI response flagged
+- Blog published
+
+New Stage 2 data models prepared in `server/db/schema.prisma`:
+
+- `DoctorProfile`
+- `SymptomCheckLog`
+- `AiInteractionFlag`
+- `ConsultationRequest`
+- `SafetyReport`
+
+After pulling this phase locally, run:
+
+```bash
+npx prisma db push
+npx prisma generate
+```
+
+Then restart the dev server.

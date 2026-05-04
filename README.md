@@ -75,3 +75,17 @@ Included admin routes:
 Reusable admin UI components live in `features/admin/components` and include the sidebar, top bar, dashboard cards, table shell, status badge, and filter shell.
 
 The admin top bar includes a profile/logout menu. The logout action clears the signed HTTP-only session cookie and redirects to `/login`.
+
+## Stage 2 Admin — Phase 4 Overview Dashboard
+
+Phase 4 connects `/admin` to a real overview dashboard with user counts, activity windows, symptom-check totals, consultation requests, pending doctor verification counts, AI safety flags, emergency-risk interactions, published articles, and a recent activity feed.
+
+Run after extracting this phase:
+
+```bash
+npx prisma db push
+npx prisma generate
+npm run dev
+```
+
+The new Stage 2 tables will start at `0` until the corresponding workflows are implemented and populated in later phases.
