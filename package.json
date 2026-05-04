@@ -9,7 +9,12 @@
     "start": "next start",
     "lint": "eslint .",
     "prisma:generate": "prisma generate",
-    "prisma:migrate": "prisma migrate dev"
+    "prisma:migrate": "prisma migrate dev",
+    "prisma:push": "prisma db push",
+    "prisma:seed": "prisma db seed",
+    "db:push": "prisma db push",
+    "db:generate": "prisma generate",
+    "db:seed": "prisma db seed"
   },
   "dependencies": {
     "@prisma/adapter-better-sqlite3": "^7.8.0",
@@ -36,9 +41,11 @@
     "postcss": "latest",
     "prisma": "latest",
     "tailwindcss": "latest",
-    "typescript": "latest"
+    "typescript": "latest",
+    "tsx": "latest"
   },
   "prisma": {
-    "schema": "server/db/schema.prisma"
+    "schema": "server/db/schema.prisma",
+    "seed": "tsx server/test/seed.ts"
   }
 }
