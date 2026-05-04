@@ -1,9 +1,10 @@
 import Link from "next/link";
 import { ShieldCheck, Stethoscope, Users, FileText, MessageSquareWarning, ClipboardList } from "lucide-react";
-import { ADMIN_USER_STORY, adminModules, adminRoles } from "@/features/admin/data/admin-scope";
+import { ADMIN_USER_STORY, adminModules, adminRoles, systemUserRoles } from "@/features/admin/data/admin-scope";
+import { adminActionRules } from "@/features/admin/data/admin-permission-rules";
 
 const highlights = [
-  { label: "Admin roles", value: adminRoles.length, icon: ShieldCheck, description: "Clear responsibility boundaries before permissions are implemented." },
+  { label: "Admin roles", value: adminRoles.length, icon: ShieldCheck, description: "Clear responsibility boundaries with route and module permissions." },
   { label: "MVP modules", value: adminModules.length, icon: ClipboardList, description: "The dashboard areas included in Stage 2 admin scope." },
   { label: "Health safety", value: "Core", icon: Stethoscope, description: "AI reviews, symptom logs, reports, and doctor verification are first-class modules." }
 ];
@@ -27,7 +28,7 @@ export function AdminScopePage() {
           <div className="max-w-4xl">
             <p className="mb-4 inline-flex rounded-full bg-white px-4 py-2 text-sm font-semibold text-brand-700 shadow-soft">AFIYAPAL Stage 2 Admin Scope</p>
             <h1 className="text-3xl font-bold tracking-tight text-slate-950 sm:text-5xl">Admin dashboard scope for a safer, medically responsible platform.</h1>
-            <p className="mt-5 max-w-3xl text-base leading-8 text-slate-700 sm:text-lg">This phase defines the first admin roles, the Stage 2 MVP dashboard modules, and the core admin user story. It is intentionally focused on scope before deeper permissions, workflows, and database-heavy features are added.</p>
+            <p className="mt-5 max-w-3xl text-base leading-8 text-slate-700 sm:text-lg">This phase defines the admin roles, the Stage 2 MVP dashboard modules, the core admin user story, and the Phase 2 permission rules that protect the admin area before database-heavy workflows are added.</p>
           </div>
           <div className="mt-8 grid gap-4 md:grid-cols-3">
             {highlights.map((item) => {
@@ -69,6 +70,44 @@ export function AdminScopePage() {
               </ul>
             </article>
           ))}
+        </div>
+      </section>
+
+
+      <section className="container-page pb-12">
+        <div className="rounded-3xl border border-emerald-100 bg-white p-6 shadow-soft sm:p-8">
+          <p className="text-sm font-semibold uppercase tracking-wide text-brand-700">System role keys</p>
+          <h2 className="mt-2 text-2xl font-bold text-slate-950">Role-based access foundation</h2>
+          <p className="mt-3 max-w-3xl text-sm leading-6 text-slate-600">These role keys are now centralized for authentication, authorization, and future admin actions. USER and DOCTOR do not receive admin access by default.</p>
+          <div className="mt-6 grid gap-3 md:grid-cols-2 lg:grid-cols-4">
+            {systemUserRoles.map((role) => (
+              <article key={role.key} className="rounded-2xl border border-emerald-100 bg-emerald-50 p-4">
+                <p className="text-sm font-bold text-slate-950">{role.name}</p>
+                <p className="mt-1 rounded-full bg-white px-2 py-1 text-xs font-semibold text-brand-700">{role.key}</p>
+                <p className="mt-3 text-xs leading-5 text-slate-600">{role.summary}</p>
+              </article>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="container-page pb-12">
+        <div className="rounded-3xl border border-emerald-100 bg-white p-6 shadow-soft sm:p-8">
+          <p className="text-sm font-semibold uppercase tracking-wide text-brand-700">Permission helper rules</p>
+          <h2 className="mt-2 text-2xl font-bold text-slate-950">Admin action boundaries</h2>
+          <div className="mt-6 grid gap-3 lg:grid-cols-2">
+            {adminActionRules.map((item) => (
+              <article key={item.rule} className="rounded-2xl border border-emerald-100 bg-slate-50 p-4">
+                <p className="text-sm font-semibold text-slate-950">{item.rule}</p>
+                <p className="mt-2 text-xs font-medium text-slate-500">Permission: {item.permission}</p>
+                <div className="mt-3 flex flex-wrap gap-2">
+                  {item.allowedRoles.map((role) => (
+                    <span key={role} className="rounded-full bg-white px-3 py-1 text-xs font-semibold text-brand-700">{role}</span>
+                  ))}
+                </div>
+              </article>
+            ))}
+          </div>
         </div>
       </section>
 

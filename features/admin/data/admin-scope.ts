@@ -1,7 +1,19 @@
 export const ADMIN_USER_STORY =
   "As an AFIYAPAL admin, I want to manage users, doctors, AI health interactions, health content, consultation requests, and safety reports so that the platform remains safe, trustworthy, and medically responsible.";
 
+export const systemUserRoles = [
+  { key: "USER", name: "User", summary: "Default patient/community role with no admin access." },
+  { key: "DOCTOR", name: "Doctor", summary: "Healthcare provider role; admin access is not granted unless a separate admin role is assigned." },
+  { key: "ADMIN", name: "Admin", summary: "General operations admin with limited access to users, reports, consultations, and privacy-safe symptom logs." },
+  { key: "SUPER_ADMIN", name: "Super Admin", summary: "Full platform authority including admin creation and sensitive governance actions." },
+  { key: "MEDICAL_REVIEWER", name: "Medical Reviewer", summary: "Health safety reviewer for AI flags, symptom logs, and medical content review." },
+  { key: "SUPPORT_ADMIN", name: "Support Admin", summary: "Support role for user issues, reports, and consultation queues." },
+  { key: "DOCTOR_MANAGER", name: "Doctor Manager", summary: "Provider operations role for doctor verification and suspension workflows." },
+  { key: "CONTENT_MANAGER", name: "Content Manager", summary: "Publishing operations role for blogs, translations, and content freshness." }
+] as const;
+
 export const adminRoles = [
+  { key: "ADMIN", name: "Admin", summary: "General operations admin with limited access to users, reports, consultations, and privacy-safe symptom logs.", responsibilities: ["View the admin overview dashboard", "Manage basic user support operations", "Handle reports and consultation queues", "View privacy-safe symptom-check logs"] },
   { key: "SUPER_ADMIN", name: "Super Admin", summary: "Owns platform-level administration, permissions, settings, and final escalation decisions.", responsibilities: ["Manage admin access and role assignments", "View audit-sensitive platform operations", "Configure platform safety and health governance settings", "Handle critical escalations that require full authority"] },
   { key: "SUPPORT_ADMIN", name: "Support Admin", summary: "Handles user support, account issues, consultation queues, and general safety reports.", responsibilities: ["Review user reports and support tickets", "Manage consultation request status updates", "Suspend or reactivate users when policy requires it", "Escalate medical or AI safety issues to qualified reviewers"] },
   { key: "MEDICAL_REVIEWER", name: "Medical Reviewer", summary: "Reviews health-sensitive AI outputs, symptom-check patterns, and medical content quality.", responsibilities: ["Review flagged AI health interactions", "Approve or reject medical content before publication", "Add safety notes to symptom-check reviews", "Recommend escalation to verified doctors where needed"] },
@@ -26,6 +38,7 @@ export type AdminModuleKey = (typeof adminModules)[number]["key"];
 export const adminScopeSummary = {
   stage: "Stage 2 MVP",
   purpose: "Turn AFIYAPAL from a hackathon-winning demo into a safer, more trustworthy health platform with clear admin responsibilities.",
+  systemRoles: systemUserRoles,
   roles: adminRoles,
   modules: adminModules,
   userStory: ADMIN_USER_STORY

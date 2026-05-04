@@ -29,7 +29,7 @@ export function AdminModulePlaceholderPage({ module }: { module: AdminModule }) 
             </ul>
           </div>
           <p className="mt-8 rounded-2xl bg-slate-50 p-4 text-sm leading-6 text-slate-600">
-            This page is intentionally a Phase 1 placeholder. The module-specific database models, permissions, tables, filters, and actions will be implemented in later phases.
+            This page is intentionally a protected Phase 2 placeholder. Route access and module permissions are now enforced; module-specific database models, tables, filters, and actions will be implemented in later phases.
           </p>
         </div>
       </section>

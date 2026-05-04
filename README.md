@@ -51,3 +51,7 @@ The first admin roles are Super Admin, Support Admin, Medical Reviewer, Doctor M
 
 The source of truth for this scope lives in `features/admin/data/admin-scope.ts`, with a human-readable copy in `docs/ADMIN_SCOPE.md`. The `/admin` route currently renders the scope definition and will be expanded in later phases with route protection, permissions, and database-backed workflows.
 
+
+## Stage 2 Admin Access
+
+The admin area is available at `/admin` and is protected by role-based access. New users register as `USER`; promote a trusted test account to `SUPER_ADMIN` in the database for local admin testing. See `docs/ADMIN_SCOPE.md` for the current role and permission map.
