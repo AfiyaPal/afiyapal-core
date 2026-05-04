@@ -84,10 +84,11 @@ export async function getAdminUserDetail(userId: number) {
 
   if (!user) return null;
 
-  const [blogs, comments, symptomChecks, consultationRequests, aiFlags, safetyReports] = await Promise.all([
+  const [blogs, comments, symptomChecks, mentalHealthInteractions, consultationRequests, aiFlags, safetyReports] = await Promise.all([
     prisma.blog.count({ where: { creatorId: user.id } }),
     prisma.comment.count({ where: { userId: user.id } }),
     prisma.symptomCheckLog.count({ where: { userId: user.id } }),
+    prisma.mentalHealthInteraction.count({ where: { userId: user.id } }),
     prisma.consultationRequest.count({ where: { userId: user.id } }),
     prisma.aiInteractionFlag.count({ where: { userId: user.id } }),
     prisma.safetyReport.count({ where: { reporterUserId: user.id } })
@@ -99,6 +100,7 @@ export async function getAdminUserDetail(userId: number) {
       blogs,
       comments,
       symptomChecks,
+      mentalHealthInteractions,
       consultationRequests,
       aiFlags,
       safetyReports

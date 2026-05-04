@@ -126,6 +126,7 @@ model SymptomCheckLog {
 model AiInteractionFlag {
   id                            Int       @id @default(autoincrement())
   symptomCheckLogId             Int?
+  mentalHealthInteractionId      Int?
   userId                        Int?
   title                         String
   summary                       String?
@@ -143,6 +144,7 @@ model AiInteractionFlag {
   updatedAt                     DateTime  @updatedAt
 
   @@index([symptomCheckLogId])
+  @@index([mentalHealthInteractionId])
   @@index([userId])
   @@index([assignedReviewerId])
   @@index([status])
@@ -191,3 +193,42 @@ model SafetyReport {
   @@index([createdAt])
 }
 
+
+model MentalHealthInteraction {
+  id                    Int      @id @default(autoincrement())
+  userId                Int?
+  language              String   @default("en")
+  moodCategory          String   @default("GENERAL_SUPPORT")
+  riskLevel             String   @default("LOW")
+  interactionSummary    String
+  aiResponseSummary     String?
+  supportResourcesShown String?
+  escalationSuggested   Boolean  @default(false)
+  status                String   @default("COMPLETED")
+  createdAt             DateTime @default(now())
+  updatedAt             DateTime @updatedAt
+
+  @@index([userId])
+  @@index([language])
+  @@index([moodCategory])
+  @@index([riskLevel])
+  @@index([escalationSuggested])
+  @@index([status])
+  @@index([createdAt])
+}
+
+model MentalHealthResource {
+  id          Int      @id @default(autoincrement())
+  hotlineName String
+  country     String
+  phone       String?
+  website     String?
+  description String?
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([country])
+  @@index([isActive])
+  @@index([createdAt])
+}

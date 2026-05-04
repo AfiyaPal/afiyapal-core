@@ -86,6 +86,7 @@ export async function getAdminAiFlags(filters: AiFlagFilters = {}) {
       select: {
         id: true,
         symptomCheckLogId: true,
+        mentalHealthInteractionId: true,
         userId: true,
         title: true,
         category: true,
@@ -129,6 +130,7 @@ export async function getAdminAiFlagDetail(flagId: number) {
     select: {
       id: true,
       symptomCheckLogId: true,
+      mentalHealthInteractionId: true,
       userId: true,
       title: true,
       summary: true,
@@ -149,7 +151,7 @@ export async function getAdminAiFlagDetail(flagId: number) {
 
   if (!flag) return null;
 
-  const [user, assignedReviewer, symptomCheck, consultation, eligibleReviewers] = await Promise.all([
+  const [user, assignedReviewer, symptomCheck, mentalHealthInteraction, consultation, eligibleReviewers] = await Promise.all([
     flag.userId ? prisma.user.findUnique({ where: { id: flag.userId }, select: { id: true, username: true, email: true, preferredLanguage: true, role: true, status: true } }) : null,
     flag.assignedReviewerId ? prisma.user.findUnique({ where: { id: flag.assignedReviewerId }, select: { id: true, username: true, email: true, role: true } }) : null,
     flag.symptomCheckLogId
@@ -169,6 +171,23 @@ export async function getAdminAiFlagDetail(flagId: number) {
           }
         })
       : null,
+    flag.mentalHealthInteractionId
+      ? prisma.mentalHealthInteraction.findUnique({
+          where: { id: flag.mentalHealthInteractionId },
+          select: {
+            id: true,
+            language: true,
+            moodCategory: true,
+            riskLevel: true,
+            interactionSummary: true,
+            aiResponseSummary: true,
+            supportResourcesShown: true,
+            escalationSuggested: true,
+            status: true,
+            createdAt: true
+          }
+        })
+      : null,
     flag.escalatedConsultationRequestId
       ? prisma.consultationRequest.findUnique({
           where: { id: flag.escalatedConsultationRequestId },
@@ -182,5 +201,5 @@ export async function getAdminAiFlagDetail(flagId: number) {
     })
   ]);
 
-  return { flag, user, assignedReviewer, symptomCheck, consultation, eligibleReviewers };
+  return { flag, user, assignedReviewer, symptomCheck, mentalHealthInteraction, consultation, eligibleReviewers };
 }

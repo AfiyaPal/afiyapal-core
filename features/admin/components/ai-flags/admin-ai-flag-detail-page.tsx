@@ -52,7 +52,7 @@ export async function AdminAiFlagDetailPage({ flagId }: { flagId: number }) {
     );
   }
 
-  const { flag, user, assignedReviewer, symptomCheck, consultation, eligibleReviewers } = data;
+  const { flag, user, assignedReviewer, symptomCheck, mentalHealthInteraction, consultation, eligibleReviewers } = data;
 
   return (
     <div className="space-y-6">
@@ -96,6 +96,24 @@ export async function AdminAiFlagDetailPage({ flagId }: { flagId: number }) {
                 <Link href={`${routes.adminSymptomChecks}/${symptomCheck.id}`} className="inline-flex rounded-full border border-emerald-100 px-4 py-2 text-sm font-black text-slate-700 transition hover:border-brand-600 hover:text-brand-700">Open symptom-check summary</Link>
               </div>
             ) : <p className="text-slate-500">No symptom-check log is attached to this flag.</p>}
+          </DetailCard>
+
+
+
+          <DetailCard title="Privacy-safe mental health context">
+            {mentalHealthInteraction ? (
+              <div className="space-y-4">
+                <div className="grid gap-4 md:grid-cols-2">
+                  <Field label="Language" value={mentalHealthInteraction.language === "sw" ? "Swahili" : "English"} />
+                  <Field label="Mood category" value={label(mentalHealthInteraction.moodCategory)} />
+                  <Field label="Risk level" value={<AdminStatusBadge tone={mentalHealthInteraction.riskLevel === "EMERGENCY" ? "red" : mentalHealthInteraction.riskLevel === "HIGH" ? "amber" : mentalHealthInteraction.riskLevel === "MEDIUM" ? "blue" : "green"}>{mentalHealthInteraction.riskLevel}</AdminStatusBadge>} />
+                  <Field label="Escalation suggested" value={mentalHealthInteraction.escalationSuggested ? "Yes" : "No"} />
+                </div>
+                <Field label="Interaction summary" value={<p className="rounded-2xl bg-slate-50 p-4 font-medium leading-7 text-slate-700">{mentalHealthInteraction.interactionSummary}</p>} />
+                <Field label="AI response summary" value={<p className="rounded-2xl bg-slate-50 p-4 font-medium leading-7 text-slate-700">{mentalHealthInteraction.aiResponseSummary ?? "No AI summary stored."}</p>} />
+                <Field label="Support resources shown" value={<p className="rounded-2xl bg-emerald-50 p-4 font-medium leading-7 text-slate-700">{mentalHealthInteraction.supportResourcesShown ?? "No support resource summary stored."}</p>} />
+              </div>
+            ) : <p className="text-slate-500">No mental health companion log is attached to this flag.</p>}
           </DetailCard>
 
           <DetailCard title="User context">
@@ -152,7 +170,7 @@ export async function AdminAiFlagDetailPage({ flagId }: { flagId: number }) {
             ) : (
               <form action={escalateAiFlagToConsultationAction} className="space-y-4">
                 <input type="hidden" name="flagId" value={flag.id} />
-                <label className="space-y-2 block text-sm font-bold text-slate-700"><span>Requested specialty</span><input name="requestedSpecialty" defaultValue={symptomCheck?.symptomCategory ?? "General clinician"} className="w-full rounded-2xl border border-emerald-100 bg-white px-4 py-3 text-sm font-medium text-slate-700 outline-none focus:border-brand-600 focus:ring-4 focus:ring-emerald-100" /></label>
+                <label className="space-y-2 block text-sm font-bold text-slate-700"><span>Requested specialty</span><input name="requestedSpecialty" defaultValue={symptomCheck?.symptomCategory ?? (mentalHealthInteraction ? "Mental health support" : "General clinician")} className="w-full rounded-2xl border border-emerald-100 bg-white px-4 py-3 text-sm font-medium text-slate-700 outline-none focus:border-brand-600 focus:ring-4 focus:ring-emerald-100" /></label>
                 <label className="space-y-2 block text-sm font-bold text-slate-700"><span>Escalation notes</span><textarea name="adminNotes" rows={4} placeholder="Briefly explain why this should become a consultation request." className="w-full rounded-2xl border border-emerald-100 bg-white px-4 py-3 text-sm font-medium text-slate-700 outline-none focus:border-brand-600 focus:ring-4 focus:ring-emerald-100" /></label>
                 <button className="w-full rounded-2xl bg-rose-600 px-4 py-3 text-sm font-black text-white transition hover:bg-rose-700">Create consultation request</button>
               </form>

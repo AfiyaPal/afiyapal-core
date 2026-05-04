@@ -122,6 +122,7 @@ export async function AdminUserDetailPage({ userId, currentUserRole }: { userId:
           <AdminDashboardCard label="Blogs created" value={String(activitySummary.blogs)} helper="Health content authored by this user." />
           <AdminDashboardCard label="Comments" value={String(activitySummary.comments)} helper="Community or blog comments." />
           <AdminDashboardCard label="Symptom checks" value={String(activitySummary.symptomChecks)} helper="Logged symptom checker sessions." />
+          <AdminDashboardCard label="Mental health interactions" value={String(activitySummary.mentalHealthInteractions)} helper="Privacy-safe companion sessions." />
           <AdminDashboardCard label="Consultation requests" value={String(activitySummary.consultationRequests)} helper="Doctor connection requests." />
           <AdminDashboardCard label="AI flags" value={String(activitySummary.aiFlags)} helper="Flagged AI interactions linked to this user." />
           <AdminDashboardCard label="Safety reports" value={String(activitySummary.safetyReports)} helper="Reports submitted by this user." />

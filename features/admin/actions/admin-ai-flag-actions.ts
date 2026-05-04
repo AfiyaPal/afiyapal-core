@@ -45,6 +45,7 @@ async function ensureFlagExists(flagId: number) {
       id: true,
       userId: true,
       symptomCheckLogId: true,
+      mentalHealthInteractionId: true,
       title: true,
       summary: true,
       category: true,
@@ -129,20 +130,28 @@ export async function escalateAiFlagToConsultationAction(formData: FormData) {
     return;
   }
 
-  const symptomCheck = flag.symptomCheckLogId
-    ? await prisma.symptomCheckLog.findUnique({
-        where: { id: flag.symptomCheckLogId },
-        select: { language: true, symptomsSummary: true, symptomCategory: true, riskLevel: true, recommendedNextStep: true }
-      })
-    : null;
+  const [symptomCheck, mentalHealthInteraction] = await Promise.all([
+    flag.symptomCheckLogId
+      ? prisma.symptomCheckLog.findUnique({
+          where: { id: flag.symptomCheckLogId },
+          select: { language: true, symptomsSummary: true, symptomCategory: true, riskLevel: true, recommendedNextStep: true }
+        })
+      : null,
+    flag.mentalHealthInteractionId
+      ? prisma.mentalHealthInteraction.findUnique({
+          where: { id: flag.mentalHealthInteractionId },
+          select: { language: true, interactionSummary: true, moodCategory: true, riskLevel: true, supportResourcesShown: true }
+        })
+      : null
+  ]);
 
   const urgencyLevel = flag.priority === "CRITICAL" ? "EMERGENCY" : flag.priority === "HIGH" ? "HIGH" : "MEDIUM";
 
   const consultation = await prisma.consultationRequest.create({
     data: {
       userId: flag.userId ?? null,
-      reasonSummary: symptomCheck?.symptomsSummary ?? flag.summary ?? flag.title,
-      preferredLanguage: symptomCheck?.language ?? "en",
+      reasonSummary: symptomCheck?.symptomsSummary ?? mentalHealthInteraction?.interactionSummary ?? flag.summary ?? flag.title,
+      preferredLanguage: symptomCheck?.language ?? mentalHealthInteraction?.language ?? "en",
       urgencyLevel,
       requestedSpecialty,
       status: "ESCALATED",
@@ -164,6 +173,9 @@ export async function escalateAiFlagToConsultationAction(formData: FormData) {
     }),
     flag.symptomCheckLogId
       ? prisma.symptomCheckLog.update({ where: { id: flag.symptomCheckLogId }, data: { status: "ESCALATED", escalationSuggested: true } })
+      : Promise.resolve(),
+    flag.mentalHealthInteractionId
+      ? prisma.mentalHealthInteraction.update({ where: { id: flag.mentalHealthInteractionId }, data: { status: "ESCALATED", escalationSuggested: true } })
       : Promise.resolve()
   ]);
 

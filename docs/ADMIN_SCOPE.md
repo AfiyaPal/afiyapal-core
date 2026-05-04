@@ -237,3 +237,30 @@ Privacy rule:
 Escalation rule:
 
 - Escalating a flag creates a `ConsultationRequest`, links it to the flag, marks the flag as `ESCALATED`, and updates the related symptom-check log to `ESCALATED` when one exists.
+
+
+## Phase 9 — Mental Health Companion Oversight
+
+Implemented in this version:
+
+- Mental health companion interactions are stored separately from normal symptom-check logs.
+- Mental health logs keep privacy-safe summaries only by default:
+  - user id when signed in
+  - language
+  - mood category
+  - risk level
+  - support resources shown
+  - escalation suggested
+  - created date
+- High-risk mental health companion interactions automatically create AI safety flags in `/admin/ai-flags`.
+- AI flag detail pages now show privacy-safe mental health context when a flag comes from the companion flow.
+- Mental health support resource management is available at `/admin/settings/mental-health-resources`.
+- Resource records include hotline name, country, phone, website, description, and active/inactive status.
+
+Run after extracting:
+
+```bash
+npx prisma db push
+npx prisma generate
+npm run dev
+```

@@ -168,6 +168,7 @@ async function hasRecentRepeatedSymptoms(input: { userId?: number | null; sympto
 
 async function createFlagIfMissing(input: {
   symptomCheckLogId?: number | null;
+  mentalHealthInteractionId?: number | null;
   userId?: number | null;
   category: AiFlagCategory;
   trigger?: AiFlagTrigger;
@@ -183,13 +184,23 @@ async function createFlagIfMissing(input: {
         },
         select: { id: true }
       })
-    : null;
+    : input.mentalHealthInteractionId
+      ? await prisma.aiInteractionFlag.findFirst({
+          where: {
+            mentalHealthInteractionId: input.mentalHealthInteractionId,
+            category: input.category,
+            status: { in: ["OPEN", "IN_REVIEW", "ESCALATED"] }
+          },
+          select: { id: true }
+        })
+      : null;
 
   if (existing) return existing;
 
   return prisma.aiInteractionFlag.create({
     data: {
       symptomCheckLogId: input.symptomCheckLogId ?? null,
+      mentalHealthInteractionId: input.mentalHealthInteractionId ?? null,
       userId: input.userId ?? null,
       title: titleForCategory(input.category),
       summary: truncate(input.summary),
@@ -234,13 +245,61 @@ export async function createAutomaticAiSafetyFlagsForSymptomCheck(input: {
   );
 }
 
+
+function buildMentalHealthFlagSummary(input: {
+  moodCategory: string;
+  language: string;
+  riskLevel: string;
+  interactionSummary: string;
+  aiResponseSummary?: string | null;
+  supportResourcesShown?: string | null;
+}) {
+  return truncate([
+    `Mood category: ${input.moodCategory}`,
+    `Language: ${input.language}`,
+    `Risk level: ${input.riskLevel}`,
+    `Interaction summary: ${input.interactionSummary}`,
+    input.supportResourcesShown ? `Support resources shown: ${input.supportResourcesShown}` : null,
+    input.aiResponseSummary ? `AI summary: ${input.aiResponseSummary}` : null
+  ].filter(Boolean).join(" | "));
+}
+
+export async function createAutomaticAiSafetyFlagsForMentalHealthInteraction(input: {
+  id: number;
+  userId?: number | null;
+  moodCategory: string;
+  language: string;
+  riskLevel: string;
+  interactionSummary: string;
+  aiResponseSummary?: string | null;
+  supportResourcesShown?: string | null;
+  escalationSuggested?: boolean | null;
+}) {
+  if (input.riskLevel !== "HIGH" && input.riskLevel !== "EMERGENCY" && input.moodCategory !== "CRISIS_SUPPORT_NEEDED") return [];
+
+  const summary = buildMentalHealthFlagSummary(input);
+
+  return Promise.all([
+    createFlagIfMissing({
+      mentalHealthInteractionId: input.id,
+      userId: input.userId ?? null,
+      category: "MENTAL_HEALTH_CRISIS",
+      trigger: "AUTOMATIC_RISK_RULE",
+      riskLevel: input.riskLevel,
+      summary
+    })
+  ]);
+}
+
 export async function createUserReportedWrongAnswerFlag(input: {
   symptomCheckLogId?: number | null;
+  mentalHealthInteractionId?: number | null;
   userId?: number | null;
   summary?: string | null;
 }) {
   return createFlagIfMissing({
     symptomCheckLogId: input.symptomCheckLogId ?? null,
+    mentalHealthInteractionId: input.mentalHealthInteractionId ?? null,
     userId: input.userId ?? null,
     category: "USER_REPORTED_WRONG_ANSWER",
     trigger: "USER_REPORT",
