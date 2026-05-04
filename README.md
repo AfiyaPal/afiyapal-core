@@ -38,3 +38,16 @@ npx prisma migrate dev --name init
 - Django static images were copied to `public/images/*`.
 
 No secrets are included. Rotate any previously exposed API keys before deploying.
+
+## Stage 2 admin scope
+
+AFIYAPAL Stage 2 introduces an admin scope for keeping the platform safe, trustworthy, and medically responsible.
+
+Core admin user story:
+
+> As an AFIYAPAL admin, I want to manage users, doctors, AI health interactions, health content, consultation requests, and safety reports so that the platform remains safe, trustworthy, and medically responsible.
+
+The first admin roles are Super Admin, Support Admin, Medical Reviewer, Doctor Manager, and Content Manager. The Stage 2 MVP dashboard modules are Overview Dashboard, User Management, Doctor Verification, Symptom Checker Logs, Flagged AI Interactions, Blog / Content Management, Consultation Requests, and Reports / Safety Center.
+
+The source of truth for this scope lives in `features/admin/data/admin-scope.ts`, with a human-readable copy in `docs/ADMIN_SCOPE.md`. The `/admin` route currently renders the scope definition and will be expanded in later phases with route protection, permissions, and database-backed workflows.
+

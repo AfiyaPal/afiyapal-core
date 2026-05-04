@@ -4,5 +4,6 @@ export const routes = {
   chatbot: "/chatbot",
   login: "/login",
   register: "/register",
-  passwordReset: "/password-reset"
+  passwordReset: "/password-reset",
+  admin: "/admin"
 } as const;

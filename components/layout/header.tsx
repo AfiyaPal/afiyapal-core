@@ -5,6 +5,7 @@ const navItems = [
   { label: "Home", href: routes.home },
   { label: "Blogs", href: routes.blogs },
   { label: "Chatbot", href: routes.chatbot },
+  { label: "Admin", href: routes.admin },
   { label: "Login", href: routes.login }
 ];
 
