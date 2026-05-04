@@ -6,9 +6,9 @@ import type { BlogDetailModel, BlogSummary } from "@/features/blogs/types/blog";
 export async function listPublishedBlogs(): Promise<BlogSummary[]> {
   try {
     const blogs = await prisma.blog.findMany({
-      where: { status: "published" },
+      where: { status: { in: ["PUBLISHED", "published"] } },
       include: { media: true },
-      orderBy: { createdAt: "desc" }
+      orderBy: [{ publishedAt: "desc" }, { createdAt: "desc" }]
     });
 
     if (blogs.length === 0) return fallbackBlogs();
@@ -17,9 +17,9 @@ export async function listPublishedBlogs(): Promise<BlogSummary[]> {
       id: blog.id,
       title: blog.title,
       slug: blog.slug,
-      excerpt: blog.content.slice(0, 150),
+      excerpt: blog.excerpt ?? blog.content.slice(0, 150),
       imageUrl: blog.media[0]?.mediaUrl ?? null,
-      createdAt: blog.createdAt
+      createdAt: blog.publishedAt ?? blog.createdAt
     }));
   } catch {
     return fallbackBlogs();
@@ -28,8 +28,8 @@ export async function listPublishedBlogs(): Promise<BlogSummary[]> {
 
 export async function findBlogBySlug(slug: string): Promise<BlogDetailModel | null> {
   try {
-    const blog = await prisma.blog.findUnique({
-      where: { slug },
+    const blog = await prisma.blog.findFirst({
+      where: { slug, status: { in: ["PUBLISHED", "published"] } },
       include: { category: true, media: true }
     });
 
@@ -39,11 +39,11 @@ export async function findBlogBySlug(slug: string): Promise<BlogDetailModel | nu
       id: blog.id,
       title: blog.title,
       slug: blog.slug,
-      excerpt: blog.content.slice(0, 150),
+      excerpt: blog.excerpt ?? blog.content.slice(0, 150),
       content: blog.content,
-      category: blog.category?.name ?? null,
+      category: blog.category?.name ?? blog.contentCategory?.replaceAll("_", " ").toLowerCase() ?? null,
       imageUrl: blog.media[0]?.mediaUrl ?? null,
-      createdAt: blog.createdAt
+      createdAt: blog.publishedAt ?? blog.createdAt
     };
   } catch {
     return fallbackBlog(slug);

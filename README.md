@@ -180,3 +180,52 @@ npx prisma db push
 npx prisma generate
 npm run dev
 ```
+
+### Phase 10: Admin content management
+
+The `/admin/content` module now supports AFIYAPAL health education content management:
+
+- Article list and filters
+- Create/edit article forms
+- Draft, pending review, published, and archived states
+- English and Swahili language support
+- Malaria, maternal health, nutrition, mental health, first aid, and general wellness categories
+- Medical review status, reviewer, review date, and review notes
+- Submit for review, approve, publish, unpublish, archive, and request changes actions
+- Outdated published content reminders after 6 months without review
+
+After extracting this phase, run:
+
+```bash
+npx prisma db push
+npx prisma generate
+npm run dev
+```
+
+### Phase 11: Consultation requests
+
+Phase 11 implements the admin consultation workflow.
+
+Included:
+
+- `/admin/consultations` real request list.
+- `/admin/consultations/[requestId]` detail page.
+- Filters for status, urgency, specialty, language, and assigned/unassigned state.
+- Verified doctor assignment.
+- Status updates.
+- Internal admin notes.
+- Privacy-safe patient and doctor summaries.
+
+After updating from Phase 10, run:
+
+```bash
+npx prisma db push
+npx prisma generate
+npm run dev
+```
+
+Recommended commit:
+
+```bash
+feat(admin): add consultation request management
+```

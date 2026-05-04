@@ -11,6 +11,7 @@ export const routes = {
   adminSymptomChecks: "/admin/symptom-checks",
   adminAiFlags: "/admin/ai-flags",
   adminContent: "/admin/content",
+  adminContentNew: "/admin/content/new",
   adminConsultations: "/admin/consultations",
   adminReports: "/admin/reports",
   adminSettings: "/admin/settings",

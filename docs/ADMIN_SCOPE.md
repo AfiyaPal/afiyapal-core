@@ -264,3 +264,78 @@ npx prisma db push
 npx prisma generate
 npm run dev
 ```
+
+## Phase 10: Content management
+
+The admin content module is now an operational CMS workflow for AFIYAPAL health education articles.
+
+### Routes
+
+- `/admin/content` — article list with filters and workflow actions.
+- `/admin/content/new` — create a draft article.
+- `/admin/content/[blogId]` — article detail, review metadata, action controls, and safe preview.
+- `/admin/content/[blogId]/edit` — edit article content and metadata.
+
+### Article workflow
+
+Supported article statuses:
+
+- `DRAFT`
+- `PENDING_REVIEW`
+- `PUBLISHED`
+- `ARCHIVED`
+
+Supported medical review statuses:
+
+- `NOT_SUBMITTED`
+- `PENDING`
+- `APPROVED`
+- `CHANGES_REQUESTED`
+- `REJECTED`
+
+### Categories and languages
+
+Categories:
+
+- Malaria
+- Maternal health
+- Nutrition
+- Mental health
+- First aid
+- General wellness
+
+Languages:
+
+- English
+- Swahili
+
+### Governance rules
+
+- Content Managers can create, edit, submit, publish, unpublish, and archive articles.
+- Medical Reviewers can approve content for publishing or request changes.
+- Published content edited later is moved back into review to protect medical quality.
+- Published articles older than 6 months without a fresh review are marked as needing review.
+- The public blog listing only shows published articles.
+
+## Phase 11 update: consultation requests
+
+The consultation requests module is now implemented beyond the placeholder stage.
+
+Included:
+
+- `/admin/consultations` real consultation request table.
+- `/admin/consultations/[requestId]` privacy-safe consultation detail page.
+- Consultation request fields: user, symptoms/reason summary, preferred language, country/region, urgency level, requested specialty, assigned doctor, status, admin notes, created date, and updated date.
+- Consultation statuses: `NEW`, `AWAITING_ASSIGNMENT`, `ASSIGNED`, `ACCEPTED_BY_DOCTOR`, `COMPLETED`, `CANCELLED`, and `ESCALATED`.
+- Filters for status, urgency, specialty, language, and assigned/unassigned state.
+- Assign doctor action restricted to verified doctors.
+- Change status action.
+- Internal admin notes action.
+
+Privacy rule:
+
+- Consultation detail pages show summarized care-coordination context and basic user profile details only. Full raw AI or health conversations remain outside the default consultation view.
+
+Care coordination rule:
+
+- Assigning a verified doctor automatically moves the request to `ASSIGNED`. Clearing the assigned doctor moves the request to `AWAITING_ASSIGNMENT`.

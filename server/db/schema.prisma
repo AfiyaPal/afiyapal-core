@@ -34,21 +34,35 @@ model Category {
 }
 
 model Blog {
-  id         Int       @id @default(autoincrement())
-  title      String
-  slug       String    @unique
-  content    String
-  status     String    @default("draft")
-  creatorId  Int
-  categoryId Int?
-  createdAt  DateTime  @default(now())
-  updatedAt  DateTime  @updatedAt
-  creator    User      @relation(fields: [creatorId], references: [id])
-  category   Category? @relation(fields: [categoryId], references: [id])
-  comments   Comment[]
-  media      Media[]
+  id                  Int       @id @default(autoincrement())
+  title               String
+  slug                String    @unique
+  excerpt             String?
+  content             String
+  status              String    @default("DRAFT")
+  language            String    @default("en")
+  contentCategory     String    @default("GENERAL_WELLNESS")
+  medicalReviewStatus String    @default("NOT_SUBMITTED")
+  reviewedById        Int?
+  reviewedAt          DateTime?
+  reviewNotes         String?
+  publishedAt         DateTime?
+  archivedAt          DateTime?
+  creatorId           Int
+  categoryId          Int?
+  createdAt           DateTime  @default(now())
+  updatedAt           DateTime  @updatedAt
+  creator             User      @relation(fields: [creatorId], references: [id])
+  category            Category? @relation(fields: [categoryId], references: [id])
+  comments            Comment[]
+  media               Media[]
 
   @@index([status])
+  @@index([language])
+  @@index([contentCategory])
+  @@index([medicalReviewStatus])
+  @@index([reviewedAt])
+  @@index([publishedAt])
   @@index([createdAt])
 }
 
@@ -161,16 +175,19 @@ model ConsultationRequest {
   reasonSummary      String
   preferredLanguage  String   @default("en")
   countryRegion      String?
-  urgencyLevel       String   @default("NORMAL")
+  urgencyLevel       String   @default("LOW")
   requestedSpecialty String?
   status             String   @default("NEW")
   adminNotes         String?
   createdAt          DateTime @default(now())
   updatedAt          DateTime @updatedAt
 
+  @@index([userId])
+  @@index([assignedDoctorId])
   @@index([status])
   @@index([urgencyLevel])
   @@index([preferredLanguage])
+  @@index([requestedSpecialty])
   @@index([createdAt])
 }
 
