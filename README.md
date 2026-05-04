@@ -110,3 +110,24 @@ npx prisma db push
 npx prisma generate
 npm run dev
 ```
+
+### Phase 7: Symptom checker logging
+
+The admin symptom checker module now supports:
+
+- Safe logging of chatbot/symptom-checker requests.
+- User ID capture when the user is signed in.
+- Language detection using the user's preferred language and simple Swahili/English heuristics.
+- Symptom category inference.
+- Risk levels: `LOW`, `MEDIUM`, `HIGH`, `EMERGENCY`.
+- Recommended next step and doctor-escalation suggestion.
+- `/admin/symptom-checks` with filters for risk level, language, date range, escalation suggested, and status.
+- `/admin/symptom-checks/[logId]` with a privacy-safe summary detail view.
+
+After updating from Phase 5, run:
+
+```bash
+npx prisma db push
+npx prisma generate
+npm run dev
+```

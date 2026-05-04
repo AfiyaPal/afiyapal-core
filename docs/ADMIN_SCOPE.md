@@ -193,3 +193,24 @@ Privacy rule:
 Permission rule:
 
 - Admin roles can only be assigned or removed by a `SUPER_ADMIN` through the existing `CREATE_ADMINS` permission helper.
+
+## Phase 7 update: symptom checker logging
+
+The symptom checker module is now implemented beyond the placeholder stage.
+
+Included:
+
+- Every chatbot/symptom-checker request is logged safely after an AI response is generated.
+- Logs capture user ID when available, language, symptom summary, AI response summary, symptom category, risk level, recommended next step, escalation suggestion, status, created date, and updated date.
+- Risk levels are standardized as `LOW`, `MEDIUM`, `HIGH`, and `EMERGENCY`.
+- `/admin/symptom-checks` now shows a real table of symptom checker requests.
+- Filters include risk level, language, start date, end date, escalation suggested, and status.
+- `/admin/symptom-checks/[logId]` shows a privacy-safe detail summary.
+
+Privacy rule:
+
+- The admin view shows summarized health content and metadata. Full raw health conversations are intentionally not exposed by default.
+
+Safety rule:
+
+- `HIGH` and `EMERGENCY` risk logs automatically mark doctor escalation as suggested. Emergency logs recommend urgent local medical care.

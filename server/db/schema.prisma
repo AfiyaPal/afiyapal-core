@@ -115,8 +115,11 @@ model SymptomCheckLog {
   createdAt             DateTime @default(now())
   updatedAt             DateTime @updatedAt
 
+  @@index([userId])
   @@index([riskLevel])
   @@index([language])
+  @@index([status])
+  @@index([escalationSuggested])
   @@index([createdAt])
 }
 
