@@ -214,3 +214,26 @@ Privacy rule:
 Safety rule:
 
 - `HIGH` and `EMERGENCY` risk logs automatically mark doctor escalation as suggested. Emergency logs recommend urgent local medical care.
+
+## Phase 8 update: AI safety flags
+
+The flagged AI interactions module is now implemented beyond the placeholder stage.
+
+Included:
+
+- `AiInteractionFlag` now stores reviewer assignment, admin notes, reviewer notes, resolution notes, trigger source, resolved timestamp, and linked escalation consultation ID.
+- Automatic flags are created when symptom-check logs contain emergency symptoms, mental health crisis language, pregnancy/child high-risk symptoms, low-confidence AI wording, or repeated unresolved symptoms.
+- User-reported wrong-answer flags are supported at the service layer for later UI/reporting integration.
+- Flag statuses are standardized as `OPEN`, `IN_REVIEW`, `RESOLVED`, and `ESCALATED`.
+- Flag priorities are standardized as `LOW`, `MEDIUM`, `HIGH`, and `CRITICAL`.
+- `/admin/ai-flags` now shows a real table with filters for search, status, priority, category, trigger, and date range.
+- `/admin/ai-flags/[flagId]` shows a privacy-safe review detail page.
+- Medical reviewers can assign reviewers, update flag status, update priority, add admin/reviewer/resolution notes, and escalate flags into consultation requests.
+
+Privacy rule:
+
+- AI flag detail pages show summarized context and linked symptom-check summaries. Full raw private health conversations are not exposed by default.
+
+Escalation rule:
+
+- Escalating a flag creates a `ConsultationRequest`, links it to the flag, marks the flag as `ESCALATED`, and updates the related symptom-check log to `ESCALATED` when one exists.

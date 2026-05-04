@@ -124,23 +124,31 @@ model SymptomCheckLog {
 }
 
 model AiInteractionFlag {
-  id                 Int      @id @default(autoincrement())
-  symptomCheckLogId  Int?
-  userId             Int?
-  title              String
-  summary            String?
-  category           String
-  priority           String   @default("MEDIUM")
-  status             String   @default("OPEN")
-  assignedReviewerId Int?
-  reviewerNotes      String?
-  resolutionNotes    String?
-  createdAt          DateTime @default(now())
-  updatedAt          DateTime @updatedAt
+  id                            Int       @id @default(autoincrement())
+  symptomCheckLogId             Int?
+  userId                        Int?
+  title                         String
+  summary                       String?
+  category                      String
+  trigger                       String    @default("AUTOMATIC_RISK_RULE")
+  priority                      String    @default("MEDIUM")
+  status                        String    @default("OPEN")
+  assignedReviewerId            Int?
+  adminNotes                    String?
+  reviewerNotes                 String?
+  resolutionNotes               String?
+  escalatedConsultationRequestId Int?
+  resolvedAt                    DateTime?
+  createdAt                     DateTime  @default(now())
+  updatedAt                     DateTime  @updatedAt
 
+  @@index([symptomCheckLogId])
+  @@index([userId])
+  @@index([assignedReviewerId])
   @@index([status])
   @@index([priority])
   @@index([category])
+  @@index([trigger])
   @@index([createdAt])
 }
 

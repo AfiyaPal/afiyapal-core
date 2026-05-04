@@ -1,3 +1,4 @@
+import type { ReactNode } from "react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { routes } from "@/lib/routes";
@@ -28,7 +29,7 @@ function statusTone(status: string) {
   return "green" as const;
 }
 
-function DetailCard({ title, children }: { title: string; children: React.ReactNode }) {
+function DetailCard({ title, children }: { title: string; children: ReactNode }) {
   return (
     <section className="rounded-3xl border border-emerald-100 bg-white p-5 shadow-sm">
       <h2 className="text-sm font-black uppercase tracking-wide text-brand-700">{title}</h2>
@@ -114,7 +115,7 @@ export async function AdminSymptomCheckDetailPage({ logId }: { logId: number }) 
               <div className="space-y-3">
                 {flags.map((flag) => (
                   <div key={flag.id} className="rounded-2xl border border-emerald-100 p-3">
-                    <p className="font-black text-slate-950">{flag.title}</p>
+                    <Link href={`${routes.adminAiFlags}/${flag.id}`} className="font-black text-slate-950 transition hover:text-brand-700">{flag.title}</Link>
                     <p className="mt-1 text-xs font-bold uppercase tracking-wide text-slate-500">{flag.category} · {flag.priority} · {flag.status}</p>
                   </div>
                 ))}

@@ -131,3 +131,25 @@ npx prisma db push
 npx prisma generate
 npm run dev
 ```
+
+### Phase 8: AI safety flags
+
+The admin AI safety module now supports:
+
+- Automatic AI safety flags from symptom-check logs.
+- Flag categories for emergency symptoms, mental health crisis language, pregnancy/child high-risk symptoms, user-reported wrong answers, low-confidence AI responses, and repeated unresolved symptoms.
+- Flag statuses: `OPEN`, `IN_REVIEW`, `RESOLVED`, `ESCALATED`.
+- Flag priorities: `LOW`, `MEDIUM`, `HIGH`, `CRITICAL`.
+- `/admin/ai-flags` with filters for search, status, priority, category, trigger, and date range.
+- `/admin/ai-flags/[flagId]` with a privacy-safe review page.
+- Reviewer assignment.
+- Admin, reviewer, and resolution notes.
+- Escalation action that creates a consultation request and links it back to the flag.
+
+After updating from Phase 7, run:
+
+```bash
+npx prisma db push
+npx prisma generate
+npm run dev
+```

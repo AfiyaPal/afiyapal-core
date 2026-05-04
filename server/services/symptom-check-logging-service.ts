@@ -1,5 +1,6 @@
 import "server-only";
 import { prisma } from "@/server/db/prisma";
+import { createAutomaticAiSafetyFlagsForSymptomCheck } from "@/server/services/ai-safety-flag-service";
 
 export const SYMPTOM_RISK_LEVELS = ["LOW", "MEDIUM", "HIGH", "EMERGENCY"] as const;
 export type SymptomRiskLevel = (typeof SYMPTOM_RISK_LEVELS)[number];
@@ -114,7 +115,7 @@ export async function logSymptomCheckRequest(input: {
   const recommendedNextStep = truncate(recommendedNextStepForRisk(riskLevel), MAX_NEXT_STEP_LENGTH);
   const escalationSuggested = riskLevel === "HIGH" || riskLevel === "EMERGENCY";
 
-  return prisma.symptomCheckLog.create({
+  const log = await prisma.symptomCheckLog.create({
     data: {
       userId: input.userId ?? null,
       language,
@@ -127,4 +128,18 @@ export async function logSymptomCheckRequest(input: {
       status: input.status ?? "COMPLETED"
     }
   });
+
+  await createAutomaticAiSafetyFlagsForSymptomCheck({
+    id: log.id,
+    userId: log.userId,
+    symptomsSummary: log.symptomsSummary,
+    aiResponseSummary: log.aiResponseSummary,
+    symptomCategory: log.symptomCategory,
+    riskLevel: log.riskLevel,
+    recommendedNextStep: log.recommendedNextStep
+  }).catch((error) => {
+    console.error("Failed to create automatic AI safety flags", error);
+  });
+
+  return log;
 }
