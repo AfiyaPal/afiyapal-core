@@ -1,347 +1,323 @@
-# AfiyaPal Next.js Migration Starter
+# 🌍 AFIYAPAL – Your AI-Powered Health Assistant for African Lives
 
-This zip is a production-oriented Next.js App Router starter generated from the Django project structure.
+AFIYAPAL is an AI-powered health assistant designed to improve access to basic healthcare guidance, health education, mental wellness support, and doctor connections for African communities.
 
-## Architecture
+The platform combines AI, multilingual support, health content, and telemedicine workflows to help users receive first-step health guidance in a simple, accessible, and familiar way.
 
-```txt
-app/        = thin routes, layouts, route handlers, loading/error/not-found states
-features/   = feature-based UI, schemas, actions, feature queries/types
-server/     = server-only sensitive logic: Prisma, repositories, services, AI clients
-components/ = reusable layout, UI, and shared presentation components
-lib/        = shared config, env validation, routes, utilities
-public/     = migrated static images from Django static/img
-styles/     = optional extra global styles
-```
+---
 
-## Start
+## ✨ Inspiration
+
+Accessing quality healthcare in many African communities remains a challenge due to limited medical infrastructure, long travel distances, language barriers, cost constraints, and low access to reliable health information.
+
+We created **AFIYAPAL** to make healthcare more accessible, inclusive, and smarter using AI-powered assistance and low-barrier digital communication tools.
+
+By integrating technologies like **Gemini AI**, multilingual support, and telemedicine workflows, AFIYAPAL aims to bridge the gap between healthcare providers and people who need timely health guidance — in their own language and through familiar digital channels.
+
+---
+
+## ⚙️ What AFIYAPAL Does
+
+### 🏥 AI Symptom Checker
+
+Users can describe their symptoms and receive AI-powered health insights. The symptom checker helps users understand possible next steps and whether they may need professional medical attention.
+
+> AFIYAPAL does not replace a licensed medical professional. It provides first-step guidance and encourages users to seek professional care when needed.
+
+### 💬 Multilingual Health Support
+
+AFIYAPAL supports communication in:
+
+- English
+- Swahili
+
+This helps make health guidance more inclusive and easier to understand for users across different communities.
+
+### 🧠 Mental Health Companion
+
+The mental health companion provides supportive wellness prompts, mindfulness tips, emotional check-ins, and safe guidance for users who may need mental health support.
+
+High-risk interactions can be flagged for safety review and escalation where appropriate.
+
+### 👨‍⚕️ Telemedicine Connector
+
+AFIYAPAL helps users connect with verified healthcare providers through consultation request workflows.
+
+Users can request medical help, and admins can assign verified doctors based on urgency, specialty, language, and availability.
+
+### 📚 Health Education Content
+
+The platform includes health articles and educational resources covering topics such as:
+
+- Malaria
+- Maternal health
+- Nutrition
+- Mental health
+- First aid
+- General wellness
+
+Content can be reviewed before publishing to ensure quality and trustworthiness.
+
+---
+
+## 🔧 How We Built It
+
+AFIYAPAL was built as a modern web platform using a scalable full-stack architecture.
+
+### Frontend
+
+The user interface is built with **Next.js**, providing a fast, responsive, and accessible experience for users and administrators.
+
+Key frontend areas include:
+
+- Public homepage
+- Authentication pages
+- AI chatbot interface
+- Blog and health education pages
+- Admin dashboard
+- Doctor verification workflows
+- Consultation management screens
+- Safety and reporting dashboards
+
+### Backend
+
+The backend uses server-side logic and database-backed workflows to manage users, doctors, AI logs, consultations, reports, notifications, and admin actions.
+
+Core backend responsibilities include:
+
+- Authentication and sessions
+- Role-based access control
+- Admin permissions
+- Symptom checker logging
+- AI safety flagging
+- Doctor verification
+- Consultation request management
+- Reports and safety center
+- Audit logging
+- Notification workflows
+
+### Database
+
+AFIYAPAL uses **Prisma** as the database ORM, allowing structured management of platform data such as:
+
+- Users
+- Doctor profiles
+- Symptom check logs
+- Mental health interactions
+- AI safety flags
+- Consultation requests
+- Blog articles
+- Reports
+- Audit logs
+- Notifications
+- Platform settings
+- Health resources
+
+### AI Integration
+
+AFIYAPAL integrates with **Gemini AI** to power health-related conversations, symptom checking, and user support flows.
+
+AI interactions are designed with safety in mind by including:
+
+- Medical disclaimers
+- Emergency guidance
+- Risk-level detection
+- Safety flags
+- Human review workflows
+- Privacy-conscious logging
+
+---
+
+## 🛡️ Safety and Privacy
+
+Because AFIYAPAL handles health-related information, privacy and safety are central to the platform.
+
+The system includes:
+
+- Medical disclaimers across AI assistant flows
+- Emergency guidance for critical symptoms
+- Privacy-safe admin summaries
+- Restricted access to sensitive health details
+- Required reason before viewing sensitive summaries
+- Audit logs for sensitive admin actions
+- Role-based access control
+- Doctor verification before public visibility
+- Safety reports and review workflows
+
+AFIYAPAL avoids exposing full sensitive health conversations by default. Admins see summaries first, and sensitive access is restricted to authorized roles such as Super Admins and Medical Reviewers.
+
+---
+
+## 🧑‍💼 Admin Dashboard
+
+AFIYAPAL includes a powerful admin dashboard for managing platform trust, safety, and operations.
+
+Admin modules include:
+
+- Overview dashboard
+- User management
+- Doctor verification
+- Symptom checker logs
+- AI safety flags
+- Mental health oversight
+- Content management
+- Consultation requests
+- Reports and safety center
+- Audit logs
+- Platform settings
+- Health resources
+- Notifications
+- Testing checklist
+
+The admin dashboard helps the team ensure that the platform remains safe, medically responsible, and operationally reliable.
+
+---
+
+## 🔐 Role-Based Access
+
+AFIYAPAL supports multiple roles for safe platform management:
+
+- User
+- Doctor
+- Admin
+- Super Admin
+- Medical Reviewer
+- Support Admin
+- Doctor Manager
+- Content Manager
+
+Each role has specific permissions. For example:
+
+- Super Admins can manage system-wide settings and audit logs.
+- Doctor Managers can approve or reject doctors.
+- Medical Reviewers can review AI safety flags.
+- Content Managers can manage health articles.
+- Support Admins can manage consultation requests and reports.
+
+---
+
+## 📌 Key Features
+
+- AI-powered symptom checker
+- English and Swahili support
+- Mental health companion
+- Verified doctor connection workflow
+- Health education articles
+- Admin dashboard
+- Doctor verification
+- Consultation request management
+- AI safety flagging
+- Reports and safety center
+- Audit logs
+- Notifications
+- Health resource management
+- Privacy-first safety review system
+
+---
+
+## 🚀 Getting Started
+
+### 1. Install dependencies
 
 ```bash
 npm install
-cp .env.example .env.local
-npx prisma generate
-npm run dev
 ```
 
-For database-backed auth/blogs, set `DATABASE_URL` in `.env.local`, then run:
+### 2. Configure environment variables
 
-```bash
-npx prisma migrate dev --name init
+Create a `.env` file and configure your database and AI provider settings.
+
+Example:
+
+```env
+DATABASE_URL="file:./dev.db"
+GEMINI_API_KEY="your-gemini-api-key"
+SESSION_SECRET="your-secure-session-secret"
 ```
 
-## Migration notes
-
-- Django `templates/base.html` became `app/layout.tsx` + `components/layout/*`.
-- Django `frontend/templates/frontend/index.html` became `features/home/components/home-page.tsx`.
-- Django chatbot views became `features/chatbot/*`, `app/api/chatbot/route.ts`, and `server/ai/gemini-client.ts`.
-- Django `users/models.py` was mapped to `server/db/schema.prisma`.
-- Django static images were copied to `public/images/*`.
-
-No secrets are included. Rotate any previously exposed API keys before deploying.
-
-## Stage 2 admin scope
-
-AFIYAPAL Stage 2 introduces an admin scope for keeping the platform safe, trustworthy, and medically responsible.
-
-Core admin user story:
-
-> As an AFIYAPAL admin, I want to manage users, doctors, AI health interactions, health content, consultation requests, and safety reports so that the platform remains safe, trustworthy, and medically responsible.
-
-The first admin roles are Super Admin, Support Admin, Medical Reviewer, Doctor Manager, and Content Manager. The Stage 2 MVP dashboard modules are Overview Dashboard, User Management, Doctor Verification, Symptom Checker Logs, Flagged AI Interactions, Blog / Content Management, Consultation Requests, Reports / Safety Center, and Super Admin Audit Logs.
-
-The source of truth for this scope lives in `features/admin/data/admin-scope.ts`, with a human-readable copy in `docs/ADMIN_SCOPE.md`. The `/admin` route currently renders the scope definition and will be expanded in later phases with route protection, permissions, and database-backed workflows.
-
-
-## Stage 2 Admin Access
-
-The admin area is available at `/admin` and is protected by role-based access. New users register as `USER`; promote a trusted test account to `SUPER_ADMIN` in the database for local admin testing. See `docs/ADMIN_SCOPE.md` for the current role and permission map.
-
-## Stage 2 Phase 3 Admin Layout
-
-Phase 3 adds the reusable admin dashboard shell used by all protected admin routes.
-
-Included admin routes:
-
-- `/admin`
-- `/admin/users`
-- `/admin/doctors`
-- `/admin/symptom-checks`
-- `/admin/ai-flags`
-- `/admin/content`
-- `/admin/consultations`
-- `/admin/reports`
-- `/admin/settings`
-
-Reusable admin UI components live in `features/admin/components` and include the sidebar, top bar, dashboard cards, table shell, status badge, and filter shell.
-
-The admin top bar includes a profile/logout menu. The logout action clears the signed HTTP-only session cookie and redirects to `/login`.
-
-## Stage 2 Admin — Phase 4 Overview Dashboard
-
-Phase 4 connects `/admin` to a real overview dashboard with user counts, activity windows, symptom-check totals, consultation requests, pending doctor verification counts, AI safety flags, emergency-risk interactions, published articles, and a recent activity feed.
-
-Run after extracting this phase:
+### 3. Push database schema
 
 ```bash
 npx prisma db push
+```
+
+### 4. Generate Prisma Client
+
+```bash
 npx prisma generate
+```
+
+### 5. Seed development data
+
+```bash
+npx prisma db seed
+```
+
+### 6. Run the development server
+
+```bash
 npm run dev
 ```
 
-The new Stage 2 tables will start at `0` until the corresponding workflows are implemented and populated in later phases.
-
-
-### Phase 5: User management
-
-The admin users module now supports:
-
-- User list at `/admin/users`.
-- Search by username/email.
-- Filters by role and account status.
-- User detail pages at `/admin/users/[userId]`.
-- Activate/suspend account actions.
-- Role changes with Super Admin protection for admin-level roles.
-- Privacy-safe activity summaries that avoid exposing raw health conversations by default.
-
-After updating from Phase 4, run:
-
-```bash
-npx prisma db push
-npx prisma generate
-npm run dev
-```
-
-### Phase 7: Symptom checker logging
-
-The admin symptom checker module now supports:
-
-- Safe logging of chatbot/symptom-checker requests.
-- User ID capture when the user is signed in.
-- Language detection using the user's preferred language and simple Swahili/English heuristics.
-- Symptom category inference.
-- Risk levels: `LOW`, `MEDIUM`, `HIGH`, `EMERGENCY`.
-- Recommended next step and doctor-escalation suggestion.
-- `/admin/symptom-checks` with filters for risk level, language, date range, escalation suggested, and status.
-- `/admin/symptom-checks/[logId]` with a privacy-safe summary detail view.
-
-After updating from Phase 5, run:
-
-```bash
-npx prisma db push
-npx prisma generate
-npm run dev
-```
-
-### Phase 8: AI safety flags
-
-The admin AI safety module now supports:
-
-- Automatic AI safety flags from symptom-check logs.
-- Flag categories for emergency symptoms, mental health crisis language, pregnancy/child high-risk symptoms, user-reported wrong answers, low-confidence AI responses, and repeated unresolved symptoms.
-- Flag statuses: `OPEN`, `IN_REVIEW`, `RESOLVED`, `ESCALATED`.
-- Flag priorities: `LOW`, `MEDIUM`, `HIGH`, `CRITICAL`.
-- `/admin/ai-flags` with filters for search, status, priority, category, trigger, and date range.
-- `/admin/ai-flags/[flagId]` with a privacy-safe review page.
-- Reviewer assignment.
-- Admin, reviewer, and resolution notes.
-- Escalation action that creates a consultation request and links it back to the flag.
-
-After updating from Phase 7, run:
-
-```bash
-npx prisma db push
-npx prisma generate
-npm run dev
-```
-
-
-## Phase 9 — Mental Health Companion Oversight
-
-Implemented in this version:
-
-- Mental health companion interactions are stored separately from normal symptom-check logs.
-- Mental health logs keep privacy-safe summaries only by default:
-  - user id when signed in
-  - language
-  - mood category
-  - risk level
-  - support resources shown
-  - escalation suggested
-  - created date
-- High-risk mental health companion interactions automatically create AI safety flags in `/admin/ai-flags`.
-- AI flag detail pages now show privacy-safe mental health context when a flag comes from the companion flow.
-- Mental health support resource management is available at `/admin/settings/mental-health-resources`.
-- Resource records include hotline name, country, phone, website, description, and active/inactive status.
-
-Run after extracting:
-
-```bash
-npx prisma db push
-npx prisma generate
-npm run dev
-```
-
-### Phase 10: Admin content management
-
-The `/admin/content` module now supports AFIYAPAL health education content management:
-
-- Article list and filters
-- Create/edit article forms
-- Draft, pending review, published, and archived states
-- English and Swahili language support
-- Malaria, maternal health, nutrition, mental health, first aid, and general wellness categories
-- Medical review status, reviewer, review date, and review notes
-- Submit for review, approve, publish, unpublish, archive, and request changes actions
-- Outdated published content reminders after 6 months without review
-
-After extracting this phase, run:
-
-```bash
-npx prisma db push
-npx prisma generate
-npm run dev
-```
-
-### Phase 11: Consultation requests
-
-Phase 11 implements the admin consultation workflow.
-
-Included:
-
-- `/admin/consultations` real request list.
-- `/admin/consultations/[requestId]` detail page.
-- Filters for status, urgency, specialty, language, and assigned/unassigned state.
-- Verified doctor assignment.
-- Status updates.
-- Internal admin notes.
-- Privacy-safe patient and doctor summaries.
-
-After updating from Phase 10, run:
-
-```bash
-npx prisma db push
-npx prisma generate
-npm run dev
-```
-
-Recommended commit:
-
-```bash
-feat(admin): add consultation request management
-```
-
-### Phase 12 admin reports and safety center
-
-The admin dashboard now includes a real Reports / Safety Center workflow at `/admin/reports`.
-
-Included report types:
-
-- AI response report
-- Doctor report
-- User report
-- Content report
-- Platform issue
-- Safety incident
-
-Included workflow fields:
-
-- Status: `OPEN`, `IN_REVIEW`, `RESOLVED`, `DISMISSED`
-- Priority: `LOW`, `MEDIUM`, `HIGH`, `CRITICAL`
-- Assigned admin
-- Resolution notes
-- Action history for status, priority, assignment, and resolution updates
-
-After extracting this phase, run:
-
-```bash
-npx prisma db push
-npx prisma generate
-npm run dev
-```
-
-### Phase 13: Admin audit logs
-
-Phase 13 adds Super Admin-only governance auditing at `/admin/audit-logs`.
-
-Included:
-
-- `AdminAuditLog` Prisma model/table.
-- Read-only Super Admin audit log dashboard.
-- Filters by search, admin user, action type, target type, and date range.
-- Logging for important admin actions including user suspension/status changes, role changes, doctor approval/rejection/suspension, article publication, AI flag resolution/escalation, consultation assignment/status changes, and safety report resolution.
-- Audit entries store admin user, action type, target type, target ID, old value, new value, reason, and timestamp.
-
-After updating from Phase 12, run:
-
-```bash
-npx prisma db push
-npx prisma generate
-npm run dev
-```
-
-### Phase 14 privacy and safety notes
-
-The admin system now enforces privacy-forward health review rules. AI assistant flows show medical disclaimers and critical-risk emergency guidance. Admin tables minimize health data. Sensitive health summaries are hidden by default and can only be viewed by a Super Admin or Medical Reviewer after entering a reason. That access is temporary and recorded in the Super Admin audit log. The system intentionally avoids storing full raw health conversations by default.
-
-## Phase 15 Admin Settings
-
-The admin center now includes production-oriented settings management at `/admin/settings`. Super Admins can configure supported languages, emergency message text, doctor verification requirements, AI disclaimer text, consultation urgency rules, content review interval, and the platform support email.
-
-Health resource management is available at `/admin/settings/health-resources` for clinics, hotlines, emergency contacts, and country-specific resources. Changes are recorded in admin audit logs.
-
-After pulling this phase, run:
-
-```bash
-npx prisma db push
-npx prisma generate
-npm run dev
-```
-
-
-## Stage 2 Phase 16: Notifications
-
-Phase 16 adds a database-backed notification system for AFIYAPAL operations.
-
-New notification workflows include:
-
-- Admin alerts for doctor applications, critical AI flags, urgent consultations, reported AI responses, content pending medical review, and important safety reports.
-- Doctor alerts for verification approval/rejection and consultation assignment.
-- User alerts for consultation assignment, consultation status updates, and resolved reports.
-
-Admins can view their notifications at:
+The app should now be available at:
 
 ```txt
-/admin/notifications
+http://localhost:3000
 ```
 
-After extracting this phase, run:
+---
 
-```bash
-npx prisma db push
-npx prisma generate
-npm run dev
-```
+## 🧪 Testing
 
-### Phase 17: Testing checklist
+AFIYAPAL includes an admin testing checklist for verifying important platform behavior.
 
-Phase 17 adds a release QA checklist for the Stage 2 admin system.
+Important checks include:
 
-Included:
+- Normal users cannot access `/admin`
+- Suspended users cannot use protected services
+- Doctors do not appear publicly before verification
+- Doctor Managers can approve doctors
+- Content Managers cannot approve doctors
+- Medical Reviewers can review AI safety flags
+- Support Admins can manage consultation requests
+- Critical AI flags appear in the admin dashboard
+- Consultations can only be assigned to verified doctors
+- Sensitive health details are not exposed unnecessarily
+- Audit logs are created for sensitive actions
 
-- Super Admin-only `/admin/testing` checklist page.
-- Manual QA cases for admin route protection, suspended-user protection, doctor verification, AI safety flags, consultation assignment, audit logging, pagination, filters, and sensitive-health privacy.
-- Documentation at `docs/ADMIN_TESTING_CHECKLIST.md`.
+---
 
-Run before testing:
+## 🧭 Project Vision
 
-```bash
-npx prisma db push
-npx prisma generate
-npm run dev
-```
+AFIYAPAL aims to become a trusted digital health access bridge for African communities.
 
-Recommended commit:
+The long-term vision is to support:
 
-```bash
-feat(admin): add stage two testing checklist
-```
+- AI-assisted health guidance
+- Multilingual health conversations
+- Low-tech access through SMS, WhatsApp, or USSD
+- Verified doctor networks
+- Localized health resources
+- Preventive health education
+- Mental health support
+- Community-level health insights
+
+---
+
+## ⚠️ Medical Disclaimer
+
+AFIYAPAL is not a replacement for professional medical diagnosis, treatment, or emergency care.
+
+The AI assistant provides general health guidance only. Users should contact a qualified healthcare provider for medical advice and seek emergency services immediately when experiencing severe or life-threatening symptoms.
+
+---
+
+## 👥 Team
+
+Built with the goal of making healthcare more accessible, inclusive, and intelligent for African lives.
+
+---
+
+## 📄 License
+
+This project is intended for research, and healthcare innovation purposes.
