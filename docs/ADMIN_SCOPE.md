@@ -171,3 +171,25 @@ npx prisma generate
 ```
 
 Then restart the dev server.
+
+## Phase 5 update: user management
+
+The users module is now implemented beyond the placeholder stage.
+
+Included:
+
+- `/admin/users` user list page.
+- Search by username or email.
+- Filters by role and account status.
+- `/admin/users/[userId]` profile detail page.
+- Profile fields: name, email, phone, preferred language, role, status, verification state, date joined, and last updated date.
+- Admin actions: activate user, suspend user, change account status, and change role.
+- Activity summary cards for blogs, comments, symptom checks, consultations, AI flags, and reports.
+
+Privacy rule:
+
+- The user profile shows activity counts only. Full symptom-check, mental-health, or AI conversation content is intentionally not exposed from the user management page by default.
+
+Permission rule:
+
+- Admin roles can only be assigned or removed by a `SUPER_ADMIN` through the existing `CREATE_ADMINS` permission helper.

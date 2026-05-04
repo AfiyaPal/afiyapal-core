@@ -89,3 +89,24 @@ npm run dev
 ```
 
 The new Stage 2 tables will start at `0` until the corresponding workflows are implemented and populated in later phases.
+
+
+### Phase 5: User management
+
+The admin users module now supports:
+
+- User list at `/admin/users`.
+- Search by username/email.
+- Filters by role and account status.
+- User detail pages at `/admin/users/[userId]`.
+- Activate/suspend account actions.
+- Role changes with Super Admin protection for admin-level roles.
+- Privacy-safe activity summaries that avoid exposing raw health conversations by default.
+
+After updating from Phase 4, run:
+
+```bash
+npx prisma db push
+npx prisma generate
+npm run dev
+```
