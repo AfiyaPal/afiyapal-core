@@ -321,3 +321,27 @@ npx prisma db push
 npx prisma generate
 npm run dev
 ```
+
+### Phase 17: Testing checklist
+
+Phase 17 adds a release QA checklist for the Stage 2 admin system.
+
+Included:
+
+- Super Admin-only `/admin/testing` checklist page.
+- Manual QA cases for admin route protection, suspended-user protection, doctor verification, AI safety flags, consultation assignment, audit logging, pagination, filters, and sensitive-health privacy.
+- Documentation at `docs/ADMIN_TESTING_CHECKLIST.md`.
+
+Run before testing:
+
+```bash
+npx prisma db push
+npx prisma generate
+npm run dev
+```
+
+Recommended commit:
+
+```bash
+feat(admin): add stage two testing checklist
+```

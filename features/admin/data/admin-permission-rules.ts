@@ -12,6 +12,7 @@ export const adminModulePermissions = {
   reports: [ADMIN_PERMISSIONS.MANAGE_REPORTS],
   "audit-logs": [ADMIN_PERMISSIONS.VIEW_AUDIT_SENSITIVE_ADMIN_DATA],
   notifications: [ADMIN_PERMISSIONS.VIEW_NOTIFICATIONS],
+  testing: [ADMIN_PERMISSIONS.VIEW_TESTING_CHECKLIST],
   settings: [ADMIN_PERMISSIONS.MANAGE_ADMIN_SETTINGS]
 } as const satisfies Record<AdminModuleKey, readonly AdminPermission[]>;
 

@@ -465,3 +465,25 @@ Users receive notifications when:
 - Their consultation request is assigned to a verified doctor.
 - A doctor/status update is recorded for their consultation.
 - Their safety report is resolved.
+
+## Phase 17 update: testing checklist
+
+Phase 17 adds a Super Admin-only QA checklist page at `/admin/testing` and a matching documentation file at `docs/ADMIN_TESTING_CHECKLIST.md`.
+
+The checklist covers:
+
+- Normal user cannot access `/admin`.
+- Suspended user cannot use protected services.
+- Doctor cannot appear publicly before verification.
+- Doctor Manager can approve doctors.
+- Content Manager cannot approve doctors.
+- Medical Reviewer can review AI flags.
+- Support Admin can manage consultation requests.
+- Critical AI flag appears in the admin dashboard.
+- Consultation can be assigned to verified doctor only.
+- Audit logs are created for sensitive actions.
+- Admin tables paginate correctly.
+- Search and filters work.
+- Sensitive health details are not exposed unnecessarily.
+
+The testing checklist is intentionally visible only to `SUPER_ADMIN` through the `VIEW_TESTING_CHECKLIST` permission.

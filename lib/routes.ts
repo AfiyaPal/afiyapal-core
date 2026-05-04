@@ -16,6 +16,7 @@ export const routes = {
   adminReports: "/admin/reports",
   adminAuditLogs: "/admin/audit-logs",
   adminNotifications: "/admin/notifications",
+  adminTesting: "/admin/testing",
   adminSettings: "/admin/settings",
   adminMentalHealthResources: "/admin/settings/mental-health-resources",
   adminHealthResources: "/admin/settings/health-resources",
