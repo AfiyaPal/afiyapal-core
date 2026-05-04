@@ -391,3 +391,43 @@ Phase 14 makes the admin system privacy-first and medically safer:
 - Sensitive access grants expire after 15 minutes.
 - Every sensitive health access request writes an `AdminAuditLog` entry using `SENSITIVE_HEALTH_DETAILS_VIEWED`.
 - Full raw health conversations are not stored by default; AFIYAPAL stores bounded summaries only for safety review and care coordination.
+
+## Phase 15: Admin settings
+
+Phase 15 turns `/admin/settings` into the operational settings center for AFIYAPAL Stage 2.
+
+### Platform settings
+
+Super Admins can now manage:
+
+- Supported languages
+- Emergency message text
+- Doctor verification requirements
+- AI disclaimer text
+- Default consultation urgency rules
+- Content review interval
+- Contact/support email
+
+These values are stored in the `PlatformSetting` table and use safe defaults when a setting has not been customized yet.
+
+### Health resources
+
+The settings area now includes `/admin/settings/health-resources`, which manages country-aware resources:
+
+- Clinics
+- Hotlines
+- Emergency contacts
+- Country-specific resources
+
+Each resource stores a type, name, country, optional region, phone, email, website, description, active/inactive state, and timestamps.
+
+### Governance
+
+Platform setting updates and health resource changes are audit-backed through the admin audit log system:
+
+- `PLATFORM_SETTINGS_UPDATED`
+- `HEALTH_RESOURCE_CREATED`
+- `HEALTH_RESOURCE_UPDATED`
+- `HEALTH_RESOURCE_STATUS_CHANGED`
+
+This keeps safety-critical operational settings traceable.

@@ -282,3 +282,18 @@ npm run dev
 ### Phase 14 privacy and safety notes
 
 The admin system now enforces privacy-forward health review rules. AI assistant flows show medical disclaimers and critical-risk emergency guidance. Admin tables minimize health data. Sensitive health summaries are hidden by default and can only be viewed by a Super Admin or Medical Reviewer after entering a reason. That access is temporary and recorded in the Super Admin audit log. The system intentionally avoids storing full raw health conversations by default.
+
+## Phase 15 Admin Settings
+
+The admin center now includes production-oriented settings management at `/admin/settings`. Super Admins can configure supported languages, emergency message text, doctor verification requirements, AI disclaimer text, consultation urgency rules, content review interval, and the platform support email.
+
+Health resource management is available at `/admin/settings/health-resources` for clinics, hotlines, emergency contacts, and country-specific resources. Changes are recorded in admin audit logs.
+
+After pulling this phase, run:
+
+```bash
+npx prisma db push
+npx prisma generate
+npm run dev
+```
+

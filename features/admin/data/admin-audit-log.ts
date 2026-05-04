@@ -14,7 +14,11 @@ export const ADMIN_AUDIT_ACTIONS = [
   "CONSULTATION_ASSIGNED",
   "CONSULTATION_STATUS_CHANGED",
   "REPORT_RESOLVED",
-  "SENSITIVE_HEALTH_DETAILS_VIEWED"
+  "SENSITIVE_HEALTH_DETAILS_VIEWED",
+  "PLATFORM_SETTINGS_UPDATED",
+  "HEALTH_RESOURCE_CREATED",
+  "HEALTH_RESOURCE_UPDATED",
+  "HEALTH_RESOURCE_STATUS_CHANGED"
 ] as const;
 
 export type AdminAuditAction = (typeof ADMIN_AUDIT_ACTIONS)[number];
@@ -27,7 +31,9 @@ export const ADMIN_AUDIT_TARGET_TYPES = [
   "ConsultationRequest",
   "SafetyReport",
   "SymptomCheckLog",
-  "MentalHealthInteraction"
+  "MentalHealthInteraction",
+  "PlatformSetting",
+  "HealthResource"
 ] as const;
 
 export type AdminAuditTargetType = (typeof ADMIN_AUDIT_TARGET_TYPES)[number];
@@ -48,7 +54,11 @@ export const adminAuditActionLabels: Record<AdminAuditAction, string> = {
   CONSULTATION_ASSIGNED: "Consultation assigned",
   CONSULTATION_STATUS_CHANGED: "Consultation status changed",
   REPORT_RESOLVED: "Report resolved",
-  SENSITIVE_HEALTH_DETAILS_VIEWED: "Sensitive health details viewed"
+  SENSITIVE_HEALTH_DETAILS_VIEWED: "Sensitive health details viewed",
+  PLATFORM_SETTINGS_UPDATED: "Platform settings updated",
+  HEALTH_RESOURCE_CREATED: "Health resource created",
+  HEALTH_RESOURCE_UPDATED: "Health resource updated",
+  HEALTH_RESOURCE_STATUS_CHANGED: "Health resource status changed"
 };
 
 export const adminAuditTargetLabels: Record<AdminAuditTargetType, string> = {
@@ -59,5 +69,7 @@ export const adminAuditTargetLabels: Record<AdminAuditTargetType, string> = {
   ConsultationRequest: "Consultation request",
   SafetyReport: "Safety report",
   SymptomCheckLog: "Symptom check log",
-  MentalHealthInteraction: "Mental health interaction"
+  MentalHealthInteraction: "Mental health interaction",
+  PlatformSetting: "Platform setting",
+  HealthResource: "Health resource"
 };

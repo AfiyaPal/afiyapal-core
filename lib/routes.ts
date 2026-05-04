@@ -17,5 +17,6 @@ export const routes = {
   adminAuditLogs: "/admin/audit-logs",
   adminSettings: "/admin/settings",
   adminMentalHealthResources: "/admin/settings/mental-health-resources",
+  adminHealthResources: "/admin/settings/health-resources",
   unauthorized: "/unauthorized"
 } as const;

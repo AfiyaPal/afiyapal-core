@@ -308,3 +308,38 @@ model AdminSensitiveHealthAccessGrant {
   @@index([expiresAt])
   @@index([createdAt])
 }
+
+model PlatformSetting {
+  id          Int      @id @default(autoincrement())
+  key         String   @unique
+  value       String
+  updatedById Int?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([key])
+  @@index([updatedById])
+  @@index([updatedAt])
+}
+
+model HealthResource {
+  id          Int      @id @default(autoincrement())
+  type        String
+  name        String
+  country     String
+  region      String?
+  phone       String?
+  email       String?
+  website     String?
+  description String?
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([type])
+  @@index([country])
+  @@index([region])
+  @@index([isActive])
+  @@index([createdAt])
+}
+
