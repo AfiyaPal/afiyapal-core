@@ -55,3 +55,23 @@ The source of truth for this scope lives in `features/admin/data/admin-scope.ts`
 ## Stage 2 Admin Access
 
 The admin area is available at `/admin` and is protected by role-based access. New users register as `USER`; promote a trusted test account to `SUPER_ADMIN` in the database for local admin testing. See `docs/ADMIN_SCOPE.md` for the current role and permission map.
+
+## Stage 2 Phase 3 Admin Layout
+
+Phase 3 adds the reusable admin dashboard shell used by all protected admin routes.
+
+Included admin routes:
+
+- `/admin`
+- `/admin/users`
+- `/admin/doctors`
+- `/admin/symptom-checks`
+- `/admin/ai-flags`
+- `/admin/content`
+- `/admin/consultations`
+- `/admin/reports`
+- `/admin/settings`
+
+Reusable admin UI components live in `features/admin/components` and include the sidebar, top bar, dashboard cards, table shell, status badge, and filter shell.
+
+The admin top bar includes a profile/logout menu. The logout action clears the signed HTTP-only session cookie and redirects to `/login`.

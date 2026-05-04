@@ -1,38 +1,56 @@
 import Link from "next/link";
-import { adminModules } from "@/features/admin/data/admin-scope";
+import { AdminDataTable, type AdminTableColumn } from "./admin-data-table";
+import { AdminFilters, reusableAdminFilters, type AdminFilterConfig } from "./admin-filters";
+import { AdminStatusBadge } from "./admin-status-badge";
+import { adminModules, type AdminModuleKey } from "@/features/admin/data/admin-scope";
 
 type AdminModule = (typeof adminModules)[number];
+type ModuleChecklistRow = { item: string; status: string; owner: string };
+
+const moduleFilterMap: Partial<Record<AdminModuleKey, readonly AdminFilterConfig[]>> = {
+  users: [reusableAdminFilters.search, reusableAdminFilters.status, reusableAdminFilters.role, reusableAdminFilters.dateRange],
+  doctors: [reusableAdminFilters.search, reusableAdminFilters.status, reusableAdminFilters.language, reusableAdminFilters.dateRange],
+  "symptom-checks": [reusableAdminFilters.search, reusableAdminFilters.status, reusableAdminFilters.language, reusableAdminFilters.dateRange],
+  "ai-flags": [reusableAdminFilters.search, reusableAdminFilters.status, reusableAdminFilters.urgency, reusableAdminFilters.dateRange],
+  content: [reusableAdminFilters.search, reusableAdminFilters.status, reusableAdminFilters.language, reusableAdminFilters.dateRange],
+  consultations: [reusableAdminFilters.search, reusableAdminFilters.status, reusableAdminFilters.urgency, reusableAdminFilters.language],
+  reports: [reusableAdminFilters.search, reusableAdminFilters.status, reusableAdminFilters.urgency, reusableAdminFilters.dateRange],
+  settings: [reusableAdminFilters.search, reusableAdminFilters.status]
+};
+
+const checklistColumns: readonly AdminTableColumn<ModuleChecklistRow>[] = [
+  { key: "item", header: "MVP capability", render: (row) => <span className="font-semibold text-slate-900">{row.item}</span> },
+  { key: "status", header: "Status", render: (row) => <AdminStatusBadge tone="amber">{row.status}</AdminStatusBadge> },
+  { key: "owner", header: "Primary owner", render: (row) => row.owner }
+];
+
+function getModuleOwner(moduleKey: AdminModuleKey) {
+  if (moduleKey === "doctors") return "Doctor Manager";
+  if (moduleKey === "ai-flags" || moduleKey === "symptom-checks") return "Medical Reviewer";
+  if (moduleKey === "content") return "Content Manager";
+  if (moduleKey === "consultations" || moduleKey === "reports") return "Support Admin";
+  if (moduleKey === "settings") return "Super Admin";
+  return "Super Admin / Support Admin";
+}
 
 export function getAdminModuleByKey(key: AdminModule["key"]) {
   return adminModules.find((module) => module.key === key);
 }
 
 export function AdminModulePlaceholderPage({ module }: { module: AdminModule }) {
+  const filters = moduleFilterMap[module.key] ?? [reusableAdminFilters.search, reusableAdminFilters.status, reusableAdminFilters.dateRange];
+  const rows = module.mvpIncludes.map((item) => ({ item, status: "Ready for data integration", owner: getModuleOwner(module.key) }));
+
   return (
-    <main className="bg-[#f8fffb]">
-      <section className="container-page py-14">
-        <Link href="/admin" className="text-sm font-semibold text-brand-700 hover:text-brand-600">
-          ← Back to admin scope
-        </Link>
-        <div className="mt-6 rounded-3xl border border-emerald-100 bg-white p-8 shadow-soft">
-          <p className="text-sm font-semibold uppercase tracking-wide text-brand-700">Stage 2 admin module</p>
-          <h1 className="mt-3 text-3xl font-bold tracking-tight text-slate-950">{module.name}</h1>
-          <p className="mt-4 max-w-3xl text-base leading-8 text-slate-700">{module.summary}</p>
-          <div className="mt-8">
-            <h2 className="text-lg font-bold text-slate-950">MVP includes</h2>
-            <ul className="mt-4 grid gap-3 text-sm leading-6 text-slate-700 md:grid-cols-2">
-              {module.mvpIncludes.map((item) => (
-                <li key={item} className="rounded-2xl border border-emerald-100 bg-emerald-50 px-4 py-3">
-                  {item}
-                </li>
-              ))}
-            </ul>
-          </div>
-          <p className="mt-8 rounded-2xl bg-slate-50 p-4 text-sm leading-6 text-slate-600">
-            This page is intentionally a protected Phase 2 placeholder. Route access and module permissions are now enforced; module-specific database models, tables, filters, and actions will be implemented in later phases.
-          </p>
-        </div>
-      </section>
-    </main>
+    <div className="space-y-6">
+      <div className="rounded-3xl border border-emerald-100 bg-white p-6 shadow-sm">
+        <Link href="/admin" className="text-sm font-bold text-brand-700 hover:text-brand-600">← Back to overview</Link>
+        <p className="mt-6 text-sm font-semibold uppercase tracking-wide text-brand-700">Stage 2 admin module</p>
+        <h1 className="mt-3 text-3xl font-black tracking-tight text-slate-950">{module.name}</h1>
+        <p className="mt-4 max-w-4xl text-base leading-8 text-slate-700">{module.summary}</p>
+      </div>
+      <AdminFilters filters={filters} />
+      <AdminDataTable title={`${module.name} MVP table shell`} description="Reusable admin table structure for this module. Later phases will connect this table to real database records and protected actions." columns={checklistColumns} rows={rows} />
+    </div>
   );
 }

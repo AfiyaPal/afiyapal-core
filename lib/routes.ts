@@ -6,5 +6,13 @@ export const routes = {
   register: "/register",
   passwordReset: "/password-reset",
   admin: "/admin",
+  adminUsers: "/admin/users",
+  adminDoctors: "/admin/doctors",
+  adminSymptomChecks: "/admin/symptom-checks",
+  adminAiFlags: "/admin/ai-flags",
+  adminContent: "/admin/content",
+  adminConsultations: "/admin/consultations",
+  adminReports: "/admin/reports",
+  adminSettings: "/admin/settings",
   unauthorized: "/unauthorized"
 } as const;

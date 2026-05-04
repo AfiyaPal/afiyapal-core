@@ -9,7 +9,8 @@ export const adminModulePermissions = {
   "ai-flags": [ADMIN_PERMISSIONS.REVIEW_HEALTH_FLAGS],
   content: [ADMIN_PERMISSIONS.MANAGE_CONTENT, ADMIN_PERMISSIONS.REVIEW_MEDICAL_CONTENT],
   consultations: [ADMIN_PERMISSIONS.MANAGE_CONSULTATIONS],
-  reports: [ADMIN_PERMISSIONS.MANAGE_REPORTS]
+  reports: [ADMIN_PERMISSIONS.MANAGE_REPORTS],
+  settings: [ADMIN_PERMISSIONS.MANAGE_ADMIN_SETTINGS]
 } as const satisfies Record<AdminModuleKey, readonly AdminPermission[]>;
 
 export const adminActionRules = [

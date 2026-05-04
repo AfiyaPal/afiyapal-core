@@ -92,3 +92,41 @@ Newly registered users are created with:
 - `status = "ACTIVE"`
 
 Until a Super Admin management screen exists, promote a trusted local test account directly in the database, for example by setting its `role` to `SUPER_ADMIN`.
+
+## Phase 3 admin layout foundation
+
+Phase 3 turns the protected admin routes from plain placeholders into a reusable dashboard shell.
+
+### Admin routes included
+
+- `/admin`
+- `/admin/users`
+- `/admin/doctors`
+- `/admin/symptom-checks`
+- `/admin/ai-flags`
+- `/admin/content`
+- `/admin/consultations`
+- `/admin/reports`
+- `/admin/settings`
+
+### Layout components added
+
+- `features/admin/components/admin-shell.tsx`
+- `features/admin/components/admin-sidebar.tsx`
+- `features/admin/components/admin-topbar.tsx`
+- `features/admin/components/admin-dashboard-card.tsx`
+- `features/admin/components/admin-data-table.tsx`
+- `features/admin/components/admin-filters.tsx`
+- `features/admin/components/admin-status-badge.tsx`
+
+### Reusable filters added
+
+The admin UI now has reusable filter definitions for search, status, date, role, language, and urgency. The module pages use these filters as UI shells first. Later phases should connect them to query parameters, repository methods, and real data models.
+
+### Logout/profile menu
+
+The admin top bar now includes a profile menu with the authenticated admin's name, email, role label, and a logout action backed by the existing HTTP-only session cookie.
+
+### Settings route
+
+`/admin/settings` is now included as a Super Admin-only module. It is intended for Stage 2 platform safety settings such as supported languages, emergency guidance, AI disclaimers, doctor verification requirements, review intervals, and support contact settings.
