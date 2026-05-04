@@ -1,14 +1,7 @@
 import "dotenv/config";
 
 import bcrypt from "bcryptjs";
-import { PrismaClient } from "@prisma/client";
-import { PrismaBetterSqlite3 } from "@prisma/adapter-better-sqlite3";
-
-const adapter = new PrismaBetterSqlite3({
-  url: process.env.DATABASE_URL ?? "file:./dev.db",
-});
-
-const prisma = new PrismaClient({ adapter });
+import { prisma } from "../db/prisma";
 
 const SEED_PREFIX = "[Seed]";
 const SEED_DOMAIN = "afiyapal.seed";
@@ -25,9 +18,19 @@ const roles = [
 ] as const;
 
 const userStatuses = ["ACTIVE", "SUSPENDED", "DELETED"] as const;
-const doctorStatuses = ["PENDING", "VERIFIED", "REJECTED", "SUSPENDED"] as const;
+const doctorStatuses = [
+  "PENDING",
+  "VERIFIED",
+  "REJECTED",
+  "SUSPENDED",
+] as const;
 const riskLevels = ["LOW", "MEDIUM", "HIGH", "EMERGENCY"] as const;
-const symptomStatuses = ["COMPLETED", "REVIEWED", "ESCALATED", "FAILED"] as const;
+const symptomStatuses = [
+  "COMPLETED",
+  "REVIEWED",
+  "ESCALATED",
+  "FAILED",
+] as const;
 const aiFlagStatuses = ["OPEN", "IN_REVIEW", "RESOLVED", "ESCALATED"] as const;
 const aiFlagPriorities = ["LOW", "MEDIUM", "HIGH", "CRITICAL"] as const;
 const aiFlagCategories = [
@@ -38,8 +41,17 @@ const aiFlagCategories = [
   "LOW_CONFIDENCE_AI_RESPONSE",
   "REPEATED_UNRESOLVED_SYMPTOMS",
 ] as const;
-const aiFlagTriggers = ["AUTOMATIC_RISK_RULE", "USER_REPORT", "REVIEWER_CREATED"] as const;
-const articleStatuses = ["DRAFT", "PENDING_REVIEW", "PUBLISHED", "ARCHIVED"] as const;
+const aiFlagTriggers = [
+  "AUTOMATIC_RISK_RULE",
+  "USER_REPORT",
+  "REVIEWER_CREATED",
+] as const;
+const articleStatuses = [
+  "DRAFT",
+  "PENDING_REVIEW",
+  "PUBLISHED",
+  "ARCHIVED",
+] as const;
 const articleCategories = [
   "MALARIA",
   "MATERNAL_HEALTH",
@@ -49,7 +61,13 @@ const articleCategories = [
   "GENERAL_WELLNESS",
 ] as const;
 const languages = ["en", "sw"] as const;
-const medicalReviewStatuses = ["NOT_SUBMITTED", "PENDING", "APPROVED", "CHANGES_REQUESTED", "REJECTED"] as const;
+const medicalReviewStatuses = [
+  "NOT_SUBMITTED",
+  "PENDING",
+  "APPROVED",
+  "CHANGES_REQUESTED",
+  "REJECTED",
+] as const;
 const consultationStatuses = [
   "NEW",
   "AWAITING_ASSIGNMENT",
@@ -136,7 +154,12 @@ const notificationTypes = [
   "SAFETY_REPORT_SUBMITTED",
 ] as const;
 const notificationPriorities = ["LOW", "NORMAL", "HIGH", "CRITICAL"] as const;
-const healthResourceTypes = ["CLINIC", "HOTLINE", "EMERGENCY_CONTACT", "COUNTRY_RESOURCE"] as const;
+const healthResourceTypes = [
+  "CLINIC",
+  "HOTLINE",
+  "EMERGENCY_CONTACT",
+  "COUNTRY_RESOURCE",
+] as const;
 
 function seedEmail(slug: string) {
   return `${slug}@${SEED_DOMAIN}`;
@@ -170,24 +193,52 @@ async function cleanupSeedData() {
   const seededBlogIds = seededBlogs.map((blog) => blog.id);
 
   if (seededBlogIds.length > 0) {
-    await prisma.comment.deleteMany({ where: { blogId: { in: seededBlogIds } } });
+    await prisma.comment.deleteMany({
+      where: { blogId: { in: seededBlogIds } },
+    });
     await prisma.media.deleteMany({ where: { blogId: { in: seededBlogIds } } });
     await prisma.blog.deleteMany({ where: { id: { in: seededBlogIds } } });
   }
 
-  await prisma.notification.deleteMany({ where: { title: { startsWith: SEED_PREFIX } } });
-  await prisma.adminSensitiveHealthAccessGrant.deleteMany({ where: { reason: { contains: SEED_PREFIX } } });
-  await prisma.adminAuditLog.deleteMany({ where: { reason: { contains: SEED_PREFIX } } });
-  await prisma.safetyReportActionHistory.deleteMany({ where: { note: { contains: SEED_PREFIX } } });
-  await prisma.safetyReport.deleteMany({ where: { title: { startsWith: SEED_PREFIX } } });
-  await prisma.consultationRequest.deleteMany({ where: { reasonSummary: { startsWith: SEED_PREFIX } } });
-  await prisma.aiInteractionFlag.deleteMany({ where: { title: { startsWith: SEED_PREFIX } } });
-  await prisma.symptomCheckLog.deleteMany({ where: { symptomsSummary: { startsWith: SEED_PREFIX } } });
-  await prisma.mentalHealthInteraction.deleteMany({ where: { interactionSummary: { startsWith: SEED_PREFIX } } });
-  await prisma.mentalHealthResource.deleteMany({ where: { hotlineName: { startsWith: SEED_PREFIX } } });
-  await prisma.healthResource.deleteMany({ where: { name: { startsWith: SEED_PREFIX } } });
-  await prisma.doctorProfile.deleteMany({ where: { email: { endsWith: `@${SEED_DOMAIN}` } } });
-  await prisma.platformSetting.deleteMany({ where: { key: { startsWith: "seed." } } });
+  await prisma.notification.deleteMany({
+    where: { title: { startsWith: SEED_PREFIX } },
+  });
+  await prisma.adminSensitiveHealthAccessGrant.deleteMany({
+    where: { reason: { contains: SEED_PREFIX } },
+  });
+  await prisma.adminAuditLog.deleteMany({
+    where: { reason: { contains: SEED_PREFIX } },
+  });
+  await prisma.safetyReportActionHistory.deleteMany({
+    where: { note: { contains: SEED_PREFIX } },
+  });
+  await prisma.safetyReport.deleteMany({
+    where: { title: { startsWith: SEED_PREFIX } },
+  });
+  await prisma.consultationRequest.deleteMany({
+    where: { reasonSummary: { startsWith: SEED_PREFIX } },
+  });
+  await prisma.aiInteractionFlag.deleteMany({
+    where: { title: { startsWith: SEED_PREFIX } },
+  });
+  await prisma.symptomCheckLog.deleteMany({
+    where: { symptomsSummary: { startsWith: SEED_PREFIX } },
+  });
+  await prisma.mentalHealthInteraction.deleteMany({
+    where: { interactionSummary: { startsWith: SEED_PREFIX } },
+  });
+  await prisma.mentalHealthResource.deleteMany({
+    where: { hotlineName: { startsWith: SEED_PREFIX } },
+  });
+  await prisma.healthResource.deleteMany({
+    where: { name: { startsWith: SEED_PREFIX } },
+  });
+  await prisma.doctorProfile.deleteMany({
+    where: { email: { endsWith: `@${SEED_DOMAIN}` } },
+  });
+  await prisma.platformSetting.deleteMany({
+    where: { key: { startsWith: "seed." } },
+  });
 }
 
 async function upsertSeedUsers(passwordHash: string) {
@@ -243,14 +294,23 @@ async function upsertSeedUsers(passwordHash: string) {
         isVerified: status !== "DELETED",
       },
     });
-    users[`USER_${status}`] = { id: user.id, role: user.role, email: user.email };
+    users[`USER_${status}`] = {
+      id: user.id,
+      role: user.role,
+      email: user.email,
+    };
   }
 
   return users;
 }
 
-async function createDoctorProfiles(users: Record<string, { id: number; role: string; email: string }>) {
-  const doctors: Record<string, { id: number; userId?: number | null; status: string }> = {};
+async function createDoctorProfiles(
+  users: Record<string, { id: number; role: string; email: string }>,
+) {
+  const doctors: Record<
+    string,
+    { id: number; userId?: number | null; status: string }
+  > = {};
 
   for (const [index, status] of doctorStatuses.entries()) {
     const userSlug = `doctor_${status.toLowerCase()}`;
@@ -290,8 +350,14 @@ async function createDoctorProfiles(users: Record<string, { id: number; role: st
         availabilityStatus: status === "VERIFIED" ? "AVAILABLE" : "UNAVAILABLE",
         verifiedById: status === "VERIFIED" ? users.SUPER_ADMIN.id : null,
         verifiedAt: status === "VERIFIED" ? daysAgo(5) : null,
-        rejectionReason: status === "REJECTED" ? `${SEED_PREFIX} License document was unreadable.` : null,
-        suspensionReason: status === "SUSPENDED" ? `${SEED_PREFIX} Temporarily suspended for QA testing.` : null,
+        rejectionReason:
+          status === "REJECTED"
+            ? `${SEED_PREFIX} License document was unreadable.`
+            : null,
+        suspensionReason:
+          status === "SUSPENDED"
+            ? `${SEED_PREFIX} Temporarily suspended for QA testing.`
+            : null,
         createdAt: daysAgo(20 - index),
       },
     });
@@ -306,20 +372,30 @@ async function createCategories() {
   for (const category of articleCategories) {
     const model = await prisma.category.upsert({
       where: { name: category },
-      update: { description: `${SEED_PREFIX} ${category.toLowerCase().replace(/_/g, " ")} category.` },
-      create: { name: category, description: `${SEED_PREFIX} ${category.toLowerCase().replace(/_/g, " ")} category.` },
+      update: {
+        description: `${SEED_PREFIX} ${category.toLowerCase().replace(/_/g, " ")} category.`,
+      },
+      create: {
+        name: category,
+        description: `${SEED_PREFIX} ${category.toLowerCase().replace(/_/g, " ")} category.`,
+      },
     });
     categories[category] = { id: model.id };
   }
   return categories;
 }
 
-async function createBlogs(users: Record<string, { id: number }>, categories: Record<string, { id: number }>) {
-  const blogs: Record<string, { id: number; slug: string; status: string }> = {};
+async function createBlogs(
+  users: Record<string, { id: number }>,
+  categories: Record<string, { id: number }>,
+) {
+  const blogs: Record<string, { id: number; slug: string; status: string }> =
+    {};
 
   for (const [index, category] of articleCategories.entries()) {
     const status = articleStatuses[index % articleStatuses.length];
-    const reviewStatus = medicalReviewStatuses[index % medicalReviewStatuses.length];
+    const reviewStatus =
+      medicalReviewStatuses[index % medicalReviewStatuses.length];
     const isPublished = status === "PUBLISHED";
     const isArchived = status === "ARCHIVED";
     const slug = `seed-${category.toLowerCase().replace(/_/g, "-")}-${status.toLowerCase()}`;
@@ -333,7 +409,8 @@ async function createBlogs(users: Record<string, { id: number }>, categories: Re
         language: languages[index % languages.length],
         contentCategory: category,
         medicalReviewStatus: reviewStatus,
-        reviewedById: reviewStatus === "APPROVED" ? users.MEDICAL_REVIEWER.id : null,
+        reviewedById:
+          reviewStatus === "APPROVED" ? users.MEDICAL_REVIEWER.id : null,
         reviewedAt: reviewStatus === "APPROVED" ? daysAgo(10) : null,
         reviewNotes: `${SEED_PREFIX} Review notes for ${category}.`,
         publishedAt: isPublished ? monthsAgo(index === 2 ? 8 : 1) : null,
@@ -389,7 +466,12 @@ async function createSymptomLogs(users: Record<string, { id: number }>) {
         language: languages[index % languages.length],
         symptomsSummary: `${SEED_PREFIX} ${riskLevel} symptom summary for admin QA.`,
         aiResponseSummary: `${SEED_PREFIX} Privacy-safe AI response summary for ${riskLevel} risk.`,
-        symptomCategory: ["General", "Malaria-like", "Respiratory", "Emergency"][index],
+        symptomCategory: [
+          "General",
+          "Malaria-like",
+          "Respiratory",
+          "Emergency",
+        ][index],
         riskLevel,
         recommendedNextStep:
           riskLevel === "EMERGENCY"
@@ -406,7 +488,9 @@ async function createSymptomLogs(users: Record<string, { id: number }>) {
   return logs;
 }
 
-async function createMentalHealthInteractions(users: Record<string, { id: number }>) {
+async function createMentalHealthInteractions(
+  users: Record<string, { id: number }>,
+) {
   const interactions: Array<{ id: number; riskLevel: string }> = [];
 
   for (const [index, riskLevel] of riskLevels.entries()) {
@@ -414,11 +498,19 @@ async function createMentalHealthInteractions(users: Record<string, { id: number
       data: {
         userId: users.USER.id,
         language: languages[index % languages.length],
-        moodCategory: ["GENERAL_SUPPORT", "STRESS", "ANXIETY", "CRISIS_SUPPORT"][index],
+        moodCategory: [
+          "GENERAL_SUPPORT",
+          "STRESS",
+          "ANXIETY",
+          "CRISIS_SUPPORT",
+        ][index],
         riskLevel,
         interactionSummary: `${SEED_PREFIX} ${riskLevel} mental health support summary for QA.`,
         aiResponseSummary: `${SEED_PREFIX} Supportive, non-diagnostic response summary for ${riskLevel} risk.`,
-        supportResourcesShown: riskLevel === "HIGH" || riskLevel === "EMERGENCY" ? "Kenya emergency contacts, trusted support hotline" : "Breathing exercise, journaling prompt",
+        supportResourcesShown:
+          riskLevel === "HIGH" || riskLevel === "EMERGENCY"
+            ? "Kenya emergency contacts, trusted support hotline"
+            : "Breathing exercise, journaling prompt",
         escalationSuggested: riskLevel === "HIGH" || riskLevel === "EMERGENCY",
         status: symptomStatuses[index % symptomStatuses.length],
         createdAt: daysAgo(index + 2),
@@ -435,26 +527,47 @@ async function createAiFlags(
   symptomLogs: Array<{ id: number }>,
   mentalHealthInteractions: Array<{ id: number }>,
 ) {
-  const flags: Record<string, { id: number; status: string; priority: string }> = {};
+  const flags: Record<
+    string,
+    { id: number; status: string; priority: string }
+  > = {};
 
   for (const [index, category] of aiFlagCategories.entries()) {
     const status = aiFlagStatuses[index % aiFlagStatuses.length];
     const priority = aiFlagPriorities[index % aiFlagPriorities.length];
     const flag = await prisma.aiInteractionFlag.create({
       data: {
-        symptomCheckLogId: category === "MENTAL_HEALTH_CRISIS" ? null : symptomLogs[index % symptomLogs.length]?.id,
-        mentalHealthInteractionId: category === "MENTAL_HEALTH_CRISIS" ? mentalHealthInteractions[index % mentalHealthInteractions.length]?.id : null,
+        symptomCheckLogId:
+          category === "MENTAL_HEALTH_CRISIS"
+            ? null
+            : symptomLogs[index % symptomLogs.length]?.id,
+        mentalHealthInteractionId:
+          category === "MENTAL_HEALTH_CRISIS"
+            ? mentalHealthInteractions[index % mentalHealthInteractions.length]
+                ?.id
+            : null,
         userId: users.USER.id,
         title: `${SEED_PREFIX} ${category.replace(/_/g, " ")}`,
         summary: `${SEED_PREFIX} Privacy-safe safety flag summary for ${category}.`,
         category,
         trigger: aiFlagTriggers[index % aiFlagTriggers.length],
-        priority: category === "EMERGENCY_SYMPTOMS" || category === "MENTAL_HEALTH_CRISIS" ? "CRITICAL" : priority,
+        priority:
+          category === "EMERGENCY_SYMPTOMS" ||
+          category === "MENTAL_HEALTH_CRISIS"
+            ? "CRITICAL"
+            : priority,
         status,
-        assignedReviewerId: status === "IN_REVIEW" ? users.MEDICAL_REVIEWER.id : null,
+        assignedReviewerId:
+          status === "IN_REVIEW" ? users.MEDICAL_REVIEWER.id : null,
         adminNotes: `${SEED_PREFIX} Admin QA note for ${category}.`,
-        reviewerNotes: status === "IN_REVIEW" ? `${SEED_PREFIX} Reviewer is assessing the case.` : null,
-        resolutionNotes: status === "RESOLVED" ? `${SEED_PREFIX} Resolved during QA seed.` : null,
+        reviewerNotes:
+          status === "IN_REVIEW"
+            ? `${SEED_PREFIX} Reviewer is assessing the case.`
+            : null,
+        resolutionNotes:
+          status === "RESOLVED"
+            ? `${SEED_PREFIX} Resolved during QA seed.`
+            : null,
         resolvedAt: status === "RESOLVED" ? daysAgo(1) : null,
         createdAt: daysAgo(index + 1),
       },
@@ -472,7 +585,13 @@ async function createConsultations(
   const consultations: Array<{ id: number; status: string }> = [];
 
   for (const [index, status] of consultationStatuses.entries()) {
-    const assignedDoctorId = ["ASSIGNED", "ACCEPTED_BY_DOCTOR", "COMPLETED"].includes(status) ? doctors.VERIFIED.id : null;
+    const assignedDoctorId = [
+      "ASSIGNED",
+      "ACCEPTED_BY_DOCTOR",
+      "COMPLETED",
+    ].includes(status)
+      ? doctors.VERIFIED.id
+      : null;
     const request = await prisma.consultationRequest.create({
       data: {
         userId: users.USER.id,
@@ -502,14 +621,20 @@ async function createSafetyReports(users: Record<string, { id: number }>) {
     const report = await prisma.safetyReport.create({
       data: {
         reporterUserId: users.USER.id,
-        assignedAdminId: ["IN_REVIEW", "RESOLVED"].includes(status) ? users.SUPPORT_ADMIN.id : null,
+        assignedAdminId: ["IN_REVIEW", "RESOLVED"].includes(status)
+          ? users.SUPPORT_ADMIN.id
+          : null,
         type,
         title: `${SEED_PREFIX} ${type.replace(/_/g, " ")}`,
         summary: `${SEED_PREFIX} Safety center QA report for ${type}.`,
         priority,
         status,
-        resolutionNotes: status === "RESOLVED" || status === "DISMISSED" ? `${SEED_PREFIX} Resolution notes for ${type}.` : null,
-        resolvedAt: status === "RESOLVED" || status === "DISMISSED" ? daysAgo(1) : null,
+        resolutionNotes:
+          status === "RESOLVED" || status === "DISMISSED"
+            ? `${SEED_PREFIX} Resolution notes for ${type}.`
+            : null,
+        resolvedAt:
+          status === "RESOLVED" || status === "DISMISSED" ? daysAgo(1) : null,
         createdAt: daysAgo(index + 1),
       },
     });
@@ -519,7 +644,8 @@ async function createSafetyReports(users: Record<string, { id: number }>) {
       data: {
         reportId: report.id,
         actorAdminId: users.SUPPORT_ADMIN.id,
-        actionType: safetyReportActionTypes[index % safetyReportActionTypes.length],
+        actionType:
+          safetyReportActionTypes[index % safetyReportActionTypes.length],
         fromStatus: index === 0 ? null : "OPEN",
         toStatus: status,
         fromPriority: index === 0 ? null : "MEDIUM",
@@ -532,13 +658,27 @@ async function createSafetyReports(users: Record<string, { id: number }>) {
   return reports;
 }
 
-async function createSettingsAndResources(users: Record<string, { id: number }>) {
+async function createSettingsAndResources(
+  users: Record<string, { id: number }>,
+) {
   const settings = [
     ["seed.supportedLanguages", "English, Swahili"],
-    ["seed.emergencyMessageText", "If this may be an emergency, contact local emergency services or go to the nearest clinic immediately."],
-    ["seed.doctorVerificationRequirements", "License number, identity verification, specialty, country, and language review required."],
-    ["seed.aiDisclaimerText", "AFIYAPAL provides supportive health information, not a diagnosis or replacement for professional care."],
-    ["seed.defaultConsultationUrgencyRules", "Emergency symptoms escalate immediately; high-risk symptoms require clinician review."],
+    [
+      "seed.emergencyMessageText",
+      "If this may be an emergency, contact local emergency services or go to the nearest clinic immediately.",
+    ],
+    [
+      "seed.doctorVerificationRequirements",
+      "License number, identity verification, specialty, country, and language review required.",
+    ],
+    [
+      "seed.aiDisclaimerText",
+      "AFIYAPAL provides supportive health information, not a diagnosis or replacement for professional care.",
+    ],
+    [
+      "seed.defaultConsultationUrgencyRules",
+      "Emergency symptoms escalate immediately; high-risk symptoms require clinician review.",
+    ],
     ["seed.contentReviewIntervalMonths", "6"],
     ["seed.contactSupportEmail", "support@afiyapal.local"],
   ];
@@ -667,7 +807,11 @@ async function main() {
   const blogs = await createBlogs(users, categories);
   const symptomLogs = await createSymptomLogs(users);
   const mentalHealthInteractions = await createMentalHealthInteractions(users);
-  const flags = await createAiFlags(users, symptomLogs, mentalHealthInteractions);
+  const flags = await createAiFlags(
+    users,
+    symptomLogs,
+    mentalHealthInteractions,
+  );
   const consultations = await createConsultations(users, doctors);
   const reports = await createSafetyReports(users);
   await createSettingsAndResources(users);
