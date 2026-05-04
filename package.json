@@ -4,11 +4,9 @@
   "private": true,
   "scripts": {
     "dev": "npm run db:offline:generate && dotenv -e .env.offline -- next dev --webpack",
-    "dev:turbopack": "npm run db:offline:generate && dotenv -e .env.offline -- next dev --turbopack",
     "dev:online": "npm run db:online:generate && dotenv -e .env.online -- next dev --webpack",
-    "dev:online:turbopack": "npm run db:online:generate && dotenv -e .env.online -- next dev --turbopack",
-    "build": "npm run db:online:generate && dotenv -e .env.online -- next build",
-    "start": "dotenv -e .env.online -- next start",
+    "build": "prisma generate --schema server/db/schema.prisma && next build",
+    "start": "next start",
     "lint": "eslint .",
     "db:offline:generate": "dotenv -e .env.offline -- prisma generate --schema server/db/schema.sqlite.prisma",
     "db:offline:push": "dotenv -e .env.offline -- prisma db push --schema server/db/schema.sqlite.prisma",
@@ -16,7 +14,7 @@
     "db:online:generate": "dotenv -e .env.online -- prisma generate --schema server/db/schema.prisma",
     "db:online:push": "dotenv -e .env.online -- prisma db push --schema server/db/schema.prisma",
     "db:online:seed": "dotenv -e .env.online -- prisma db seed --schema server/db/schema.prisma",
-    "db:online:deploy": "dotenv -e .env.online -- prisma migrate deploy --schema server/db/schema.prisma"
+    "db:online:seed-super": "dotenv -e .env.online -- tsx server/test/seed-super-user.ts"
   },
   "dependencies": {
     "@prisma/adapter-better-sqlite3": "^7.8.0",
