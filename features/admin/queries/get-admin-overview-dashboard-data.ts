@@ -80,7 +80,8 @@ export async function getAdminOverviewDashboardData() {
     recentSymptomChecks,
     recentConsultations,
     recentAiFlags,
-    recentBlogs
+    recentBlogs,
+    recentReports
   ] = await Promise.all([
     safeCount('SELECT COUNT(*) AS count FROM "User"'),
     safeCount('SELECT COUNT(*) AS count FROM "User" WHERE "updatedAt" >= ?', today),
@@ -97,7 +98,8 @@ export async function getAdminOverviewDashboardData() {
     safeRows<RawActivityRow>('SELECT "id", "symptomCategory" AS title, "recommendedNextStep" AS description, "createdAt", "riskLevel" FROM "SymptomCheckLog" ORDER BY "createdAt" DESC LIMIT 5'),
     safeRows<RawActivityRow>('SELECT "id", "reasonSummary" AS title, "requestedSpecialty" AS description, "createdAt", "status", "urgencyLevel" AS priority FROM "ConsultationRequest" ORDER BY "createdAt" DESC LIMIT 5'),
     safeRows<RawActivityRow>('SELECT "id", "title", "summary" AS description, "createdAt", "status", "priority" FROM "AiInteractionFlag" ORDER BY "createdAt" DESC LIMIT 5'),
-    safeRows<RawActivityRow>('SELECT "id", "title", "status" AS description, "createdAt", "status" FROM "Blog" WHERE LOWER("status") = ? ORDER BY "createdAt" DESC LIMIT 5', "published")
+    safeRows<RawActivityRow>('SELECT "id", "title", "status" AS description, "createdAt", "status" FROM "Blog" WHERE LOWER("status") = ? ORDER BY "createdAt" DESC LIMIT 5', "published"),
+    safeRows<RawActivityRow>('SELECT "id", "title", "summary" AS description, "createdAt", "status", "priority" FROM "SafetyReport" ORDER BY "createdAt" DESC LIMIT 5')
   ]);
 
   const recentActivity: AdminRecentActivityItem[] = [
@@ -154,6 +156,15 @@ export async function getAdminOverviewDashboardData() {
       createdAt: asDate(item.createdAt),
       href: routes.adminContent,
       tone: activityTone(item.status)
+    })),
+    ...recentReports.map((item) => ({
+      id: `report-${item.id}`,
+      type: "Safety report opened",
+      title: item.title ?? "Safety report",
+      description: item.description ?? "A report needs review in the safety center.",
+      createdAt: asDate(item.createdAt),
+      href: routes.adminReports,
+      tone: activityTone(item.status, item.priority)
     }))
   ]
     .sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime())

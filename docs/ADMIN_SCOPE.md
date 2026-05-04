@@ -339,3 +339,9 @@ Privacy rule:
 Care coordination rule:
 
 - Assigning a verified doctor automatically moves the request to `ASSIGNED`. Clearing the assigned doctor moves the request to `AWAITING_ASSIGNMENT`.
+
+## Phase 12: Reports and Safety Center
+
+Phase 12 turns `/admin/reports` into a real safety operations area. It supports AI response reports, doctor reports, user reports, content reports, platform issues, and safety incidents. Each report has a status (`OPEN`, `IN_REVIEW`, `RESOLVED`, `DISMISSED`), priority (`LOW`, `MEDIUM`, `HIGH`, `CRITICAL`), assigned admin, resolution notes, and action history.
+
+The safety center is intentionally privacy-aware: the default report detail view shows summaries and operational metadata, not full private health conversations. Admin changes to status, priority, assignment, and resolution notes are recorded in `SafetyReportActionHistory` for traceability.

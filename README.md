@@ -229,3 +229,32 @@ Recommended commit:
 ```bash
 feat(admin): add consultation request management
 ```
+
+### Phase 12 admin reports and safety center
+
+The admin dashboard now includes a real Reports / Safety Center workflow at `/admin/reports`.
+
+Included report types:
+
+- AI response report
+- Doctor report
+- User report
+- Content report
+- Platform issue
+- Safety incident
+
+Included workflow fields:
+
+- Status: `OPEN`, `IN_REVIEW`, `RESOLVED`, `DISMISSED`
+- Priority: `LOW`, `MEDIUM`, `HIGH`, `CRITICAL`
+- Assigned admin
+- Resolution notes
+- Action history for status, priority, assignment, and resolution updates
+
+After extracting this phase, run:
+
+```bash
+npx prisma db push
+npx prisma generate
+npm run dev
+```
