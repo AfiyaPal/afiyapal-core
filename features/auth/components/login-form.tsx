@@ -19,6 +19,12 @@ export function LoginForm() {
         <Input name="password" type="password" placeholder="Password" required />
         <FormMessage message={state.message} type={state.ok ? "success" : "error"} />
         <Button disabled={pending} className="w-full">{pending ? "Please wait..." : "Continue"}</Button>
+        <p className="text-center text-sm text-slate-500">
+          New here?{" "}
+          <a href="/register" className="font-semibold text-brand-600 hover:text-brand-700">Create account</a>
+          {" \u00B7 "}
+          <a href="/register/doctor" className="font-semibold text-brand-600 hover:text-brand-700">Join as doctor</a>
+        </p>
       </form>
     </AuthCard>
   );

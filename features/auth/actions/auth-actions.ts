@@ -1,7 +1,9 @@
 "use server";
 
-import { loginSchema, passwordResetConfirmSchema, passwordResetSchema, registerSchema } from "../schemas/auth-schemas";
-import { loginUser, registerUser, requestPasswordReset, resetPassword } from "@/server/services/auth-service";
+import { loginSchema, passwordResetConfirmSchema, passwordResetSchema, registerSchema, doctorRegisterSchema } from "../schemas/auth-schemas";
+import { loginUser, registerUser, requestPasswordReset, resetPassword, registerDoctorUser } from "@/server/services/auth-service";
+import { redirect } from "next/navigation";
+import { routes } from "@/lib/routes";
 
 export async function loginAction(_: unknown, formData: FormData) {
   const parsed = loginSchema.safeParse(Object.fromEntries(formData));
@@ -13,6 +15,14 @@ export async function registerAction(_: unknown, formData: FormData) {
   const parsed = registerSchema.safeParse(Object.fromEntries(formData));
   if (!parsed.success) return { ok: false, message: parsed.error.issues[0]?.message ?? "Invalid registration details." };
   return registerUser(parsed.data);
+}
+
+export async function doctorRegisterAction(_: unknown, formData: FormData) {
+  const parsed = doctorRegisterSchema.safeParse(Object.fromEntries(formData));
+  if (!parsed.success) return { ok: false, message: parsed.error.issues[0]?.message ?? "Invalid registration details." };
+  const result = await registerDoctorUser(parsed.data);
+  if (result.ok) redirect(routes.dashboard);
+  return result;
 }
 
 export async function passwordResetAction(_: unknown, formData: FormData) {

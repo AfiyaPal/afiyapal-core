@@ -10,3 +10,4 @@ out
 coverage
 prisma/dev.db
 *.db
+dev.db

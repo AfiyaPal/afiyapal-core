@@ -22,6 +22,10 @@ export function RegisterForm() {
         <Input name="confirmPassword" type="password" placeholder="Confirm password" required />
         <FormMessage message={state.message} type={state.ok ? "success" : "error"} />
         <Button disabled={pending} className="w-full">{pending ? "Please wait..." : "Continue"}</Button>
+        <p className="text-center text-sm text-slate-500">
+          Are you a health professional?{" "}
+          <a href="/register/doctor" className="font-semibold text-brand-600 hover:text-brand-700">Register here</a>
+        </p>
       </form>
     </AuthCard>
   );

@@ -4,6 +4,8 @@ export const routes = {
   chatbot: "/chatbot",
   login: "/login",
   register: "/register",
+  registerDoctor: "/register/doctor",
+  dashboard: "/dashboard",
   passwordReset: "/password-reset",
   admin: "/admin",
   adminUsers: "/admin/users",
