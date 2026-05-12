@@ -11,6 +11,7 @@ export const FACILITY_VERIFICATION_STATUSES = ["PENDING", "VERIFIED", "REJECTED"
 
 export const EVENT_TYPES = [
   { value: "FREE_CHECKUP", label: "Free checkup" },
+  { value: "MEDICAL_CAMP", label: "Medical camp" },
   { value: "HEALTH_TALK", label: "Health talk" },
   { value: "VACCINATION_DRIVE", label: "Vaccination drive" },
   { value: "SCREENING", label: "Health screening" },

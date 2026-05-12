@@ -13,5 +13,5 @@ export default async function Page() {
   const facility = await getFacilityByAdminId(user.id);
   if (!facility) redirect(routes.facilityDashboard);
 
-  return <FacilityEventList events={facility.events} facilityId={facility.id} />;
+  return <FacilityEventList events={facility.events} />;
 }

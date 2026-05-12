@@ -1,5 +1,9 @@
+"use client";
+
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { EVENT_TYPES } from "@/features/facility/data/facility-management";
+import { deleteEventAction } from "@/features/facility/actions/facility-actions";
 
 const statusBadge: Record<string, { tone: string; label: string }> = {
   UPCOMING: { tone: "bg-sky-50 text-sky-700 ring-sky-100", label: "Upcoming" },
@@ -19,7 +23,17 @@ type EventItem = {
   isPublic: boolean;
 };
 
-export function FacilityEventList({ events, facilityId }: { events: EventItem[]; facilityId: number }) {
+export function FacilityEventList({ events }: { events: EventItem[] }) {
+  const router = useRouter();
+
+  async function handleDelete(eventId: number) {
+    if (!confirm("Delete this event? This cannot be undone.")) return;
+    const fd = new FormData();
+    fd.set("eventId", String(eventId));
+    await deleteEventAction(fd);
+    router.refresh();
+  }
+
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
@@ -65,7 +79,11 @@ export function FacilityEventList({ events, facilityId }: { events: EventItem[];
                 const typeLabel = EVENT_TYPES.find((t) => t.value === event.type)?.label ?? event.type;
                 return (
                   <tr key={event.id} className="transition hover:bg-emerald-50/40">
-                    <td className="px-5 py-4 font-bold text-slate-950">{event.title}</td>
+                    <td className="px-5 py-4">
+                      <Link href={`/facility/events/${event.id}`} className="font-bold text-slate-950 hover:text-brand-600">
+                        {event.title}
+                      </Link>
+                    </td>
                     <td className="px-5 py-4 text-slate-600">{typeLabel}</td>
                     <td className="px-5 py-4">
                       <span className={`inline-flex rounded-full px-3 py-1 text-xs font-black ring-1 ${badge.tone}`}>{badge.label}</span>
@@ -74,9 +92,15 @@ export function FacilityEventList({ events, facilityId }: { events: EventItem[];
                     <td className="px-5 py-4 text-slate-600">{event.isPublic ? "Yes" : "No"}</td>
                     <td className="px-5 py-4">
                       <div className="flex gap-2">
-                        <Link href={`/facility/events/${event.id}/edit`} className="text-sm font-semibold text-brand-600 hover:text-brand-700">
+                        <Link href={`/facility/events/${event.id}`} className="text-sm font-semibold text-brand-600 hover:text-brand-700">
+                          View
+                        </Link>
+                        <Link href={`/facility/events/${event.id}/edit`} className="text-sm font-semibold text-slate-600 hover:text-slate-700">
                           Edit
                         </Link>
+                        <button onClick={() => handleDelete(event.id)} className="text-sm font-semibold text-rose-600 hover:text-rose-700">
+                          Delete
+                        </button>
                       </div>
                     </td>
                   </tr>

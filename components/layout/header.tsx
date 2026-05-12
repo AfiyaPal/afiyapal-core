@@ -3,6 +3,7 @@ import { routes } from "@/lib/routes";
 
 const navItems = [
   { label: "Home", href: routes.home },
+  { label: "Events", href: "/events" },
   { label: "Blogs", href: routes.blogs },
   { label: "Chatbot", href: routes.chatbot },
   { label: "Admin", href: routes.admin },

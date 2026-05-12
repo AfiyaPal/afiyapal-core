@@ -107,6 +107,25 @@ export async function updateEventAction(_: unknown, formData: FormData) {
   redirect(routes.facilityEvents);
 }
 
+export async function updateEventStatusAction(_: unknown, formData: FormData) {
+  const user = await requireFacilityAdmin();
+  const facility = await getOwnedFacility(user.id);
+  const eventId = Number(formData.get("eventId"));
+  if (!Number.isInteger(eventId) || eventId <= 0) return { ok: false, message: "Invalid event ID." };
+
+  const status = getText(formData, "status");
+  if (!["UPCOMING", "ONGOING", "COMPLETED", "CANCELLED"].includes(status)) return { ok: false, message: "Invalid status." };
+
+  const existing = await prisma.event.findFirst({ where: { id: eventId, facilityId: facility.id } });
+  if (!existing) return { ok: false, message: "Event not found." };
+
+  await prisma.event.update({ where: { id: eventId }, data: { status } });
+
+  revalidatePath(routes.facilityEvents);
+  revalidatePath(`${routes.facilityEvents}/${eventId}`);
+  return { ok: true, message: `Event marked as ${status.toLowerCase()}.` };
+}
+
 export async function deleteEventAction(formData: FormData) {
   const user = await requireFacilityAdmin();
   const facility = await getOwnedFacility(user.id);
