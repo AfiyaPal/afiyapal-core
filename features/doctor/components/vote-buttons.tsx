@@ -18,31 +18,39 @@ export function VoteButtons({ blogId, initialUp, initialDown, userVote, canVote 
   const [down, setDown] = useState(initialDown);
   const [currentVote, setCurrentVote] = useState<"UP" | "DOWN" | null>(userVote);
   const [message, setMessage] = useState<string | null>(null);
+  const [isPending, setIsPending] = useState(false);
 
   async function handleVote(vote: "UP" | "DOWN") {
+    setMessage(null);
+
     if (!canVote) {
       setMessage("Only verified health professionals can vote.");
       return;
     }
 
-    if (currentVote === vote) {
-      const res = await unvoteAction(blogId);
-      if (res.ok) {
-        if (vote === "UP") setUp((n) => n - 1);
-        else setDown((n) => n - 1);
-        setCurrentVote(null);
+    setIsPending(true);
+    try {
+      if (currentVote === vote) {
+        const res = await unvoteAction(blogId);
+        if (res.ok) {
+          if (vote === "UP") setUp((n) => n - 1);
+          else setDown((n) => n - 1);
+          setCurrentVote(null);
+        }
+        setMessage(res.ok ? null : res.message);
+      } else {
+        const res = await voteAction(blogId, vote);
+        if (res.ok) {
+          if (currentVote === "UP") setUp((n) => n - 1);
+          if (currentVote === "DOWN") setDown((n) => n - 1);
+          if (vote === "UP") setUp((n) => n + 1);
+          if (vote === "DOWN") setDown((n) => n + 1);
+          setCurrentVote(vote);
+        }
+        setMessage(res.ok ? null : res.message);
       }
-      setMessage(res.ok ? null : res.message);
-    } else {
-      const res = await voteAction(blogId, vote);
-      if (res.ok) {
-        if (currentVote === "UP") setUp((n) => n - 1);
-        if (currentVote === "DOWN") setDown((n) => n - 1);
-        if (vote === "UP") setUp((n) => n + 1);
-        if (vote === "DOWN") setDown((n) => n + 1);
-        setCurrentVote(vote);
-      }
-      setMessage(res.ok ? null : res.message);
+    } finally {
+      setIsPending(false);
     }
   }
 
@@ -51,8 +59,10 @@ export function VoteButtons({ blogId, initialUp, initialDown, userVote, canVote 
       <div className="flex items-center gap-1">
         <button
           onClick={() => handleVote("UP")}
+          disabled={isPending}
           className={cn(
             "inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-sm font-semibold transition",
+            isPending && "opacity-50 cursor-not-allowed",
             currentVote === "UP"
               ? "bg-brand-600 text-white shadow-soft"
               : "bg-emerald-50 text-brand-700 hover:bg-brand-100"
@@ -64,8 +74,10 @@ export function VoteButtons({ blogId, initialUp, initialDown, userVote, canVote 
         </button>
         <button
           onClick={() => handleVote("DOWN")}
+          disabled={isPending}
           className={cn(
             "inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-sm font-semibold transition",
+            isPending && "opacity-50 cursor-not-allowed",
             currentVote === "DOWN"
               ? "bg-rose-600 text-white shadow-soft"
               : "bg-rose-50 text-rose-700 hover:bg-rose-100"
