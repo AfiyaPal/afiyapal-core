@@ -348,6 +348,7 @@ export type DoctorProfileWhereInput = {
   suspensionReason?: Prisma.StringNullableFilter<"DoctorProfile"> | string | null
   createdAt?: Prisma.DateTimeFilter<"DoctorProfile"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"DoctorProfile"> | Date | string
+  facilityMemberships?: Prisma.FacilityProfessionalListRelationFilter
 }
 
 export type DoctorProfileOrderByWithRelationInput = {
@@ -371,6 +372,7 @@ export type DoctorProfileOrderByWithRelationInput = {
   suspensionReason?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  facilityMemberships?: Prisma.FacilityProfessionalOrderByRelationAggregateInput
 }
 
 export type DoctorProfileWhereUniqueInput = Prisma.AtLeast<{
@@ -397,6 +399,7 @@ export type DoctorProfileWhereUniqueInput = Prisma.AtLeast<{
   suspensionReason?: Prisma.StringNullableFilter<"DoctorProfile"> | string | null
   createdAt?: Prisma.DateTimeFilter<"DoctorProfile"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"DoctorProfile"> | Date | string
+  facilityMemberships?: Prisma.FacilityProfessionalListRelationFilter
 }, "id" | "userId">
 
 export type DoctorProfileOrderByWithAggregationInput = {
@@ -473,6 +476,7 @@ export type DoctorProfileCreateInput = {
   suspensionReason?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  facilityMemberships?: Prisma.FacilityProfessionalCreateNestedManyWithoutDoctorProfileInput
 }
 
 export type DoctorProfileUncheckedCreateInput = {
@@ -496,6 +500,7 @@ export type DoctorProfileUncheckedCreateInput = {
   suspensionReason?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  facilityMemberships?: Prisma.FacilityProfessionalUncheckedCreateNestedManyWithoutDoctorProfileInput
 }
 
 export type DoctorProfileUpdateInput = {
@@ -518,6 +523,7 @@ export type DoctorProfileUpdateInput = {
   suspensionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  facilityMemberships?: Prisma.FacilityProfessionalUpdateManyWithoutDoctorProfileNestedInput
 }
 
 export type DoctorProfileUncheckedUpdateInput = {
@@ -541,6 +547,7 @@ export type DoctorProfileUncheckedUpdateInput = {
   suspensionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  facilityMemberships?: Prisma.FacilityProfessionalUncheckedUpdateManyWithoutDoctorProfileNestedInput
 }
 
 export type DoctorProfileCreateManyInput = {
@@ -694,6 +701,160 @@ export type DoctorProfileSumOrderByAggregateInput = {
   verifiedById?: Prisma.SortOrder
 }
 
+export type DoctorProfileScalarRelationFilter = {
+  is?: Prisma.DoctorProfileWhereInput
+  isNot?: Prisma.DoctorProfileWhereInput
+}
+
+export type DoctorProfileCreateNestedOneWithoutFacilityMembershipsInput = {
+  create?: Prisma.XOR<Prisma.DoctorProfileCreateWithoutFacilityMembershipsInput, Prisma.DoctorProfileUncheckedCreateWithoutFacilityMembershipsInput>
+  connectOrCreate?: Prisma.DoctorProfileCreateOrConnectWithoutFacilityMembershipsInput
+  connect?: Prisma.DoctorProfileWhereUniqueInput
+}
+
+export type DoctorProfileUpdateOneRequiredWithoutFacilityMembershipsNestedInput = {
+  create?: Prisma.XOR<Prisma.DoctorProfileCreateWithoutFacilityMembershipsInput, Prisma.DoctorProfileUncheckedCreateWithoutFacilityMembershipsInput>
+  connectOrCreate?: Prisma.DoctorProfileCreateOrConnectWithoutFacilityMembershipsInput
+  upsert?: Prisma.DoctorProfileUpsertWithoutFacilityMembershipsInput
+  connect?: Prisma.DoctorProfileWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.DoctorProfileUpdateToOneWithWhereWithoutFacilityMembershipsInput, Prisma.DoctorProfileUpdateWithoutFacilityMembershipsInput>, Prisma.DoctorProfileUncheckedUpdateWithoutFacilityMembershipsInput>
+}
+
+export type DoctorProfileCreateWithoutFacilityMembershipsInput = {
+  userId?: number | null
+  fullName: string
+  email?: string | null
+  phone?: string | null
+  country?: string | null
+  cityRegion?: string | null
+  licenseNumber?: string | null
+  specialty?: string | null
+  languagesSpoken?: string | null
+  yearsOfExperience?: number | null
+  bio?: string | null
+  verificationStatus?: string
+  availabilityStatus?: string
+  verifiedById?: number | null
+  verifiedAt?: Date | string | null
+  rejectionReason?: string | null
+  suspensionReason?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+}
+
+export type DoctorProfileUncheckedCreateWithoutFacilityMembershipsInput = {
+  id?: number
+  userId?: number | null
+  fullName: string
+  email?: string | null
+  phone?: string | null
+  country?: string | null
+  cityRegion?: string | null
+  licenseNumber?: string | null
+  specialty?: string | null
+  languagesSpoken?: string | null
+  yearsOfExperience?: number | null
+  bio?: string | null
+  verificationStatus?: string
+  availabilityStatus?: string
+  verifiedById?: number | null
+  verifiedAt?: Date | string | null
+  rejectionReason?: string | null
+  suspensionReason?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+}
+
+export type DoctorProfileCreateOrConnectWithoutFacilityMembershipsInput = {
+  where: Prisma.DoctorProfileWhereUniqueInput
+  create: Prisma.XOR<Prisma.DoctorProfileCreateWithoutFacilityMembershipsInput, Prisma.DoctorProfileUncheckedCreateWithoutFacilityMembershipsInput>
+}
+
+export type DoctorProfileUpsertWithoutFacilityMembershipsInput = {
+  update: Prisma.XOR<Prisma.DoctorProfileUpdateWithoutFacilityMembershipsInput, Prisma.DoctorProfileUncheckedUpdateWithoutFacilityMembershipsInput>
+  create: Prisma.XOR<Prisma.DoctorProfileCreateWithoutFacilityMembershipsInput, Prisma.DoctorProfileUncheckedCreateWithoutFacilityMembershipsInput>
+  where?: Prisma.DoctorProfileWhereInput
+}
+
+export type DoctorProfileUpdateToOneWithWhereWithoutFacilityMembershipsInput = {
+  where?: Prisma.DoctorProfileWhereInput
+  data: Prisma.XOR<Prisma.DoctorProfileUpdateWithoutFacilityMembershipsInput, Prisma.DoctorProfileUncheckedUpdateWithoutFacilityMembershipsInput>
+}
+
+export type DoctorProfileUpdateWithoutFacilityMembershipsInput = {
+  userId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  fullName?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  country?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  cityRegion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  licenseNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  specialty?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  languagesSpoken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  yearsOfExperience?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  verificationStatus?: Prisma.StringFieldUpdateOperationsInput | string
+  availabilityStatus?: Prisma.StringFieldUpdateOperationsInput | string
+  verifiedById?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  verifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  rejectionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  suspensionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type DoctorProfileUncheckedUpdateWithoutFacilityMembershipsInput = {
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  userId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  fullName?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  country?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  cityRegion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  licenseNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  specialty?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  languagesSpoken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  yearsOfExperience?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  verificationStatus?: Prisma.StringFieldUpdateOperationsInput | string
+  availabilityStatus?: Prisma.StringFieldUpdateOperationsInput | string
+  verifiedById?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  verifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  rejectionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  suspensionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+
+/**
+ * Count Type DoctorProfileCountOutputType
+ */
+
+export type DoctorProfileCountOutputType = {
+  facilityMemberships: number
+}
+
+export type DoctorProfileCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  facilityMemberships?: boolean | DoctorProfileCountOutputTypeCountFacilityMembershipsArgs
+}
+
+/**
+ * DoctorProfileCountOutputType without action
+ */
+export type DoctorProfileCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the DoctorProfileCountOutputType
+   */
+  select?: Prisma.DoctorProfileCountOutputTypeSelect<ExtArgs> | null
+}
+
+/**
+ * DoctorProfileCountOutputType without action
+ */
+export type DoctorProfileCountOutputTypeCountFacilityMembershipsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.FacilityProfessionalWhereInput
+}
 
 
 export type DoctorProfileSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -717,6 +878,8 @@ export type DoctorProfileSelect<ExtArgs extends runtime.Types.Extensions.Interna
   suspensionReason?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  facilityMemberships?: boolean | Prisma.DoctorProfile$facilityMembershipsArgs<ExtArgs>
+  _count?: boolean | Prisma.DoctorProfileCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["doctorProfile"]>
 
 export type DoctorProfileSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -789,10 +952,18 @@ export type DoctorProfileSelectScalar = {
 }
 
 export type DoctorProfileOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "userId" | "fullName" | "email" | "phone" | "country" | "cityRegion" | "licenseNumber" | "specialty" | "languagesSpoken" | "yearsOfExperience" | "bio" | "verificationStatus" | "availabilityStatus" | "verifiedById" | "verifiedAt" | "rejectionReason" | "suspensionReason" | "createdAt" | "updatedAt", ExtArgs["result"]["doctorProfile"]>
+export type DoctorProfileInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  facilityMemberships?: boolean | Prisma.DoctorProfile$facilityMembershipsArgs<ExtArgs>
+  _count?: boolean | Prisma.DoctorProfileCountOutputTypeDefaultArgs<ExtArgs>
+}
+export type DoctorProfileIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
+export type DoctorProfileIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
 
 export type $DoctorProfilePayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "DoctorProfile"
-  objects: {}
+  objects: {
+    facilityMemberships: Prisma.$FacilityProfessionalPayload<ExtArgs>[]
+  }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: number
     userId: number | null
@@ -1208,6 +1379,7 @@ readonly fields: DoctorProfileFieldRefs;
  */
 export interface Prisma__DoctorProfileClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
+  facilityMemberships<T extends Prisma.DoctorProfile$facilityMembershipsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.DoctorProfile$facilityMembershipsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$FacilityProfessionalPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1274,6 +1446,10 @@ export type DoctorProfileFindUniqueArgs<ExtArgs extends runtime.Types.Extensions
    */
   omit?: Prisma.DoctorProfileOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.DoctorProfileInclude<ExtArgs> | null
+  /**
    * Filter, which DoctorProfile to fetch.
    */
   where: Prisma.DoctorProfileWhereUniqueInput
@@ -1292,6 +1468,10 @@ export type DoctorProfileFindUniqueOrThrowArgs<ExtArgs extends runtime.Types.Ext
    */
   omit?: Prisma.DoctorProfileOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.DoctorProfileInclude<ExtArgs> | null
+  /**
    * Filter, which DoctorProfile to fetch.
    */
   where: Prisma.DoctorProfileWhereUniqueInput
@@ -1309,6 +1489,10 @@ export type DoctorProfileFindFirstArgs<ExtArgs extends runtime.Types.Extensions.
    * Omit specific fields from the DoctorProfile
    */
   omit?: Prisma.DoctorProfileOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.DoctorProfileInclude<ExtArgs> | null
   /**
    * Filter, which DoctorProfile to fetch.
    */
@@ -1358,6 +1542,10 @@ export type DoctorProfileFindFirstOrThrowArgs<ExtArgs extends runtime.Types.Exte
    */
   omit?: Prisma.DoctorProfileOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.DoctorProfileInclude<ExtArgs> | null
+  /**
    * Filter, which DoctorProfile to fetch.
    */
   where?: Prisma.DoctorProfileWhereInput
@@ -1405,6 +1593,10 @@ export type DoctorProfileFindManyArgs<ExtArgs extends runtime.Types.Extensions.I
    * Omit specific fields from the DoctorProfile
    */
   omit?: Prisma.DoctorProfileOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.DoctorProfileInclude<ExtArgs> | null
   /**
    * Filter, which DoctorProfiles to fetch.
    */
@@ -1454,6 +1646,10 @@ export type DoctorProfileCreateArgs<ExtArgs extends runtime.Types.Extensions.Int
    */
   omit?: Prisma.DoctorProfileOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.DoctorProfileInclude<ExtArgs> | null
+  /**
    * The data needed to create a DoctorProfile.
    */
   data: Prisma.XOR<Prisma.DoctorProfileCreateInput, Prisma.DoctorProfileUncheckedCreateInput>
@@ -1501,6 +1697,10 @@ export type DoctorProfileUpdateArgs<ExtArgs extends runtime.Types.Extensions.Int
    * Omit specific fields from the DoctorProfile
    */
   omit?: Prisma.DoctorProfileOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.DoctorProfileInclude<ExtArgs> | null
   /**
    * The data needed to update a DoctorProfile.
    */
@@ -1568,6 +1768,10 @@ export type DoctorProfileUpsertArgs<ExtArgs extends runtime.Types.Extensions.Int
    */
   omit?: Prisma.DoctorProfileOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.DoctorProfileInclude<ExtArgs> | null
+  /**
    * The filter to search for the DoctorProfile to update in case it exists.
    */
   where: Prisma.DoctorProfileWhereUniqueInput
@@ -1594,6 +1798,10 @@ export type DoctorProfileDeleteArgs<ExtArgs extends runtime.Types.Extensions.Int
    */
   omit?: Prisma.DoctorProfileOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.DoctorProfileInclude<ExtArgs> | null
+  /**
    * Filter which DoctorProfile to delete.
    */
   where: Prisma.DoctorProfileWhereUniqueInput
@@ -1614,6 +1822,30 @@ export type DoctorProfileDeleteManyArgs<ExtArgs extends runtime.Types.Extensions
 }
 
 /**
+ * DoctorProfile.facilityMemberships
+ */
+export type DoctorProfile$facilityMembershipsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the FacilityProfessional
+   */
+  select?: Prisma.FacilityProfessionalSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the FacilityProfessional
+   */
+  omit?: Prisma.FacilityProfessionalOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.FacilityProfessionalInclude<ExtArgs> | null
+  where?: Prisma.FacilityProfessionalWhereInput
+  orderBy?: Prisma.FacilityProfessionalOrderByWithRelationInput | Prisma.FacilityProfessionalOrderByWithRelationInput[]
+  cursor?: Prisma.FacilityProfessionalWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.FacilityProfessionalScalarFieldEnum | Prisma.FacilityProfessionalScalarFieldEnum[]
+}
+
+/**
  * DoctorProfile without action
  */
 export type DoctorProfileDefaultArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1625,4 +1857,8 @@ export type DoctorProfileDefaultArgs<ExtArgs extends runtime.Types.Extensions.In
    * Omit specific fields from the DoctorProfile
    */
   omit?: Prisma.DoctorProfileOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.DoctorProfileInclude<ExtArgs> | null
 }

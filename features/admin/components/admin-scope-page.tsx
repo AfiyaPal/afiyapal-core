@@ -1,6 +1,7 @@
 import Link from "next/link";
 import {
   Bell,
+  Building2,
   ClipboardList,
   FileText,
   FlaskConical,
@@ -27,6 +28,7 @@ const moduleIconMap = {
   content: FileText,
   users: Users,
   doctors: Stethoscope,
+  facilities: Building2,
   "symptom-checks": ClipboardList,
   "ai-flags": MessageSquareWarning,
   consultations: Stethoscope,

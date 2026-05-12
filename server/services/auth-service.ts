@@ -1,5 +1,6 @@
 import "server-only";
 import bcrypt from "bcryptjs";
+import { prisma } from "@/server/db/prisma";
 import { createUser, findUserByEmail } from "@/server/repositories/user-repository";
 import { createUserSession } from "@/server/auth/session";
 import { isActiveUserStatus } from "@/server/auth/roles";
@@ -27,6 +28,47 @@ export async function registerUser(input: { username: string; email: string; pho
   const passwordHash = await bcrypt.hash(input.password, 12);
   await createUser({ username: input.username, email: input.email, phone: input.phone, passwordHash });
   return { ok: true, message: "Account created. Add email verification/session sign-in next." };
+}
+
+type FacilityRegisterInput = {
+  username: string;
+  email: string;
+  phone?: string;
+  password: string;
+  facilityName: string;
+  facilityType: string;
+  country: string;
+  region?: string;
+  city?: string;
+  address?: string;
+  description?: string;
+};
+
+export async function registerFacilityUser(input: FacilityRegisterInput) {
+  const existing = await findUserByEmail(input.email).catch(() => null);
+  if (existing) return { ok: false, message: "An account with this email already exists." };
+
+  const passwordHash = await bcrypt.hash(input.password, 12);
+  const user = await createUser({ username: input.username, email: input.email, phone: input.phone, passwordHash, role: "FACILITY_ADMIN" });
+
+  await prisma.facility.create({
+    data: {
+      name: input.facilityName,
+      type: input.facilityType,
+      country: input.country,
+      region: input.region || null,
+      city: input.city || null,
+      address: input.address || null,
+      description: input.description || null,
+      adminId: user.id,
+      email: input.email,
+      phone: input.phone || null,
+      verificationStatus: "PENDING"
+    }
+  });
+
+  await createUserSession(user.id);
+  return { ok: true, message: "Facility application submitted. Awaiting verification." };
 }
 
 type DoctorRegisterInput = {

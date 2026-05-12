@@ -3,6 +3,7 @@ import "server-only";
 export const USER_ROLES = [
   "USER",
   "DOCTOR",
+  "FACILITY_ADMIN",
   "ADMIN",
   "SUPER_ADMIN",
   "MEDICAL_REVIEWER",

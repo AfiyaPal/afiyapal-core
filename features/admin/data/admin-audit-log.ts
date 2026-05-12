@@ -6,6 +6,9 @@ export const ADMIN_AUDIT_ACTIONS = [
   "DOCTOR_APPROVED",
   "DOCTOR_REJECTED",
   "DOCTOR_SUSPENDED",
+  "FACILITY_APPROVED",
+  "FACILITY_REJECTED",
+  "FACILITY_SUSPENDED",
   "ARTICLE_PUBLISHED",
   "ARTICLE_UNPUBLISHED",
   "ARTICLE_ARCHIVED",
@@ -33,7 +36,8 @@ export const ADMIN_AUDIT_TARGET_TYPES = [
   "SymptomCheckLog",
   "MentalHealthInteraction",
   "PlatformSetting",
-  "HealthResource"
+  "HealthResource",
+  "Facility"
 ] as const;
 
 export type AdminAuditTargetType = (typeof ADMIN_AUDIT_TARGET_TYPES)[number];
@@ -58,7 +62,10 @@ export const adminAuditActionLabels: Record<AdminAuditAction, string> = {
   PLATFORM_SETTINGS_UPDATED: "Platform settings updated",
   HEALTH_RESOURCE_CREATED: "Health resource created",
   HEALTH_RESOURCE_UPDATED: "Health resource updated",
-  HEALTH_RESOURCE_STATUS_CHANGED: "Health resource status changed"
+  HEALTH_RESOURCE_STATUS_CHANGED: "Health resource status changed",
+  FACILITY_APPROVED: "Facility approved",
+  FACILITY_REJECTED: "Facility rejected",
+  FACILITY_SUSPENDED: "Facility suspended"
 };
 
 export const adminAuditTargetLabels: Record<AdminAuditTargetType, string> = {
@@ -71,5 +78,6 @@ export const adminAuditTargetLabels: Record<AdminAuditTargetType, string> = {
   SymptomCheckLog: "Symptom check log",
   MentalHealthInteraction: "Mental health interaction",
   PlatformSetting: "Platform setting",
-  HealthResource: "Health resource"
+  HealthResource: "Health resource",
+  Facility: "Facility"
 };

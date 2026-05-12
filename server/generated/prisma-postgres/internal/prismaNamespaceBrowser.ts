@@ -68,6 +68,9 @@ export const ModelName = {
   AdminSensitiveHealthAccessGrant: 'AdminSensitiveHealthAccessGrant',
   PlatformSetting: 'PlatformSetting',
   HealthResource: 'HealthResource',
+  Facility: 'Facility',
+  FacilityProfessional: 'FacilityProfessional',
+  Event: 'Event',
   Notification: 'Notification'
 } as const
 
@@ -373,6 +376,66 @@ export const HealthResourceScalarFieldEnum = {
 } as const
 
 export type HealthResourceScalarFieldEnum = (typeof HealthResourceScalarFieldEnum)[keyof typeof HealthResourceScalarFieldEnum]
+
+
+export const FacilityScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  type: 'type',
+  email: 'email',
+  phone: 'phone',
+  website: 'website',
+  country: 'country',
+  region: 'region',
+  city: 'city',
+  address: 'address',
+  latitude: 'latitude',
+  longitude: 'longitude',
+  description: 'description',
+  services: 'services',
+  operatingHours: 'operatingHours',
+  adminId: 'adminId',
+  verificationStatus: 'verificationStatus',
+  verifiedById: 'verifiedById',
+  verifiedAt: 'verifiedAt',
+  rejectionReason: 'rejectionReason',
+  suspensionReason: 'suspensionReason',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type FacilityScalarFieldEnum = (typeof FacilityScalarFieldEnum)[keyof typeof FacilityScalarFieldEnum]
+
+
+export const FacilityProfessionalScalarFieldEnum = {
+  id: 'id',
+  facilityId: 'facilityId',
+  doctorProfileId: 'doctorProfileId',
+  role: 'role',
+  addedById: 'addedById',
+  status: 'status',
+  addedAt: 'addedAt'
+} as const
+
+export type FacilityProfessionalScalarFieldEnum = (typeof FacilityProfessionalScalarFieldEnum)[keyof typeof FacilityProfessionalScalarFieldEnum]
+
+
+export const EventScalarFieldEnum = {
+  id: 'id',
+  facilityId: 'facilityId',
+  title: 'title',
+  description: 'description',
+  type: 'type',
+  startDate: 'startDate',
+  endDate: 'endDate',
+  location: 'location',
+  isPublic: 'isPublic',
+  status: 'status',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type EventScalarFieldEnum = (typeof EventScalarFieldEnum)[keyof typeof EventScalarFieldEnum]
 
 
 export const NotificationScalarFieldEnum = {

@@ -110,6 +110,7 @@ model DoctorProfile {
   suspensionReason   String?
   createdAt          DateTime @default(now())
   updatedAt          DateTime @updatedAt
+  facilityMemberships FacilityProfessional[]
 
   @@index([verificationStatus])
   @@index([specialty])
@@ -342,6 +343,77 @@ model HealthResource {
   @@index([region])
   @@index([isActive])
   @@index([createdAt])
+}
+
+model Facility {
+  id                 Int      @id @default(autoincrement())
+  name               String
+  type               String   @default("CLINIC")
+  email              String?
+  phone              String?
+  website            String?
+  country            String
+  region             String?
+  city               String?
+  address            String?
+  latitude           Float?
+  longitude          Float?
+  description        String?
+  services           String?
+  operatingHours     String?
+  adminId            Int?
+  verificationStatus String   @default("PENDING")
+  verifiedById       Int?
+  verifiedAt         DateTime?
+  rejectionReason    String?
+  suspensionReason   String?
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+  professionals      FacilityProfessional[]
+  events             Event[]
+
+  @@index([verificationStatus])
+  @@index([country])
+  @@index([type])
+  @@index([createdAt])
+}
+
+model FacilityProfessional {
+  id              Int      @id @default(autoincrement())
+  facilityId      Int
+  doctorProfileId Int
+  role            String   @default("STAFF_DOCTOR")
+  addedById       Int?
+  status          String   @default("ACTIVE")
+  addedAt         DateTime @default(now())
+  facility        Facility @relation(fields: [facilityId], references: [id])
+  doctorProfile   DoctorProfile @relation(fields: [doctorProfileId], references: [id])
+
+  @@unique([facilityId, doctorProfileId])
+  @@index([facilityId])
+  @@index([doctorProfileId])
+  @@index([status])
+}
+
+model Event {
+  id          Int       @id @default(autoincrement())
+  facilityId  Int
+  title       String
+  description String?
+  type        String    @default("HEALTH_TALK")
+  startDate   DateTime
+  endDate     DateTime?
+  location    String?
+  isPublic    Boolean   @default(true)
+  status      String    @default("UPCOMING")
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  facility    Facility  @relation(fields: [facilityId], references: [id])
+
+  @@index([facilityId])
+  @@index([status])
+  @@index([startDate])
+  @@index([type])
 }
 
 model Notification {

@@ -24,6 +24,8 @@ export function LoginForm() {
           <a href="/register" className="font-semibold text-brand-600 hover:text-brand-700">Create account</a>
           {" \u00B7 "}
           <a href="/register/doctor" className="font-semibold text-brand-600 hover:text-brand-700">Join as doctor</a>
+          {" \u00B7 "}
+          <a href="/register/facility" className="font-semibold text-brand-600 hover:text-brand-700">Register facility</a>
         </p>
       </form>
     </AuthCard>

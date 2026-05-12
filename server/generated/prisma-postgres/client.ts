@@ -127,6 +127,21 @@ export type PlatformSetting = Prisma.PlatformSettingModel
  */
 export type HealthResource = Prisma.HealthResourceModel
 /**
+ * Model Facility
+ * 
+ */
+export type Facility = Prisma.FacilityModel
+/**
+ * Model FacilityProfessional
+ * 
+ */
+export type FacilityProfessional = Prisma.FacilityProfessionalModel
+/**
+ * Model Event
+ * 
+ */
+export type Event = Prisma.EventModel
+/**
  * Model Notification
  * 
  */
