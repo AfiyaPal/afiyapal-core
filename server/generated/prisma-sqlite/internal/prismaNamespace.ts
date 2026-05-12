@@ -389,6 +389,7 @@ export const ModelName = {
   Blog: 'Blog',
   Comment: 'Comment',
   Media: 'Media',
+  BlogVote: 'BlogVote',
   DoctorProfile: 'DoctorProfile',
   SymptomCheckLog: 'SymptomCheckLog',
   AiInteractionFlag: 'AiInteractionFlag',
@@ -420,7 +421,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "category" | "blog" | "comment" | "media" | "doctorProfile" | "symptomCheckLog" | "aiInteractionFlag" | "consultationRequest" | "safetyReport" | "safetyReportActionHistory" | "mentalHealthInteraction" | "mentalHealthResource" | "adminAuditLog" | "adminSensitiveHealthAccessGrant" | "platformSetting" | "healthResource" | "facility" | "facilityProfessional" | "event" | "notification"
+    modelProps: "user" | "category" | "blog" | "comment" | "media" | "blogVote" | "doctorProfile" | "symptomCheckLog" | "aiInteractionFlag" | "consultationRequest" | "safetyReport" | "safetyReportActionHistory" | "mentalHealthInteraction" | "mentalHealthResource" | "adminAuditLog" | "adminSensitiveHealthAccessGrant" | "platformSetting" | "healthResource" | "facility" | "facilityProfessional" | "event" | "notification"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -791,6 +792,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         count: {
           args: Prisma.MediaCountArgs<ExtArgs>
           result: runtime.Types.Utils.Optional<Prisma.MediaCountAggregateOutputType> | number
+        }
+      }
+    }
+    BlogVote: {
+      payload: Prisma.$BlogVotePayload<ExtArgs>
+      fields: Prisma.BlogVoteFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.BlogVoteFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BlogVotePayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.BlogVoteFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BlogVotePayload>
+        }
+        findFirst: {
+          args: Prisma.BlogVoteFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BlogVotePayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.BlogVoteFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BlogVotePayload>
+        }
+        findMany: {
+          args: Prisma.BlogVoteFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BlogVotePayload>[]
+        }
+        create: {
+          args: Prisma.BlogVoteCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BlogVotePayload>
+        }
+        createMany: {
+          args: Prisma.BlogVoteCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.BlogVoteCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BlogVotePayload>[]
+        }
+        delete: {
+          args: Prisma.BlogVoteDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BlogVotePayload>
+        }
+        update: {
+          args: Prisma.BlogVoteUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BlogVotePayload>
+        }
+        deleteMany: {
+          args: Prisma.BlogVoteDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.BlogVoteUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.BlogVoteUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BlogVotePayload>[]
+        }
+        upsert: {
+          args: Prisma.BlogVoteUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BlogVotePayload>
+        }
+        aggregate: {
+          args: Prisma.BlogVoteAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateBlogVote>
+        }
+        groupBy: {
+          args: Prisma.BlogVoteGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.BlogVoteGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.BlogVoteCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.BlogVoteCountAggregateOutputType> | number
         }
       }
     }
@@ -2089,6 +2164,17 @@ export const MediaScalarFieldEnum = {
 export type MediaScalarFieldEnum = (typeof MediaScalarFieldEnum)[keyof typeof MediaScalarFieldEnum]
 
 
+export const BlogVoteScalarFieldEnum = {
+  id: 'id',
+  blogId: 'blogId',
+  userId: 'userId',
+  vote: 'vote',
+  createdAt: 'createdAt'
+} as const
+
+export type BlogVoteScalarFieldEnum = (typeof BlogVoteScalarFieldEnum)[keyof typeof BlogVoteScalarFieldEnum]
+
+
 export const DoctorProfileScalarFieldEnum = {
   id: 'id',
   userId: 'userId',
@@ -2550,6 +2636,7 @@ export type GlobalOmitConfig = {
   blog?: Prisma.BlogOmit
   comment?: Prisma.CommentOmit
   media?: Prisma.MediaOmit
+  blogVote?: Prisma.BlogVoteOmit
   doctorProfile?: Prisma.DoctorProfileOmit
   symptomCheckLog?: Prisma.SymptomCheckLogOmit
   aiInteractionFlag?: Prisma.AiInteractionFlagOmit

@@ -336,6 +336,7 @@ export type BlogWhereInput = {
   category?: Prisma.XOR<Prisma.CategoryNullableScalarRelationFilter, Prisma.CategoryWhereInput> | null
   comments?: Prisma.CommentListRelationFilter
   media?: Prisma.MediaListRelationFilter
+  votes?: Prisma.BlogVoteListRelationFilter
 }
 
 export type BlogOrderByWithRelationInput = {
@@ -361,6 +362,7 @@ export type BlogOrderByWithRelationInput = {
   category?: Prisma.CategoryOrderByWithRelationInput
   comments?: Prisma.CommentOrderByRelationAggregateInput
   media?: Prisma.MediaOrderByRelationAggregateInput
+  votes?: Prisma.BlogVoteOrderByRelationAggregateInput
 }
 
 export type BlogWhereUniqueInput = Prisma.AtLeast<{
@@ -389,6 +391,7 @@ export type BlogWhereUniqueInput = Prisma.AtLeast<{
   category?: Prisma.XOR<Prisma.CategoryNullableScalarRelationFilter, Prisma.CategoryWhereInput> | null
   comments?: Prisma.CommentListRelationFilter
   media?: Prisma.MediaListRelationFilter
+  votes?: Prisma.BlogVoteListRelationFilter
 }, "id" | "slug">
 
 export type BlogOrderByWithAggregationInput = {
@@ -461,6 +464,7 @@ export type BlogCreateInput = {
   category?: Prisma.CategoryCreateNestedOneWithoutBlogsInput
   comments?: Prisma.CommentCreateNestedManyWithoutBlogInput
   media?: Prisma.MediaCreateNestedManyWithoutBlogInput
+  votes?: Prisma.BlogVoteCreateNestedManyWithoutBlogInput
 }
 
 export type BlogUncheckedCreateInput = {
@@ -484,6 +488,7 @@ export type BlogUncheckedCreateInput = {
   updatedAt?: Date | string
   comments?: Prisma.CommentUncheckedCreateNestedManyWithoutBlogInput
   media?: Prisma.MediaUncheckedCreateNestedManyWithoutBlogInput
+  votes?: Prisma.BlogVoteUncheckedCreateNestedManyWithoutBlogInput
 }
 
 export type BlogUpdateInput = {
@@ -506,6 +511,7 @@ export type BlogUpdateInput = {
   category?: Prisma.CategoryUpdateOneWithoutBlogsNestedInput
   comments?: Prisma.CommentUpdateManyWithoutBlogNestedInput
   media?: Prisma.MediaUpdateManyWithoutBlogNestedInput
+  votes?: Prisma.BlogVoteUpdateManyWithoutBlogNestedInput
 }
 
 export type BlogUncheckedUpdateInput = {
@@ -529,6 +535,7 @@ export type BlogUncheckedUpdateInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   comments?: Prisma.CommentUncheckedUpdateManyWithoutBlogNestedInput
   media?: Prisma.MediaUncheckedUpdateManyWithoutBlogNestedInput
+  votes?: Prisma.BlogVoteUncheckedUpdateManyWithoutBlogNestedInput
 }
 
 export type BlogCreateManyInput = {
@@ -807,6 +814,20 @@ export type BlogUpdateOneRequiredWithoutMediaNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.BlogUpdateToOneWithWhereWithoutMediaInput, Prisma.BlogUpdateWithoutMediaInput>, Prisma.BlogUncheckedUpdateWithoutMediaInput>
 }
 
+export type BlogCreateNestedOneWithoutVotesInput = {
+  create?: Prisma.XOR<Prisma.BlogCreateWithoutVotesInput, Prisma.BlogUncheckedCreateWithoutVotesInput>
+  connectOrCreate?: Prisma.BlogCreateOrConnectWithoutVotesInput
+  connect?: Prisma.BlogWhereUniqueInput
+}
+
+export type BlogUpdateOneRequiredWithoutVotesNestedInput = {
+  create?: Prisma.XOR<Prisma.BlogCreateWithoutVotesInput, Prisma.BlogUncheckedCreateWithoutVotesInput>
+  connectOrCreate?: Prisma.BlogCreateOrConnectWithoutVotesInput
+  upsert?: Prisma.BlogUpsertWithoutVotesInput
+  connect?: Prisma.BlogWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.BlogUpdateToOneWithWhereWithoutVotesInput, Prisma.BlogUpdateWithoutVotesInput>, Prisma.BlogUncheckedUpdateWithoutVotesInput>
+}
+
 export type BlogCreateWithoutCreatorInput = {
   title: string
   slug: string
@@ -826,6 +847,7 @@ export type BlogCreateWithoutCreatorInput = {
   category?: Prisma.CategoryCreateNestedOneWithoutBlogsInput
   comments?: Prisma.CommentCreateNestedManyWithoutBlogInput
   media?: Prisma.MediaCreateNestedManyWithoutBlogInput
+  votes?: Prisma.BlogVoteCreateNestedManyWithoutBlogInput
 }
 
 export type BlogUncheckedCreateWithoutCreatorInput = {
@@ -848,6 +870,7 @@ export type BlogUncheckedCreateWithoutCreatorInput = {
   updatedAt?: Date | string
   comments?: Prisma.CommentUncheckedCreateNestedManyWithoutBlogInput
   media?: Prisma.MediaUncheckedCreateNestedManyWithoutBlogInput
+  votes?: Prisma.BlogVoteUncheckedCreateNestedManyWithoutBlogInput
 }
 
 export type BlogCreateOrConnectWithoutCreatorInput = {
@@ -919,6 +942,7 @@ export type BlogCreateWithoutCategoryInput = {
   creator: Prisma.UserCreateNestedOneWithoutBlogsInput
   comments?: Prisma.CommentCreateNestedManyWithoutBlogInput
   media?: Prisma.MediaCreateNestedManyWithoutBlogInput
+  votes?: Prisma.BlogVoteCreateNestedManyWithoutBlogInput
 }
 
 export type BlogUncheckedCreateWithoutCategoryInput = {
@@ -941,6 +965,7 @@ export type BlogUncheckedCreateWithoutCategoryInput = {
   updatedAt?: Date | string
   comments?: Prisma.CommentUncheckedCreateNestedManyWithoutBlogInput
   media?: Prisma.MediaUncheckedCreateNestedManyWithoutBlogInput
+  votes?: Prisma.BlogVoteUncheckedCreateNestedManyWithoutBlogInput
 }
 
 export type BlogCreateOrConnectWithoutCategoryInput = {
@@ -988,6 +1013,7 @@ export type BlogCreateWithoutCommentsInput = {
   creator: Prisma.UserCreateNestedOneWithoutBlogsInput
   category?: Prisma.CategoryCreateNestedOneWithoutBlogsInput
   media?: Prisma.MediaCreateNestedManyWithoutBlogInput
+  votes?: Prisma.BlogVoteCreateNestedManyWithoutBlogInput
 }
 
 export type BlogUncheckedCreateWithoutCommentsInput = {
@@ -1010,6 +1036,7 @@ export type BlogUncheckedCreateWithoutCommentsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   media?: Prisma.MediaUncheckedCreateNestedManyWithoutBlogInput
+  votes?: Prisma.BlogVoteUncheckedCreateNestedManyWithoutBlogInput
 }
 
 export type BlogCreateOrConnectWithoutCommentsInput = {
@@ -1047,6 +1074,7 @@ export type BlogUpdateWithoutCommentsInput = {
   creator?: Prisma.UserUpdateOneRequiredWithoutBlogsNestedInput
   category?: Prisma.CategoryUpdateOneWithoutBlogsNestedInput
   media?: Prisma.MediaUpdateManyWithoutBlogNestedInput
+  votes?: Prisma.BlogVoteUpdateManyWithoutBlogNestedInput
 }
 
 export type BlogUncheckedUpdateWithoutCommentsInput = {
@@ -1069,6 +1097,7 @@ export type BlogUncheckedUpdateWithoutCommentsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   media?: Prisma.MediaUncheckedUpdateManyWithoutBlogNestedInput
+  votes?: Prisma.BlogVoteUncheckedUpdateManyWithoutBlogNestedInput
 }
 
 export type BlogCreateWithoutMediaInput = {
@@ -1090,6 +1119,7 @@ export type BlogCreateWithoutMediaInput = {
   creator: Prisma.UserCreateNestedOneWithoutBlogsInput
   category?: Prisma.CategoryCreateNestedOneWithoutBlogsInput
   comments?: Prisma.CommentCreateNestedManyWithoutBlogInput
+  votes?: Prisma.BlogVoteCreateNestedManyWithoutBlogInput
 }
 
 export type BlogUncheckedCreateWithoutMediaInput = {
@@ -1112,6 +1142,7 @@ export type BlogUncheckedCreateWithoutMediaInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   comments?: Prisma.CommentUncheckedCreateNestedManyWithoutBlogInput
+  votes?: Prisma.BlogVoteUncheckedCreateNestedManyWithoutBlogInput
 }
 
 export type BlogCreateOrConnectWithoutMediaInput = {
@@ -1149,6 +1180,7 @@ export type BlogUpdateWithoutMediaInput = {
   creator?: Prisma.UserUpdateOneRequiredWithoutBlogsNestedInput
   category?: Prisma.CategoryUpdateOneWithoutBlogsNestedInput
   comments?: Prisma.CommentUpdateManyWithoutBlogNestedInput
+  votes?: Prisma.BlogVoteUpdateManyWithoutBlogNestedInput
 }
 
 export type BlogUncheckedUpdateWithoutMediaInput = {
@@ -1171,6 +1203,113 @@ export type BlogUncheckedUpdateWithoutMediaInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   comments?: Prisma.CommentUncheckedUpdateManyWithoutBlogNestedInput
+  votes?: Prisma.BlogVoteUncheckedUpdateManyWithoutBlogNestedInput
+}
+
+export type BlogCreateWithoutVotesInput = {
+  title: string
+  slug: string
+  excerpt?: string | null
+  content: string
+  status?: string
+  language?: string
+  contentCategory?: string
+  medicalReviewStatus?: string
+  reviewedById?: number | null
+  reviewedAt?: Date | string | null
+  reviewNotes?: string | null
+  publishedAt?: Date | string | null
+  archivedAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  creator: Prisma.UserCreateNestedOneWithoutBlogsInput
+  category?: Prisma.CategoryCreateNestedOneWithoutBlogsInput
+  comments?: Prisma.CommentCreateNestedManyWithoutBlogInput
+  media?: Prisma.MediaCreateNestedManyWithoutBlogInput
+}
+
+export type BlogUncheckedCreateWithoutVotesInput = {
+  id?: number
+  title: string
+  slug: string
+  excerpt?: string | null
+  content: string
+  status?: string
+  language?: string
+  contentCategory?: string
+  medicalReviewStatus?: string
+  reviewedById?: number | null
+  reviewedAt?: Date | string | null
+  reviewNotes?: string | null
+  publishedAt?: Date | string | null
+  archivedAt?: Date | string | null
+  creatorId: number
+  categoryId?: number | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  comments?: Prisma.CommentUncheckedCreateNestedManyWithoutBlogInput
+  media?: Prisma.MediaUncheckedCreateNestedManyWithoutBlogInput
+}
+
+export type BlogCreateOrConnectWithoutVotesInput = {
+  where: Prisma.BlogWhereUniqueInput
+  create: Prisma.XOR<Prisma.BlogCreateWithoutVotesInput, Prisma.BlogUncheckedCreateWithoutVotesInput>
+}
+
+export type BlogUpsertWithoutVotesInput = {
+  update: Prisma.XOR<Prisma.BlogUpdateWithoutVotesInput, Prisma.BlogUncheckedUpdateWithoutVotesInput>
+  create: Prisma.XOR<Prisma.BlogCreateWithoutVotesInput, Prisma.BlogUncheckedCreateWithoutVotesInput>
+  where?: Prisma.BlogWhereInput
+}
+
+export type BlogUpdateToOneWithWhereWithoutVotesInput = {
+  where?: Prisma.BlogWhereInput
+  data: Prisma.XOR<Prisma.BlogUpdateWithoutVotesInput, Prisma.BlogUncheckedUpdateWithoutVotesInput>
+}
+
+export type BlogUpdateWithoutVotesInput = {
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
+  excerpt?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  content?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.StringFieldUpdateOperationsInput | string
+  language?: Prisma.StringFieldUpdateOperationsInput | string
+  contentCategory?: Prisma.StringFieldUpdateOperationsInput | string
+  medicalReviewStatus?: Prisma.StringFieldUpdateOperationsInput | string
+  reviewedById?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  reviewedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  reviewNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  publishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  creator?: Prisma.UserUpdateOneRequiredWithoutBlogsNestedInput
+  category?: Prisma.CategoryUpdateOneWithoutBlogsNestedInput
+  comments?: Prisma.CommentUpdateManyWithoutBlogNestedInput
+  media?: Prisma.MediaUpdateManyWithoutBlogNestedInput
+}
+
+export type BlogUncheckedUpdateWithoutVotesInput = {
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
+  excerpt?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  content?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.StringFieldUpdateOperationsInput | string
+  language?: Prisma.StringFieldUpdateOperationsInput | string
+  contentCategory?: Prisma.StringFieldUpdateOperationsInput | string
+  medicalReviewStatus?: Prisma.StringFieldUpdateOperationsInput | string
+  reviewedById?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  reviewedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  reviewNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  publishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  creatorId?: Prisma.IntFieldUpdateOperationsInput | number
+  categoryId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  comments?: Prisma.CommentUncheckedUpdateManyWithoutBlogNestedInput
+  media?: Prisma.MediaUncheckedUpdateManyWithoutBlogNestedInput
 }
 
 export type BlogCreateManyCreatorInput = {
@@ -1212,6 +1351,7 @@ export type BlogUpdateWithoutCreatorInput = {
   category?: Prisma.CategoryUpdateOneWithoutBlogsNestedInput
   comments?: Prisma.CommentUpdateManyWithoutBlogNestedInput
   media?: Prisma.MediaUpdateManyWithoutBlogNestedInput
+  votes?: Prisma.BlogVoteUpdateManyWithoutBlogNestedInput
 }
 
 export type BlogUncheckedUpdateWithoutCreatorInput = {
@@ -1234,6 +1374,7 @@ export type BlogUncheckedUpdateWithoutCreatorInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   comments?: Prisma.CommentUncheckedUpdateManyWithoutBlogNestedInput
   media?: Prisma.MediaUncheckedUpdateManyWithoutBlogNestedInput
+  votes?: Prisma.BlogVoteUncheckedUpdateManyWithoutBlogNestedInput
 }
 
 export type BlogUncheckedUpdateManyWithoutCreatorInput = {
@@ -1295,6 +1436,7 @@ export type BlogUpdateWithoutCategoryInput = {
   creator?: Prisma.UserUpdateOneRequiredWithoutBlogsNestedInput
   comments?: Prisma.CommentUpdateManyWithoutBlogNestedInput
   media?: Prisma.MediaUpdateManyWithoutBlogNestedInput
+  votes?: Prisma.BlogVoteUpdateManyWithoutBlogNestedInput
 }
 
 export type BlogUncheckedUpdateWithoutCategoryInput = {
@@ -1317,6 +1459,7 @@ export type BlogUncheckedUpdateWithoutCategoryInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   comments?: Prisma.CommentUncheckedUpdateManyWithoutBlogNestedInput
   media?: Prisma.MediaUncheckedUpdateManyWithoutBlogNestedInput
+  votes?: Prisma.BlogVoteUncheckedUpdateManyWithoutBlogNestedInput
 }
 
 export type BlogUncheckedUpdateManyWithoutCategoryInput = {
@@ -1347,11 +1490,13 @@ export type BlogUncheckedUpdateManyWithoutCategoryInput = {
 export type BlogCountOutputType = {
   comments: number
   media: number
+  votes: number
 }
 
 export type BlogCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   comments?: boolean | BlogCountOutputTypeCountCommentsArgs
   media?: boolean | BlogCountOutputTypeCountMediaArgs
+  votes?: boolean | BlogCountOutputTypeCountVotesArgs
 }
 
 /**
@@ -1378,6 +1523,13 @@ export type BlogCountOutputTypeCountMediaArgs<ExtArgs extends runtime.Types.Exte
   where?: Prisma.MediaWhereInput
 }
 
+/**
+ * BlogCountOutputType without action
+ */
+export type BlogCountOutputTypeCountVotesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.BlogVoteWhereInput
+}
+
 
 export type BlogSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -1402,6 +1554,7 @@ export type BlogSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   category?: boolean | Prisma.Blog$categoryArgs<ExtArgs>
   comments?: boolean | Prisma.Blog$commentsArgs<ExtArgs>
   media?: boolean | Prisma.Blog$mediaArgs<ExtArgs>
+  votes?: boolean | Prisma.Blog$votesArgs<ExtArgs>
   _count?: boolean | Prisma.BlogCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["blog"]>
 
@@ -1478,6 +1631,7 @@ export type BlogInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   category?: boolean | Prisma.Blog$categoryArgs<ExtArgs>
   comments?: boolean | Prisma.Blog$commentsArgs<ExtArgs>
   media?: boolean | Prisma.Blog$mediaArgs<ExtArgs>
+  votes?: boolean | Prisma.Blog$votesArgs<ExtArgs>
   _count?: boolean | Prisma.BlogCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type BlogIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1496,6 +1650,7 @@ export type $BlogPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     category: Prisma.$CategoryPayload<ExtArgs> | null
     comments: Prisma.$CommentPayload<ExtArgs>[]
     media: Prisma.$MediaPayload<ExtArgs>[]
+    votes: Prisma.$BlogVotePayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: number
@@ -1914,6 +2069,7 @@ export interface Prisma__BlogClient<T, Null = never, ExtArgs extends runtime.Typ
   category<T extends Prisma.Blog$categoryArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Blog$categoryArgs<ExtArgs>>): Prisma.Prisma__CategoryClient<runtime.Types.Result.GetResult<Prisma.$CategoryPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   comments<T extends Prisma.Blog$commentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Blog$commentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CommentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   media<T extends Prisma.Blog$mediaArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Blog$mediaArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$MediaPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  votes<T extends Prisma.Blog$votesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Blog$votesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$BlogVotePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -2426,6 +2582,30 @@ export type Blog$mediaArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs
   take?: number
   skip?: number
   distinct?: Prisma.MediaScalarFieldEnum | Prisma.MediaScalarFieldEnum[]
+}
+
+/**
+ * Blog.votes
+ */
+export type Blog$votesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the BlogVote
+   */
+  select?: Prisma.BlogVoteSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the BlogVote
+   */
+  omit?: Prisma.BlogVoteOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.BlogVoteInclude<ExtArgs> | null
+  where?: Prisma.BlogVoteWhereInput
+  orderBy?: Prisma.BlogVoteOrderByWithRelationInput | Prisma.BlogVoteOrderByWithRelationInput[]
+  cursor?: Prisma.BlogVoteWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.BlogVoteScalarFieldEnum | Prisma.BlogVoteScalarFieldEnum[]
 }
 
 /**

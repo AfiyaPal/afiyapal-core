@@ -43,6 +43,11 @@ export type Comment = Prisma.CommentModel
  */
 export type Media = Prisma.MediaModel
 /**
+ * Model BlogVote
+ * 
+ */
+export type BlogVote = Prisma.BlogVoteModel
+/**
  * Model DoctorProfile
  * 
  */

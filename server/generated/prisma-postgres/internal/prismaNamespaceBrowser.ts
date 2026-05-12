@@ -56,6 +56,7 @@ export const ModelName = {
   Blog: 'Blog',
   Comment: 'Comment',
   Media: 'Media',
+  BlogVote: 'BlogVote',
   DoctorProfile: 'DoctorProfile',
   SymptomCheckLog: 'SymptomCheckLog',
   AiInteractionFlag: 'AiInteractionFlag',
@@ -163,6 +164,17 @@ export const MediaScalarFieldEnum = {
 } as const
 
 export type MediaScalarFieldEnum = (typeof MediaScalarFieldEnum)[keyof typeof MediaScalarFieldEnum]
+
+
+export const BlogVoteScalarFieldEnum = {
+  id: 'id',
+  blogId: 'blogId',
+  userId: 'userId',
+  vote: 'vote',
+  createdAt: 'createdAt'
+} as const
+
+export type BlogVoteScalarFieldEnum = (typeof BlogVoteScalarFieldEnum)[keyof typeof BlogVoteScalarFieldEnum]
 
 
 export const DoctorProfileScalarFieldEnum = {

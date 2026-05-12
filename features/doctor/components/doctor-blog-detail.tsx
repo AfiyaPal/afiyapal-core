@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { ARTICLE_CATEGORIES } from "@/features/admin/data/content-management";
+import { VoteButtons } from "@/features/doctor/components/vote-buttons";
 
 const statusBadge: Record<string, { tone: string; label: string }> = {
   DRAFT: { tone: "bg-slate-50 text-slate-700 ring-slate-100", label: "Draft" },
@@ -26,7 +27,19 @@ type BlogDetail = {
   comments: { id: number; comment: string; createdAt: Date; user: { username: string } }[];
 };
 
-export function DoctorBlogDetail({ blog }: { blog: BlogDetail }) {
+export function DoctorBlogDetail({
+  blog,
+  voteUp,
+  voteDown,
+  userVote,
+  canVote
+}: {
+  blog: BlogDetail;
+  voteUp: number;
+  voteDown: number;
+  userVote: "UP" | "DOWN" | null;
+  canVote: boolean;
+}) {
   const badge = statusBadge[blog.status] ?? statusBadge.DRAFT;
   const cat = ARTICLE_CATEGORIES.find((c) => c.value === blog.contentCategory);
 
@@ -48,6 +61,10 @@ export function DoctorBlogDetail({ blog }: { blog: BlogDetail }) {
         >
           Edit article
         </Link>
+      </div>
+
+      <div className="flex items-center justify-between rounded-2xl border border-emerald-100 bg-white px-5 py-3 shadow-sm">
+        <VoteButtons blogId={blog.id} initialUp={voteUp} initialDown={voteDown} userVote={userVote} canVote={canVote} />
       </div>
 
       <div className="rounded-3xl border border-emerald-100 bg-white p-6 shadow-sm md:p-8">

@@ -21,6 +21,7 @@ model User {
   updatedAt    DateTime  @updatedAt
   blogs        Blog[]
   comments     Comment[]
+  votes        BlogVote[]
 
   @@index([role])
   @@index([status])
@@ -57,6 +58,7 @@ model Blog {
   category            Category? @relation(fields: [categoryId], references: [id])
   comments            Comment[]
   media               Media[]
+  votes               BlogVote[]
 
   @@index([status])
   @@index([language])
@@ -89,6 +91,22 @@ model Media {
   uploadedAt DateTime @default(now())
   blog       Blog     @relation(fields: [blogId], references: [id])
 }
+
+model BlogVote {
+  id        Int      @id @default(autoincrement())
+  blogId    Int
+  userId    Int
+  vote      String   @default("UP")
+  createdAt DateTime @default(now())
+  blog      Blog     @relation(fields: [blogId], references: [id])
+  user      User     @relation(fields: [userId], references: [id])
+
+  @@unique([blogId, userId])
+  @@index([blogId])
+  @@index([userId])
+  @@index([vote])
+}
+
 model DoctorProfile {
   id                 Int      @id @default(autoincrement())
   userId             Int?     @unique
