@@ -22,34 +22,34 @@ function formatActivityDate(value: Date) {
 
 export function AdminRecentActivityFeed({ items }: { items: readonly AdminRecentActivityItem[] }) {
   return (
-    <section className="rounded-3xl border border-emerald-100 bg-white p-5 shadow-sm md:p-6">
+    <section className="rounded-3xl border border-theme-border bg-theme-surface p-5 shadow-sm md:p-6">
       <div className="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between">
         <div>
-          <h2 className="text-lg font-black text-slate-950">Recent activity</h2>
+          <h2 className="text-lg font-black text-theme-foreground">Recent activity</h2>
           <p className="mt-1 text-sm leading-6 text-slate-600">Latest admin-relevant events across users, doctors, AI safety, consultations, and content.</p>
         </div>
         <AdminStatusBadge tone="green">Live MVP feed</AdminStatusBadge>
       </div>
 
-      <div className="mt-5 divide-y divide-emerald-50">
+      <div className="mt-5 divide-y divide-theme-border">
         {items.length > 0 ? (
           items.map((item) => {
             const content = (
               <article className="flex gap-4 py-4">
-                <div className="mt-1 size-2.5 shrink-0 rounded-full bg-brand-600" />
+                <div className="mt-1 size-2.5 shrink-0 rounded-full bg-theme-primary" />
                 <div className="min-w-0 flex-1">
                   <div className="flex flex-wrap items-center gap-2">
                     <AdminStatusBadge tone={item.tone ?? "slate"}>{item.type}</AdminStatusBadge>
                     <span className="text-xs font-semibold text-slate-500">{formatActivityDate(item.createdAt)}</span>
                   </div>
-                  <h3 className="mt-2 text-sm font-black text-slate-950">{item.title}</h3>
+                  <h3 className="mt-2 text-sm font-black text-theme-foreground">{item.title}</h3>
                   <p className="mt-1 text-sm leading-6 text-slate-600">{item.description}</p>
                 </div>
               </article>
             );
 
             return item.href ? (
-              <Link key={item.id} href={item.href} className="block transition hover:bg-emerald-50/40">
+              <Link key={item.id} href={item.href} className="block transition hover:bg-theme-primary-light/40">
                 {content}
               </Link>
             ) : (
@@ -57,7 +57,7 @@ export function AdminRecentActivityFeed({ items }: { items: readonly AdminRecent
             );
           })
         ) : (
-          <div className="rounded-2xl border border-dashed border-emerald-100 bg-emerald-50/40 p-6 text-sm leading-6 text-slate-600">
+          <div className="rounded-2xl border border-dashed border-theme-border bg-theme-primary-light/40 p-6 text-sm leading-6 text-slate-600">
             No recent activity yet. Once users register, doctors apply, symptom checks run, consultations are requested, AI flags are created, or blogs are published, they will appear here.
           </div>
         )}

@@ -107,7 +107,7 @@ export function AdminOverviewPage({ data }: { data: AdminOverviewData }) {
 
   return (
     <div className="space-y-8">
-      <section className="rounded-3xl border border-emerald-100 bg-gradient-to-br from-emerald-50 via-white to-teal-50 p-6 shadow-sm md:p-8">
+      <section className="rounded-3xl border border-theme-border bg-gradient-to-br from-theme-primary-light via-theme-surface to-theme-accent/10 p-6 shadow-sm md:p-8">
         <AdminSectionHeader
           eyebrow="AFIYAPAL Admin Overview"
           title="Operational dashboard for safety, care, and platform growth."

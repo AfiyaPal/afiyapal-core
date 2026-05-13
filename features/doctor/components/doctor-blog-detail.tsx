@@ -54,6 +54,11 @@ export function DoctorBlogDetail({
             <span className="text-sm text-slate-500">{cat?.label ?? blog.contentCategory}</span>
             <span className="text-sm text-slate-500">Review: {blog.medicalReviewStatus.replaceAll("_", " ").toLowerCase().replace(/\b\w/g, (c) => c.toUpperCase())}</span>
           </div>
+          {blog.reviewNotes ? (
+            <div className="mt-3 rounded-2xl bg-amber-50 p-4 text-sm leading-6 text-amber-950">
+              <strong>Review notes:</strong> {blog.reviewNotes}
+            </div>
+          ) : null}
         </div>
         <Link
           href={`/dashboard/blogs/${blog.id}/edit`}

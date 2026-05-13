@@ -5,6 +5,7 @@ import { redirect } from "next/navigation";
 import { prisma } from "@/server/db/prisma";
 import { getCurrentUser } from "@/server/auth/session";
 import { routes } from "@/lib/routes";
+import { notifyAdminsContentPendingReview } from "@/server/services/notification-service";
 
 function getText(formData: FormData, key: string) {
   const value = formData.get(key);
@@ -98,7 +99,7 @@ export async function updateDoctorBlogAction(_: unknown, formData: FormData) {
       content,
       contentCategory,
       language,
-      ...(existing.status === "PUBLISHED" ? { status: "PENDING_REVIEW", medicalReviewStatus: "PENDING", publishedAt: null } : {})
+      ...(existing.status === "PUBLISHED" ? { status: "PENDING_REVIEW", medicalReviewStatus: "PENDING" } : {})
     }
   });
 
@@ -128,10 +129,15 @@ export async function submitDoctorBlogForReviewAction(formData: FormData) {
   const existing = await prisma.blog.findFirst({ where: { id: blogId, creatorId: user.id } });
   if (!existing) return { ok: false, message: "Blog not found." };
 
-  await prisma.blog.update({
+  const article = await prisma.blog.update({
     where: { id: blogId },
-    data: { status: "PENDING_REVIEW", medicalReviewStatus: "PENDING" }
+    data: { status: "PENDING_REVIEW", medicalReviewStatus: "PENDING" },
+    select: { title: true }
   });
+
+  notifyAdminsContentPendingReview({ articleId: blogId, title: article.title }).catch((error) =>
+    console.error("Failed to notify medical reviewers about pending content", error)
+  );
 
   revalidatePath("/dashboard/blogs");
   return { ok: true, message: "Blog submitted for review." };

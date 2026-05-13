@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { Lock } from "lucide-react";
 import { EVENT_TYPES } from "@/features/facility/data/facility-management";
 import { deleteEventAction } from "@/features/facility/actions/facility-actions";
 
@@ -23,8 +24,9 @@ type EventItem = {
   isPublic: boolean;
 };
 
-export function FacilityEventList({ events }: { events: EventItem[] }) {
+export function FacilityEventList({ events, verificationStatus }: { events: EventItem[]; verificationStatus: string }) {
   const router = useRouter();
+  const isVerified = verificationStatus === "VERIFIED";
 
   async function handleDelete(eventId: number) {
     if (!confirm("Delete this event? This cannot be undone.")) return;
@@ -32,6 +34,26 @@ export function FacilityEventList({ events }: { events: EventItem[] }) {
     fd.set("eventId", String(eventId));
     await deleteEventAction(fd);
     router.refresh();
+  }
+
+  if (!isVerified) {
+    return (
+      <div className="space-y-6">
+        <div>
+          <h1 className="text-3xl font-black tracking-tight text-slate-950">Events</h1>
+          <p className="mt-1 text-sm text-slate-600">Manage your facility&apos;s health events and announcements.</p>
+        </div>
+        <div className="rounded-3xl border border-amber-200 bg-amber-50/70 p-8 text-center shadow-sm">
+          <Lock aria-hidden="true" className="mx-auto size-8 text-amber-500" />
+          <h2 className="mt-4 text-lg font-black text-amber-900">Events — Pending Verification</h2>
+          <p className="mt-2 text-sm leading-6 text-amber-800">
+            {verificationStatus === "PENDING" && <>Your facility is under review. Event management will be available once your facility is verified. This typically takes 1–2 business days.</>}
+            {verificationStatus === "REJECTED" && <>Your facility verification was not approved. Please contact support for more information.</>}
+            {verificationStatus === "SUSPENDED" && <>Your facility has been suspended. Please contact support for more information.</>}
+          </p>
+        </div>
+      </div>
+    );
   }
 
   return (

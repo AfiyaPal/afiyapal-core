@@ -15,9 +15,9 @@ export function FacilitySidebar() {
   const pathname = usePathname();
 
   return (
-    <aside className="hidden min-h-screen w-64 shrink-0 border-r border-emerald-100 bg-white/95 px-4 py-6 shadow-sm lg:sticky lg:top-0 lg:block">
-      <Link href="/facility" className="block rounded-3xl bg-emerald-50 p-4">
-        <p className="text-xs font-bold uppercase tracking-[0.2em] text-brand-700">AFIYAPAL</p>
+    <aside className="hidden min-h-[calc(100vh-3.5rem)] w-64 shrink-0 border-r border-theme-border bg-theme-surface px-4 py-6 shadow-sm lg:sticky lg:top-14 lg:block">
+      <Link href="/facility" className="block rounded-3xl bg-theme-primary-light p-4">
+        <p className="text-xs font-bold uppercase tracking-[0.2em] text-theme-primary-dark">AFIYAPAL</p>
         <h2 className="mt-1 text-xl font-black tracking-tight text-slate-950">Facility Portal</h2>
       </Link>
       <nav className="mt-6 space-y-1" aria-label="Facility navigation">
@@ -30,7 +30,7 @@ export function FacilitySidebar() {
               href={item.href}
               className={cn(
                 "flex items-center gap-3 rounded-2xl px-4 py-3 text-sm font-bold transition",
-                isActive ? "bg-brand-600 text-white shadow-soft" : "text-slate-700 hover:bg-emerald-50 hover:text-brand-700"
+                isActive ? "bg-theme-primary text-white shadow-soft" : "text-slate-700 hover:bg-theme-primary-light hover:text-theme-primary"
               )}
             >
               <Icon aria-hidden="true" className="size-5" />

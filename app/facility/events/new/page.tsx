@@ -1,6 +1,7 @@
 import { getCurrentUser } from "@/server/auth/session";
 import { redirect } from "next/navigation";
 import { routes } from "@/lib/routes";
+import { getFacilityByAdminId } from "@/features/facility/queries/get-facility-data";
 import { FacilityEventForm } from "@/features/facility/components/facility-event-form";
 
 export const metadata = { title: "Create event" };
@@ -8,6 +9,10 @@ export const metadata = { title: "Create event" };
 export default async function Page() {
   const user = await getCurrentUser();
   if (!user || user.role !== "FACILITY_ADMIN") redirect(routes.login);
+
+  const facility = await getFacilityByAdminId(user.id);
+  if (!facility) redirect(routes.facilityDashboard);
+  if (facility.verificationStatus !== "VERIFIED") redirect(routes.facilityEvents);
 
   return (
     <div className="max-w-2xl">

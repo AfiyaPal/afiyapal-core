@@ -14,7 +14,7 @@ export function AdminTopbar({ user }: { user: AdminTopbarUser }) {
           <h2 className="mt-1 text-2xl font-black tracking-tight text-slate-950">Platform operations dashboard</h2>
         </div>
         <div className="flex items-center gap-3">
-          <Link href="/" className="rounded-full border border-emerald-100 bg-white px-4 py-2 text-sm font-bold text-slate-700 shadow-sm transition hover:border-brand-600 hover:text-brand-700">View site</Link>
+          <Link target="_blank" href="/" className="rounded-full border border-emerald-100 bg-white px-4 py-2 text-sm font-bold text-slate-700 shadow-sm transition hover:border-brand-600 hover:text-brand-700">View site</Link>
           <details className="group relative">
             <summary className="flex cursor-pointer list-none items-center gap-3 rounded-full border border-emerald-100 bg-white py-1.5 pl-1.5 pr-4 shadow-sm transition hover:border-brand-600">
               <span className="grid size-10 place-items-center rounded-full bg-brand-600 text-sm font-black text-white">{initials}</span>

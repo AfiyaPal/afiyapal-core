@@ -6,7 +6,7 @@ import { getAdminContentDetail } from "@/features/admin/queries/get-admin-conten
 import { AdminSectionHeader } from "@/features/admin/components/admin-section-header";
 import { AdminStatusBadge } from "@/features/admin/components/admin-status-badge";
 import { articleCategoryLabel, articleLanguageLabel, articleStatusLabel, medicalReviewStatusLabel } from "@/features/admin/data/content-management";
-import { approveArticleForPublishingAction, archiveArticleAction, publishArticleAction, requestArticleChangesAction, submitArticleForReviewAction, unpublishArticleAction } from "@/features/admin/actions/admin-content-actions";
+import { approveArticleForPublishingAction, archiveArticleAction, publishArticleAction, rejectArticleAction, requestArticleChangesAction, submitArticleForReviewAction, unpublishArticleAction } from "@/features/admin/actions/admin-content-actions";
 
 function formatDateTime(date: Date | null | undefined) {
   if (!date) return "—";
@@ -99,6 +99,11 @@ export async function AdminContentDetailPage({ articleId }: { articleId: number 
             <input type="hidden" name="articleId" value={article.id} />
             <textarea name="reviewNotes" rows={3} className="w-full rounded-2xl border border-emerald-100 px-4 py-3 text-sm font-semibold text-slate-800 outline-none focus:border-brand-600" placeholder="Required notes for requested changes" />
             <button className="rounded-full bg-amber-600 px-4 py-2 text-sm font-black text-white transition hover:bg-amber-700">Request changes</button>
+          </form>
+          <form action={rejectArticleAction} className="mt-4 space-y-3">
+            <input type="hidden" name="articleId" value={article.id} />
+            <textarea name="reviewNotes" rows={3} className="w-full rounded-2xl border border-emerald-100 px-4 py-3 text-sm font-semibold text-slate-800 outline-none focus:border-brand-600" placeholder="Reason for rejection" />
+            <button className="rounded-full bg-rose-600 px-4 py-2 text-sm font-black text-white transition hover:bg-rose-700">Reject article</button>
           </form>
         </div>
       </section>

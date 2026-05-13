@@ -1,5 +1,5 @@
 # 🌍 AFIYAPAL – Your AI-Powered Health Assistant for African Lives
-
+# Goal: Become An AI-powered public health intelligence and healthcare education platform.
 AFIYAPAL is an AI-powered health assistant designed to improve access to basic healthcare guidance, health education, mental wellness support, and doctor connections for African communities.
 
 The platform combines AI, multilingual support, health content, and telemedicine workflows to help users receive first-step health guidance in a simple, accessible, and familiar way.

@@ -12,6 +12,7 @@ export default async function Page({ params }: { params: Promise<{ eventId: stri
 
   const facility = await getFacilityByAdminId(user.id);
   if (!facility) redirect(routes.facilityDashboard);
+  if (facility.verificationStatus !== "VERIFIED") redirect(routes.facilityEvents);
 
   const { eventId } = await params;
   const id = Number(eventId);

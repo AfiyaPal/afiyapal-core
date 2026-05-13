@@ -22,6 +22,12 @@ type Props = {
 
 const initialState = { ok: false, message: null as string | null };
 
+function getMinStartDate() {
+  const d = new Date();
+  d.setDate(d.getDate() + 5);
+  return d.toISOString().slice(0, 16);
+}
+
 export function FacilityEventForm({ event }: Props) {
   const action = event ? updateEventAction : createEventAction;
   const [state, formAction, pending] = useActionState(action, initialState);
@@ -31,6 +37,9 @@ export function FacilityEventForm({ event }: Props) {
     const d = new Date(date);
     return d.toISOString().slice(0, 16);
   }
+
+  const minStart = getMinStartDate();
+  const isEditing = Boolean(event);
 
   return (
     <form action={formAction} className="space-y-6">
@@ -67,11 +76,12 @@ export function FacilityEventForm({ event }: Props) {
       <div className="grid gap-4 md:grid-cols-2">
         <div className="space-y-2">
           <label className="text-xs font-bold uppercase tracking-wide text-slate-600">Start date *</label>
-          <Input name="startDate" type="datetime-local" defaultValue={formatDate(event?.startDate)} required />
+          <Input name="startDate" type="datetime-local" defaultValue={formatDate(event?.startDate)} min={isEditing ? undefined : minStart} required />
+          {!isEditing && <p className="text-xs text-slate-500">Must be at least 5 days from today.</p>}
         </div>
         <div className="space-y-2">
-          <label className="text-xs font-bold uppercase tracking-wide text-slate-600">End date (optional)</label>
-          <Input name="endDate" type="datetime-local" defaultValue={formatDate(event?.endDate)} />
+          <label className="text-xs font-bold uppercase tracking-wide text-slate-600">End date *</label>
+          <Input name="endDate" type="datetime-local" defaultValue={formatDate(event?.endDate)} required />
         </div>
       </div>
 

@@ -8,7 +8,7 @@ import { requireAnyAdminPermission } from "@/server/auth/admin-guard";
 import { ADMIN_PERMISSIONS, hasAdminPermission } from "@/server/auth/admin-permissions";
 import { ARTICLE_CATEGORIES, ARTICLE_LANGUAGES, ARTICLE_STATUSES, MEDICAL_REVIEW_STATUSES } from "@/features/admin/data/content-management";
 import { buildAdminAuditLogData } from "@/server/services/admin-audit-log-service";
-import { notifyAdminsContentPendingReview } from "@/server/services/notification-service";
+import { notifyAdminsContentPendingReview, notifyDoctorArticleReviewed } from "@/server/services/notification-service";
 
 type ArticleFormData = {
   title: string;
@@ -180,15 +180,31 @@ export async function approveArticleForPublishingAction(formData: FormData) {
   const articleId = parseArticleId(formData);
   const reviewNotes = getText(formData, "reviewNotes");
 
-  await prisma.blog.update({
-    where: { id: articleId },
-    data: {
-      medicalReviewStatus: "APPROVED",
-      reviewedById: actor.id,
-      reviewedAt: new Date(),
-      reviewNotes: reviewNotes || null
-    }
-  });
+  await prisma.$transaction([
+    prisma.blog.update({
+      where: { id: articleId },
+      data: {
+        medicalReviewStatus: "APPROVED",
+        reviewedById: actor.id,
+        reviewedAt: new Date(),
+        reviewNotes: reviewNotes || null
+      }
+    }),
+    prisma.adminAuditLog.create({
+      data: buildAdminAuditLogData({
+        adminUserId: actor.id,
+        actionType: "ARTICLE_APPROVED",
+        targetType: "Blog",
+        targetId: articleId,
+        newValue: { medicalReviewStatus: "APPROVED" },
+        reason: reviewNotes || "Article approved for publishing."
+      })
+    })
+  ]);
+
+  notifyDoctorArticleReviewed(articleId, { title: (await prisma.blog.findUnique({ where: { id: articleId }, select: { title: true } }))?.title ?? "Unknown", reviewStatus: "APPROVED", reviewNotes }).catch((error) =>
+    console.error("Failed to notify doctor about article approval", error)
+  );
 
   revalidatePath(routes.adminContent);
   revalidatePath(`${routes.adminContent}/${articleId}`);
@@ -201,16 +217,32 @@ export async function requestArticleChangesAction(formData: FormData) {
   const articleId = parseArticleId(formData);
   const reviewNotes = getText(formData, "reviewNotes");
 
-  await prisma.blog.update({
-    where: { id: articleId },
-    data: {
-      status: "DRAFT",
-      medicalReviewStatus: "CHANGES_REQUESTED",
-      reviewedById: actor.id,
-      reviewedAt: new Date(),
-      reviewNotes: reviewNotes || "Changes requested before publication."
-    }
-  });
+  await prisma.$transaction([
+    prisma.blog.update({
+      where: { id: articleId },
+      data: {
+        status: "DRAFT",
+        medicalReviewStatus: "CHANGES_REQUESTED",
+        reviewedById: actor.id,
+        reviewedAt: new Date(),
+        reviewNotes: reviewNotes || "Changes requested before publication."
+      }
+    }),
+    prisma.adminAuditLog.create({
+      data: buildAdminAuditLogData({
+        adminUserId: actor.id,
+        actionType: "ARTICLE_CHANGES_REQUESTED",
+        targetType: "Blog",
+        targetId: articleId,
+        newValue: { status: "DRAFT", medicalReviewStatus: "CHANGES_REQUESTED" },
+        reason: reviewNotes || "Changes requested before publication."
+      })
+    })
+  ]);
+
+  notifyDoctorArticleReviewed(articleId, { title: (await prisma.blog.findUnique({ where: { id: articleId }, select: { title: true } }))?.title ?? "Unknown", reviewStatus: "CHANGES_REQUESTED", reviewNotes }).catch((error) =>
+    console.error("Failed to notify doctor about requested changes", error)
+  );
 
   revalidatePath(routes.adminContent);
   revalidatePath(`${routes.adminContent}/${articleId}`);
@@ -293,6 +325,44 @@ export async function archiveArticleAction(formData: FormData) {
       })
     })
   ]);
+  revalidatePath(routes.adminContent);
+  revalidatePath(`${routes.adminContent}/${articleId}`);
+  revalidatePath(routes.adminAuditLogs);
+}
+
+export async function rejectArticleAction(formData: FormData) {
+  const actor = await requireAnyAdminPermission([ADMIN_PERMISSIONS.REVIEW_MEDICAL_CONTENT]);
+  ensureCanReviewContent(actor.role);
+  const articleId = parseArticleId(formData);
+  const reviewNotes = getText(formData, "reviewNotes");
+
+  await prisma.$transaction([
+    prisma.blog.update({
+      where: { id: articleId },
+      data: {
+        status: "DRAFT",
+        medicalReviewStatus: "REJECTED",
+        reviewedById: actor.id,
+        reviewedAt: new Date(),
+        reviewNotes: reviewNotes || "Article was not approved for publication."
+      }
+    }),
+    prisma.adminAuditLog.create({
+      data: buildAdminAuditLogData({
+        adminUserId: actor.id,
+        actionType: "ARTICLE_REJECTED",
+        targetType: "Blog",
+        targetId: articleId,
+        newValue: { status: "DRAFT", medicalReviewStatus: "REJECTED" },
+        reason: reviewNotes || "Article was not approved for publication."
+      })
+    })
+  ]);
+
+  notifyDoctorArticleReviewed(articleId, { title: (await prisma.blog.findUnique({ where: { id: articleId }, select: { title: true } }))?.title ?? "Unknown", reviewStatus: "REJECTED", reviewNotes }).catch((error) =>
+    console.error("Failed to notify doctor about article rejection", error)
+  );
+
   revalidatePath(routes.adminContent);
   revalidatePath(`${routes.adminContent}/${articleId}`);
   revalidatePath(routes.adminAuditLogs);

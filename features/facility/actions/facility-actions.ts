@@ -6,6 +6,8 @@ import { prisma } from "@/server/db/prisma";
 import { getCurrentUser } from "@/server/auth/session";
 import { routes } from "@/lib/routes";
 
+const FIVE_DAYS_MS = 5 * 24 * 60 * 60 * 1000;
+
 async function requireFacilityAdmin() {
   const user = await getCurrentUser();
   if (!user || user.role !== "FACILITY_ADMIN") redirect(routes.login);
@@ -18,14 +20,35 @@ async function getOwnedFacility(adminId: number) {
   return facility;
 }
 
+async function requireVerifiedFacility(adminId: number) {
+  const facility = await getOwnedFacility(adminId);
+  if (facility.verificationStatus !== "VERIFIED") {
+    throw new Error("Your facility must be verified before you can manage events or professionals.");
+  }
+  return facility;
+}
+
 function getText(formData: FormData, key: string) {
   const value = formData.get(key);
   return typeof value === "string" ? value.trim() : "";
 }
 
+function validateEventDates(startDate: Date, endDate: Date | null, isNew: boolean): string | null {
+  if (isNew && startDate.getTime() < Date.now() + FIVE_DAYS_MS) {
+    return "Start date must be at least 5 days from today.";
+  }
+  if (!endDate) {
+    return "End date is required.";
+  }
+  if (endDate <= startDate) {
+    return "End date must be after start date.";
+  }
+  return null;
+}
+
 export async function createEventAction(_: unknown, formData: FormData) {
   const user = await requireFacilityAdmin();
-  const facility = await getOwnedFacility(user.id);
+  const facility = await requireVerifiedFacility(user.id);
 
   const title = getText(formData, "title");
   const description = getText(formData, "description");
@@ -47,6 +70,9 @@ export async function createEventAction(_: unknown, formData: FormData) {
     if (isNaN(endDate.getTime())) return { ok: false, message: "Invalid end date." };
   }
 
+  const dateError = validateEventDates(startDate, endDate, true);
+  if (dateError) return { ok: false, message: dateError };
+
   await prisma.event.create({
     data: {
       facilityId: facility.id,
@@ -67,7 +93,7 @@ export async function createEventAction(_: unknown, formData: FormData) {
 
 export async function updateEventAction(_: unknown, formData: FormData) {
   const user = await requireFacilityAdmin();
-  const facility = await getOwnedFacility(user.id);
+  const facility = await requireVerifiedFacility(user.id);
   const eventId = Number(formData.get("eventId"));
   if (!Number.isInteger(eventId) || eventId <= 0) return { ok: false, message: "Invalid event ID." };
 
@@ -94,6 +120,9 @@ export async function updateEventAction(_: unknown, formData: FormData) {
     if (isNaN(endDate.getTime())) return { ok: false, message: "Invalid end date." };
   }
 
+  const dateError = validateEventDates(startDate, endDate, false);
+  if (dateError) return { ok: false, message: dateError };
+
   const now = new Date();
   let status = existing.status;
   if (status === "UPCOMING" && now > startDate) status = "ONGOING";
@@ -109,7 +138,7 @@ export async function updateEventAction(_: unknown, formData: FormData) {
 
 export async function updateEventStatusAction(_: unknown, formData: FormData) {
   const user = await requireFacilityAdmin();
-  const facility = await getOwnedFacility(user.id);
+  const facility = await requireVerifiedFacility(user.id);
   const eventId = Number(formData.get("eventId"));
   if (!Number.isInteger(eventId) || eventId <= 0) return { ok: false, message: "Invalid event ID." };
 
@@ -128,7 +157,7 @@ export async function updateEventStatusAction(_: unknown, formData: FormData) {
 
 export async function deleteEventAction(formData: FormData) {
   const user = await requireFacilityAdmin();
-  const facility = await getOwnedFacility(user.id);
+  const facility = await requireVerifiedFacility(user.id);
   const eventId = Number(formData.get("eventId"));
   if (!Number.isInteger(eventId) || eventId <= 0) return { ok: false, message: "Invalid event ID." };
 
@@ -142,7 +171,7 @@ export async function deleteEventAction(formData: FormData) {
 
 export async function addFacilityProfessionalAction(_: unknown, formData: FormData) {
   const user = await requireFacilityAdmin();
-  const facility = await getOwnedFacility(user.id);
+  const facility = await requireVerifiedFacility(user.id);
   const doctorProfileId = Number(formData.get("doctorProfileId"));
   const role = getText(formData, "role") || "STAFF_DOCTOR";
 
@@ -163,7 +192,7 @@ export async function addFacilityProfessionalAction(_: unknown, formData: FormDa
 
 export async function removeFacilityProfessionalAction(formData: FormData) {
   const user = await requireFacilityAdmin();
-  const facility = await getOwnedFacility(user.id);
+  const facility = await requireVerifiedFacility(user.id);
   const professionalId = Number(formData.get("professionalId"));
   if (!Number.isInteger(professionalId) || professionalId <= 0) return { ok: false, message: "Invalid professional ID." };
 

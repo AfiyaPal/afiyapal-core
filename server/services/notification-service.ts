@@ -16,6 +16,9 @@ export const NOTIFICATION_TYPES = [
   "DOCTOR_RESPONDED",
   "AI_RESPONSE_REPORTED",
   "CONTENT_PENDING_REVIEW",
+  "CONTENT_APPROVED",
+  "CONTENT_CHANGES_REQUESTED",
+  "CONTENT_REJECTED",
   "REPORT_RESOLVED",
   "SAFETY_REPORT_SUBMITTED"
 ] as const;
@@ -141,10 +144,47 @@ export async function notifyAdminsContentPendingReview(input: { articleId: numbe
   return notifyAdminsWithPermission(ADMIN_PERMISSIONS.REVIEW_MEDICAL_CONTENT, {
     type: "CONTENT_PENDING_REVIEW",
     title: "Article pending medical review",
-    message: `“${input.title}” has been submitted for medical review before publishing.`,
+    message: `"${input.title}" has been submitted for medical review before publishing.`,
     priority: "NORMAL",
     targetType: "Blog",
     targetId: input.articleId
+  });
+}
+
+export async function notifyDoctorArticleReviewed(articleId: number, input: { title: string; reviewStatus: string; reviewNotes?: string | null }) {
+  const article = await prisma.blog.findUnique({ where: { id: articleId }, select: { creatorId: true } });
+  if (!article?.creatorId) return null;
+
+  const labels: Record<string, { title: string; message: string }> = {
+    APPROVED: {
+      title: "Article approved",
+      message: `Your article "${input.title}" has been approved for publishing.`
+    },
+    CHANGES_REQUESTED: {
+      title: "Article changes requested",
+      message: input.reviewNotes
+        ? `Your article "${input.title}" needs changes. Review notes: ${input.reviewNotes}`
+        : `Your article "${input.title}" needs changes before it can be published.`
+    },
+    REJECTED: {
+      title: "Article rejected",
+      message: input.reviewNotes
+        ? `Your article "${input.title}" was not approved. Reason: ${input.reviewNotes}`
+        : `Your article "${input.title}" was not approved for publication.`
+    }
+  };
+
+  const label = labels[input.reviewStatus];
+  if (!label) return null;
+
+  return createNotification({
+    recipientUserId: article.creatorId,
+    type: `CONTENT_${input.reviewStatus}`,
+    title: label.title,
+    message: label.message,
+    priority: input.reviewStatus === "APPROVED" ? "NORMAL" : "HIGH",
+    targetType: "Blog",
+    targetId: articleId
   });
 }
 

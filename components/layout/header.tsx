@@ -1,5 +1,10 @@
+"use client";
+
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { routes } from "@/lib/routes";
+
+const DASHBOARD_ROUTES = ["/dashboard", "/facility", "/admin"];
 
 const navItems = [
   { label: "Home", href: routes.home },
@@ -11,6 +16,9 @@ const navItems = [
 ];
 
 export function Header() {
+  const pathname = usePathname();
+  if (DASHBOARD_ROUTES.some((route) => pathname.startsWith(route))) return null;
+
   return (
     <header className="sticky top-0 z-40 border-b border-emerald-100 bg-white/90 backdrop-blur">
       <div className="container-page flex h-16 items-center justify-between">

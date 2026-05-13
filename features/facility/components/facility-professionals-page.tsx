@@ -1,6 +1,7 @@
 "use client";
 
 import { useActionState } from "react";
+import { Lock } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { FormMessage } from "@/components/ui/form-message";
 import { PROFESSIONAL_ROLES } from "@/features/facility/data/facility-management";
@@ -10,8 +11,23 @@ type DoctorOption = { id: number; fullName: string; specialty: string | null };
 
 const initialState = { ok: false, message: null as string | null };
 
-export function AddProfessionalForm({ availableDoctors }: { availableDoctors: DoctorOption[] }) {
+export function AddProfessionalForm({ availableDoctors, verificationStatus }: { availableDoctors: DoctorOption[]; verificationStatus: string }) {
   const [state, formAction, pending] = useActionState(addFacilityProfessionalAction, initialState);
+  const isVerified = verificationStatus === "VERIFIED";
+
+  if (!isVerified) {
+    return (
+      <div className="rounded-2xl border border-amber-200 bg-amber-50/70 p-6 text-center">
+        <Lock aria-hidden="true" className="mx-auto size-6 text-amber-500" />
+        <h3 className="mt-3 text-sm font-bold text-amber-900">Feature locked</h3>
+        <p className="mt-1 text-xs leading-5 text-amber-800">
+          {verificationStatus === "PENDING" && <>Professional management is available once your facility is verified.</>}
+          {verificationStatus === "REJECTED" && <>Your facility verification was not approved. Please contact support.</>}
+          {verificationStatus === "SUSPENDED" && <>Your facility has been suspended. Please contact support.</>}
+        </p>
+      </div>
+    );
+  }
 
   return (
     <form action={formAction} className="flex flex-wrap items-end gap-3 rounded-2xl border border-emerald-100 bg-white p-4 shadow-sm">
@@ -43,5 +59,3 @@ export function AddProfessionalForm({ availableDoctors }: { availableDoctors: Do
     </form>
   );
 }
-
-
