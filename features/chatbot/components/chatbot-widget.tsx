@@ -2,6 +2,8 @@
 
 import { FormEvent, useState } from "react";
 import { Send } from "lucide-react";
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 import { Button } from "@/components/ui/button";
 import type { ChatMessage } from "../types/chat-message";
 
@@ -69,9 +71,17 @@ export function ChatbotWidget({ mode = "page" }: { mode?: "page" | "frame" }) {
       <div className="flex-1 space-y-4 overflow-y-auto bg-[#f8fffb] p-5">
         {messages.map((item) => (
           <div key={item.id} className={`flex ${item.sender === "user" ? "justify-end" : "justify-start"}`}>
-            <p className={`max-w-[82%] whitespace-pre-wrap rounded-2xl px-4 py-3 text-sm leading-6 ${item.sender === "user" ? "bg-brand-600 text-white" : "bg-white text-slate-700 shadow-sm"}`}>
-              {item.text}
-            </p>
+            {item.sender === "user" ? (
+              <p className="max-w-[82%] whitespace-pre-wrap rounded-2xl px-4 py-3 text-sm leading-6 bg-brand-600 text-white">
+                {item.text}
+              </p>
+            ) : (
+              <div className="prose prose-sm prose-emerald max-w-[82%] rounded-2xl bg-white px-4 py-3 text-slate-700 shadow-sm">
+                <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                  {item.text}
+                </ReactMarkdown>
+              </div>
+            )}
           </div>
         ))}
       </div>
