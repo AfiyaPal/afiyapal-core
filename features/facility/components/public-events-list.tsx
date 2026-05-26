@@ -1,6 +1,8 @@
 import Link from "next/link";
 import { EVENT_TYPES } from "@/features/facility/data/facility-management";
 import { CalendarDays, MapPin, Building2 } from "lucide-react";
+import { JsonLd } from "@/components/seo/json-ld";
+import { breadcrumbSchema, medicalWebPageSchema } from "@/lib/seo/schema";
 
 type PublicEvent = {
   id: number;
@@ -16,11 +18,25 @@ type PublicEvent = {
 
 export function PublicEventsList({ events }: { events: PublicEvent[] }) {
   return (
-    <div className="space-y-8">
+    <main className="container-page space-y-8 py-12">
+      <JsonLd
+        data={[
+          ...medicalWebPageSchema({
+            path: "/events",
+            title: "AfiyaPal Health Events and Medical Camps",
+            description: "Community health events, medical camps, free checkups, and health screenings.",
+            breadcrumbs: [{ name: "Events", path: "/events" }]
+          }),
+          breadcrumbSchema([
+            { name: "Home", path: "/" },
+            { name: "Events", path: "/events" }
+          ])
+        ]}
+      />
       <section className="rounded-3xl border border-emerald-100 bg-gradient-to-br from-emerald-50 via-white to-teal-50 p-6 shadow-sm md:p-8">
         <p className="text-xs font-bold uppercase tracking-[0.2em] text-brand-700">Community Health</p>
         <h1 className="mt-2 text-3xl font-black tracking-tight text-slate-950">Health events &amp; medical camps</h1>
-        <p className="mt-2 text-slate-600">Find free checkups, medical camps, health talks, and screenings near you.</p>
+        <p className="mt-2 max-w-3xl text-slate-700">Find free checkups, medical camps, health talks, screenings, and healthcare outreach events from facilities and health organizations.</p>
       </section>
 
       {events.length === 0 ? (
@@ -37,7 +53,7 @@ export function PublicEventsList({ events }: { events: PublicEvent[] }) {
               <Link
                 key={event.id}
                 href={`/events/${event.id}`}
-                className="group rounded-3xl border border-emerald-100 bg-white p-6 shadow-sm transition hover:border-brand-500 hover:shadow-soft"
+                className="group rounded-3xl border border-emerald-100 bg-white p-6 shadow-sm transition hover:border-brand-500 hover:shadow-soft focus:outline-none focus:ring-4 focus:ring-brand-100"
               >
                 <div className="flex items-start justify-between gap-3">
                   <span className="inline-flex rounded-full bg-brand-50 px-3 py-1 text-xs font-black text-brand-700">
@@ -56,7 +72,7 @@ export function PublicEventsList({ events }: { events: PublicEvent[] }) {
                 <div className="mt-4 space-y-2 text-sm text-slate-500">
                   <div className="flex items-center gap-2">
                     <CalendarDays aria-hidden="true" className="size-4 shrink-0" />
-                    <span>{new Date(event.startDate).toLocaleDateString("en-US", { weekday: "short", month: "short", day: "numeric", year: "numeric" })}</span>
+                    <time dateTime={event.startDate.toISOString()}>{new Date(event.startDate).toLocaleDateString("en-US", { weekday: "short", month: "short", day: "numeric", year: "numeric" })}</time>
                   </div>
                   <div className="flex items-center gap-2">
                     <Building2 aria-hidden="true" className="size-4 shrink-0" />
@@ -74,6 +90,6 @@ export function PublicEventsList({ events }: { events: PublicEvent[] }) {
           })}
         </div>
       )}
-    </div>
+    </main>
   );
 }

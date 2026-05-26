@@ -4,6 +4,9 @@ import { getCurrentUser } from "@/server/auth/session";
 import { routes } from "@/lib/routes";
 import { RoleThemeProvider } from "@/components/theme/role-theme-provider";
 import { DoctorNavbar } from "@/components/nav/doctor-navbar";
+import { buildNoIndexMetadata } from "@/lib/seo/metadata";
+
+export const metadata = buildNoIndexMetadata("Doctor Dashboard", "Protected AfiyaPal doctor workspace.");
 
 export default async function DashboardLayout({ children }: { children: React.ReactNode }) {
   const user = await getCurrentUser();

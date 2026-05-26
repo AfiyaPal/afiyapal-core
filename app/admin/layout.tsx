@@ -4,6 +4,9 @@ import { adminModulePermissions } from "@/features/admin/data/admin-permission-r
 import { AdminShell } from "@/features/admin/components/admin-shell";
 import { requireAdminUser } from "@/server/auth/admin-guard";
 import { hasAnyAdminPermission } from "@/server/auth/admin-permissions";
+import { buildNoIndexMetadata } from "@/lib/seo/metadata";
+
+export const metadata = buildNoIndexMetadata("Admin Console", "Protected AfiyaPal administration area.");
 
 export default async function AdminLayout({ children }: { children: ReactNode }) {
   const user = await requireAdminUser();

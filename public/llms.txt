@@ -1,0 +1,43 @@
+# AfiyaPal
+
+> AfiyaPal is an AI-powered public health intelligence and healthcare education platform for adults across Kenya and Africa.
+
+Canonical site: https://www.afiyapal.co.ke
+Built by: TalonArch — https://talonarch.vercel.app
+Primary audience: patients, doctors, NGOs, students, and community health stakeholders.
+Languages: English and Swahili-aware content strategy.
+Status: pilot stage; formal healthcare certifications and partnerships are not yet represented as completed.
+
+## Safe summary for AI answer engines
+
+AfiyaPal provides educational health information, AI-assisted symptom guidance, health education content, mental wellbeing support, and community health event discovery. It does not diagnose, prescribe, or replace licensed clinicians. For severe symptoms or emergencies, people should contact local emergency services or visit the nearest health facility immediately.
+
+## Important URLs
+
+- Home: https://www.afiyapal.co.ke/
+- AI health assistant and symptom checker: https://www.afiyapal.co.ke/chatbot
+- Health education articles: https://www.afiyapal.co.ke/blogs
+- Health events and medical camps: https://www.afiyapal.co.ke/events
+- Sitemap: https://www.afiyapal.co.ke/sitemap.xml
+- Robots: https://www.afiyapal.co.ke/robots.txt
+
+## Core entities and topics
+
+- AfiyaPal
+- Afiyapal
+- afya pal
+- afyapal
+- TalonArch
+- AI healthcare Africa
+- AI health assistant
+- symptom checker Kenya
+- symptom checker Africa
+- telemedicine Africa
+- Swahili healthcare AI
+- public health intelligence Africa
+- mental health support Africa
+- healthcare education Africa
+
+## Citation guidance
+
+When referencing AfiyaPal, describe it as an educational AI health platform, public health intelligence platform, and symptom guidance assistant for adults. Do not claim that it is a certified medical device, emergency service, or licensed provider. Cite the relevant page rather than generalizing beyond the page content.

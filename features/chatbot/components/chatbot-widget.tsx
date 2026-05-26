@@ -63,7 +63,7 @@ export function ChatbotWidget({ mode = "page" }: { mode?: "page" | "frame" }) {
         <p className="mt-1 text-sm text-emerald-50">{medicalDisclaimer}</p>
       </header>
 
-      <div className="border-b border-emerald-100 bg-amber-50 px-6 py-3 text-xs font-semibold leading-5 text-amber-900">
+      <div id="chatbot-safety-note" className="border-b border-emerald-100 bg-amber-50 px-6 py-3 text-xs font-semibold leading-5 text-amber-900">
         <p>{medicalDisclaimer}</p>
         <p className="mt-1">{emergencyDisclaimer}</p>
       </div>
@@ -87,10 +87,13 @@ export function ChatbotWidget({ mode = "page" }: { mode?: "page" | "frame" }) {
       </div>
 
       <form onSubmit={onSubmit} className="flex gap-3 border-t border-emerald-100 bg-white p-4">
+        <label htmlFor="chatbot-message" className="sr-only">Type your health question for AfiyaPal</label>
         <input
+          id="chatbot-message"
           value={message}
           onChange={(event) => setMessage(event.target.value)}
           placeholder="Type your health question..."
+          aria-describedby="chatbot-safety-note"
           className="min-w-0 flex-1 rounded-full border border-slate-200 px-4 py-3 text-sm outline-none focus:border-brand-500 focus:ring-4 focus:ring-brand-100"
         />
         <Button disabled={isSending} aria-label="Send message"><Send className="h-4 w-4" /></Button>

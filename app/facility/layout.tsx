@@ -4,6 +4,9 @@ import { routes } from "@/lib/routes";
 import { FacilitySidebar } from "@/features/facility/components/facility-sidebar";
 import { RoleThemeProvider } from "@/components/theme/role-theme-provider";
 import { FacilityNavbar } from "@/components/nav/facility-navbar";
+import { buildNoIndexMetadata } from "@/lib/seo/metadata";
+
+export const metadata = buildNoIndexMetadata("Facility Dashboard", "Protected AfiyaPal facility workspace.");
 
 export default async function FacilityLayout({ children }: { children: React.ReactNode }) {
   const user = await getCurrentUser();
