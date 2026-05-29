@@ -10,6 +10,6 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "Please enter a valid message." }, { status: 400 });
   }
 
-  const reply = await generateChatbotReply(parsed.data.message);
+  const reply = await generateChatbotReply(parsed.data.message, parsed.data.emergency);
   return NextResponse.json({ text: reply });
 }

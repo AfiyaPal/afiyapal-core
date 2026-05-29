@@ -128,6 +128,43 @@ AI interactions are designed with safety in mind by including:
 
 ---
 
+## 🆘 Maternal Emergency Response
+
+AFIYAPAL includes an **Emergency Help** feature for high-priority maternal and medical emergencies, designed for both anonymous and authenticated users.
+
+### How it works
+
+1. **Emergency Help button** — A prominent red button labelled "Emergency Help" that triggers a 3-second countdown to prevent false alarms. Placed on the dashboard and alongside the disclaimer in the chatbot UI.
+2. **Phone + type selection** — After the countdown, the user enters their phone number (optional) and selects the emergency type:
+   - **👶 Maternal Emergency** — alerts a maternal health specialist (default, pre-selected)
+   - **🚑 Medical Emergency** — alerts the general medical response team
+3. **Location capture** — The user's GPS coordinates are captured via `navigator.geolocation` and sent alongside the alert.
+4. **Session-based identity** — Anonymous users get a `sessionId` (UUID stored in `localStorage`) so the emergency can be tracked without requiring login.
+5. **API notification** — `POST /api/maternal/emergency/trigger` logs the alert and returns a confirmation. In production, this would notify admins and nearby facilities.
+
+### Chatbot integration
+
+- When an emergency is triggered, the chatbot automatically switches to **emergency guidance mode** — the system prompt changes to provide calming, step-by-step first-aid instructions.
+- A red banner appears at the top of the chatbot UI indicating that emergency mode is active.
+- Messages sent during emergency mode include an `emergency` flag in the API request body.
+
+### Maternal keyword detection
+
+- The chatbot detects maternal health keywords (pregnancy, contractions, bleeding, etc.) in user messages.
+- On first detection, it asks: *"Save your emergency contact so we can reach you faster if needed."*
+- The phone number is saved to `localStorage` under `afiyapal-maternal-contact` and can be used to pre-fill future emergency requests.
+
+### Anonymous user flow
+
+Since users can interact with the chatbot without signing in, the system uses:
+
+- **`sessionId`** — generated on first visit, stored in `localStorage`
+- **Coordinates** — captured at SOS trigger time
+- **Phone** — optionally captured at SOS trigger or via maternal keyword prompt
+- All three are sent with the emergency request, giving responders actionable data even for anonymous users.
+
+---
+
 ## 🛡️ Safety and Privacy
 
 Because AFIYAPAL handles health-related information, privacy and safety are central to the platform.
