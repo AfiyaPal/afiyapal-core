@@ -8,7 +8,7 @@ const DASHBOARD_ROUTES = ["/dashboard", "/facility", "/admin"];
 
 const navItems = [
   { label: "Home", href: routes.home },
-  { label: "Symptom Checker", href: routes.chatbot },
+  { label: "Ask Afiya", href: routes.chatbot },
   { label: "Health Events", href: "/events" },
   { label: "Health Blogs", href: routes.blogs },
   { label: "For Doctors", href: routes.registerDoctor },

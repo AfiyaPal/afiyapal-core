@@ -6,7 +6,7 @@ export const heroSlides = [
     image: "/images/hero/Symptom-Checker.jpg",
     alt: "A person using an AI symptom checker for first-step health guidance",
     href: "/chatbot",
-    cta: "Start the Symptom Checker"
+    cta: "Ask Afiya"
   },
   {
     title: "Trusted health education in simple language",

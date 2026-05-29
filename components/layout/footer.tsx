@@ -2,7 +2,7 @@ import Link from "next/link";
 import { siteConfig } from "@/lib/seo/config";
 
 const footerLinks = [
-  { label: "Symptom checker", href: "/chatbot" },
+  { label: "Ask Afiya", href: "/chatbot" },
   { label: "Health education", href: "/blogs" },
   { label: "Health events", href: "/events" },
   { label: "Doctor registration", href: "/register/doctor" },
