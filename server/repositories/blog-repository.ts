@@ -19,7 +19,8 @@ export async function listPublishedBlogs(): Promise<BlogSummary[]> {
       slug: blog.slug,
       excerpt: blog.excerpt ?? blog.content.slice(0, 150),
       imageUrl: blog.media[0]?.mediaUrl ?? null,
-      createdAt: blog.publishedAt ?? blog.createdAt
+      createdAt: blog.publishedAt ?? blog.createdAt,
+      contentCategory: blog.contentCategory ?? null
     }));
   } catch {
     return fallbackBlogs();

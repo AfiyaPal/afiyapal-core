@@ -5,6 +5,7 @@ export type BlogSummary = {
   excerpt: string;
   imageUrl?: string | null;
   createdAt?: Date | string | null;
+  contentCategory?: string | null;
 };
 
 export type BlogDetailModel = BlogSummary & {

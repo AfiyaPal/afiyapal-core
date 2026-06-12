@@ -1,42 +1,83 @@
 import Link from "next/link";
-import { siteConfig } from "@/lib/seo/config";
+import { routes } from "@/lib/routes";
+import { Heart } from "lucide-react";
 
-const footerLinks = [
-  { label: "Ask Afiya", href: "/chatbot" },
-  { label: "Health education", href: "/blogs" },
-  { label: "Health events", href: "/events" },
-  { label: "Doctor registration", href: "/register/doctor" },
-  { label: "Facility registration", href: "/register/facility" }
+const quickLinks = [
+  { label: "Symptom checker", href: routes.chatbot },
+  { label: "Health blogs",    href: routes.blogs },
+  { label: "Events",          href: "/events" },
+  { label: "Register",        href: routes.register }
+];
+
+const platformLinks = [
+  { label: "Sign in",          href: routes.login },
+  { label: "Doctor registration", href: routes.registerDoctor },
+  { label: "Facility registration", href: routes.registerFacility },
+  { label: "Admin dashboard",  href: routes.admin }
 ];
 
 export function Footer() {
   return (
-    <footer className="mt-20 border-t border-emerald-100 bg-white" role="contentinfo">
-      <div className="container-page grid gap-8 py-10 md:grid-cols-[1.4fr_1fr]">
-        <div>
-          <p className="text-lg font-black text-brand-700">AfiyaPal</p>
-          <p className="mt-3 max-w-2xl text-sm leading-6 text-slate-600">{siteConfig.tagline}</p>
-          <div className="mt-4 rounded-2xl border border-amber-200 bg-amber-50 p-4 text-xs leading-5 text-amber-950">
-            <p className="font-bold">Medical safety notice</p>
-            <p className="mt-1">{siteConfig.medicalDisclaimer}</p>
-            <p className="mt-1">{siteConfig.emergencyNotice}</p>
+    <footer className="relative mt-24 overflow-hidden border-t border-emerald-100/90 bg-white/80 backdrop-blur-sm">
+      <div aria-hidden className="pointer-events-none absolute -left-24 bottom-0 h-48 w-48 rounded-full bg-brand-100/40 blur-3xl" />
+      <div aria-hidden className="pointer-events-none absolute -right-16 top-0 h-40 w-40 rounded-full bg-teal-100/35 blur-3xl" />
+
+      <div className="container-page relative py-14">
+        <div className="grid gap-10 md:grid-cols-2 lg:grid-cols-4">
+
+          {/* Brand column */}
+          <div className="space-y-4 lg:col-span-2">
+            <div className="flex items-center gap-2.5">
+              <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-brand-500 to-teal-600 shadow-lg ring-2 ring-white">
+                <span className="text-base font-black text-white">A</span>
+              </span>
+              <span className="text-lg font-bold tracking-tight text-slate-900">AfiyaPal</span>
+            </div>
+            <p className="max-w-sm text-sm leading-relaxed text-slate-600">
+              AI-assisted first-step health guidance for African communities. Clear language, trusted education, and pathways to care when you need them.
+            </p>
+            <p className="inline-flex items-center gap-1.5 rounded-full bg-brand-50 px-3 py-1 text-xs font-semibold text-brand-700 ring-1 ring-brand-100">
+              <span className="h-1.5 w-1.5 rounded-full bg-brand-500 animate-pulse" aria-hidden />
+              Available 24/7 in English &amp; Swahili
+            </p>
           </div>
+
+          {/* Quick links */}
+          <nav aria-label="Quick links">
+            <p className="mb-4 text-xs font-bold uppercase tracking-widest text-slate-400">Quick links</p>
+            <ul className="space-y-2.5">
+              {quickLinks.map((link) => (
+                <li key={link.href}>
+                  <Link href={link.href} className="text-sm font-medium text-slate-700 underline-offset-4 transition hover:text-brand-700 hover:underline">
+                    {link.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </nav>
+
+          {/* Platform links */}
+          <nav aria-label="Platform links">
+            <p className="mb-4 text-xs font-bold uppercase tracking-widest text-slate-400">Platform</p>
+            <ul className="space-y-2.5">
+              {platformLinks.map((link) => (
+                <li key={link.href}>
+                  <Link href={link.href} className="text-sm font-medium text-slate-700 underline-offset-4 transition hover:text-brand-700 hover:underline">
+                    {link.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </nav>
         </div>
-        <nav aria-label="Footer navigation" className="grid gap-2 text-sm">
-          {footerLinks.map((item) => (
-            <Link key={item.href} href={item.href} className="font-semibold text-slate-700 hover:text-brand-700">
-              {item.label}
-            </Link>
-          ))}
-          <a href={siteConfig.creatorUrl} className="font-semibold text-slate-700 hover:text-brand-700" rel="noopener noreferrer" target="_blank">
-            Built by {siteConfig.creator}
-          </a>
-        </nav>
-      </div>
-      <div className="border-t border-emerald-50 py-4">
-        <div className="container-page flex flex-col gap-2 text-xs text-slate-500 md:flex-row md:items-center md:justify-between">
-          <p>© {new Date().getFullYear()} AfiyaPal. All rights reserved.</p>
-          <p>Minimum intended age: {siteConfig.minimumAge}. Current status: {siteConfig.stage}.</p>
+
+        <div className="mt-12 flex flex-col gap-3 border-t border-emerald-100/80 pt-8 text-xs text-slate-500 md:flex-row md:items-center md:justify-between">
+          <p className="flex items-center gap-1">
+            © {new Date().getFullYear()} AfiyaPal. Built with <Heart className="h-3 w-3 text-rose-400 fill-rose-400" aria-hidden /> for African communities.
+          </p>
+          <p className="max-w-xl md:text-right">
+            Informational guidance only. For medical emergencies, visit the nearest facility immediately.
+          </p>
         </div>
       </div>
     </footer>

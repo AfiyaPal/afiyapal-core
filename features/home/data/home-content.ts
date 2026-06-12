@@ -6,53 +6,41 @@ export const heroSlides = [
     image: "/images/hero/Symptom-Checker.jpg",
     alt: "A person using an AI symptom checker for first-step health guidance",
     href: "/chatbot",
-    cta: "Ask Afiya"
+    cta: "Start the Symptom Checker",
+    badge: "AI Symptom Checker"
   },
   {
-    title: "Trusted health education in simple language",
-    description:
-      "Explore educational articles on wellness, mental health, prevention, and everyday healthcare choices for communities across Kenya and Africa.",
+    title: "Trusted Health Education for African Communities",
+    description: "Reliable, evidence-based information and blogs at your fingertips. Stay informed, stay healthy — in English or Swahili.",
     image: "/images/hero/health education.png",
     alt: "Healthcare education illustration for African communities",
     href: "/blogs",
-    cta: "Read health articles"
+    cta: "Explore Health Articles",
+    badge: "Health Education"
   },
   {
-    title: "Connect communities with health events and medical camps",
-    description:
-      "Discover public health events, screenings, free checkups, and healthcare outreach opportunities from verified facilities and organizations.",
-    image: "/images/hero/Doctors_consultation.avif",
-    alt: "Doctors consulting with a patient during a community healthcare event",
-    href: "/events",
-    cta: "Find health events"
+    title: "Connect with Verified Doctors Near You",
+    description: "Request a consultation with a qualified, verified healthcare provider. Urgent or routine — we help you get the right care.",
+    image: "/images/hero/Symptom-Checker.jpg",
+    alt: "Connect with doctors",
+    href: "/register",
+    cta: "Request a Consultation",
+    badge: "Telemedicine"
   }
 ];
 
+export const platformStats = [
+  { value: "24/7", label: "AI availability" },
+  { value: "2", label: "Languages supported" },
+  { value: "100%", label: "Free to use" },
+  { value: "Verified", label: "Doctor network" }
+];
+
 export const benefits = [
-  {
-    title: "AI first-step guidance",
-    icon: "/images/ci-1.png",
-    description:
-      "AfiyaPal explains possible next steps in clear language while reminding users that AI guidance is not a medical diagnosis."
-  },
-  {
-    title: "Healthcare E-E-A-T",
-    icon: "/images/ci-2.png",
-    description:
-      "Content is framed as educational, transparent, and safety-aware, with trust signals for doctors, facilities, NGOs, and students."
-  },
-  {
-    title: "Pan-African discovery",
-    icon: "/images/ci-3.png",
-    description:
-      "Built for searchable health education, Swahili-aware discovery, and public health information across African communities."
-  },
-  {
-    title: "Community health access",
-    icon: "/images/ci-4.png",
-    description:
-      "Find articles, upcoming health events, medical camps, and facility-led outreach from one accessible platform."
-  }
+  { title: "Always Available", icon: "/images/ci-1.png", description: "Access health guidance anytime, anywhere. AfiyaPal is here 24/7 when you need support.", step: "01" },
+  { title: "Personalized Guidance", icon: "/images/ci-2.png", description: "Get tailored tips and advice based on your concerns, presented in clear and simple language.", step: "02" },
+  { title: "Trusted Information", icon: "/images/ci-3.png", description: "Rely on careful, evidence-aware health insights to help you make informed decisions.", step: "03" },
+  { title: "Easy to Use", icon: "/images/ci-4.png", description: "Enjoy a seamless and intuitive experience designed for quick answers and practical next steps.", step: "04" }
 ];
 
 export const featuredBlogs = [

@@ -3,9 +3,9 @@ import { Header } from "./header";
 
 export function AppShell({ children }: { children: React.ReactNode }) {
   return (
-    <div className="min-h-screen bg-theme-background text-theme-foreground">
+    <div className="relative isolate flex min-h-screen flex-col bg-transparent text-theme-foreground">
       <Header />
-      <div id="main-content">{children}</div>
+      <div className="flex-1">{children}</div>
       <Footer />
     </div>
   );
