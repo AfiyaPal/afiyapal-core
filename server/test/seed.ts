@@ -1,7 +1,7 @@
 import "dotenv/config";
 
 import bcrypt from "bcryptjs";
-import { prisma } from "./seed-prisma";
+import { prisma } from "../db/prisma";
 
 const SEED_PREFIX = "[Seed]";
 const SEED_DOMAIN = "afiyapal.seed";
@@ -19,12 +19,6 @@ const roles = [
 
 const userStatuses = ["ACTIVE", "SUSPENDED", "DELETED"] as const;
 const doctorStatuses = [
-  "PENDING",
-  "VERIFIED",
-  "REJECTED",
-  "SUSPENDED",
-] as const;
-const facilityStatuses = [
   "PENDING",
   "VERIFIED",
   "REJECTED",
@@ -245,16 +239,6 @@ async function cleanupSeedData() {
   await prisma.platformSetting.deleteMany({
     where: { key: { startsWith: "seed." } },
   });
-
-  await prisma.event.deleteMany({
-    where: { facility: { email: { endsWith: `@${SEED_DOMAIN}` } } },
-  });
-  await prisma.facilityProfessional.deleteMany({
-    where: { facility: { email: { endsWith: `@${SEED_DOMAIN}` } } },
-  });
-  await prisma.facility.deleteMany({
-    where: { email: { endsWith: `@${SEED_DOMAIN}` } },
-  });
 }
 
 async function upsertSeedUsers(passwordHash: string) {
@@ -381,72 +365,6 @@ async function createDoctorProfiles(
   }
 
   return doctors;
-}
-
-async function createFacilities(
-  users: Record<string, { id: number; role: string; email: string }>,
-) {
-  const facilities: Record<
-    string,
-    { id: number; name: string; verificationStatus: string }
-  > = {};
-
-  for (const [index, status] of facilityStatuses.entries()) {
-    const slug = `facility_${status.toLowerCase()}`;
-    const facilityUser = await prisma.user.upsert({
-      where: { email: seedEmail(slug) },
-      update: {
-        username: seedUsername(slug),
-        passwordHash: await bcrypt.hash("Password123!", 12),
-        role: "FACILITY_ADMIN",
-        status: "ACTIVE",
-        isVerified: true,
-      },
-      create: {
-        username: seedUsername(slug),
-        email: seedEmail(slug),
-        passwordHash: await bcrypt.hash("Password123!", 12),
-        role: "FACILITY_ADMIN",
-        status: "ACTIVE",
-        isVerified: true,
-      },
-    });
-
-    const facility = await prisma.facility.create({
-      data: {
-        name: `${SEED_PREFIX} ${status.charAt(0)}${status.slice(1).toLowerCase()} Clinic`,
-        type: "CLINIC",
-        email: facilityUser.email,
-        phone: `072000000${index}`,
-        country: "Kenya",
-        region: index % 2 === 0 ? "Coast" : "Nairobi",
-        city: index % 2 === 0 ? "Mombasa" : "Nairobi",
-        address: `${index + 1} ${status.toLowerCase()} lane`,
-        description: `${SEED_PREFIX} ${status.toLowerCase()} facility for admin QA testing.`,
-        services: "General consultation, Maternal health, Malaria care",
-        operatingHours: "Mon-Fri 8:00-17:00",
-        adminId: facilityUser.id,
-        verificationStatus: status,
-        verifiedById: status === "VERIFIED" ? users.SUPER_ADMIN.id : null,
-        verifiedAt: status === "VERIFIED" ? daysAgo(5) : null,
-        rejectionReason:
-          status === "REJECTED"
-            ? `${SEED_PREFIX} Required documents were incomplete.`
-            : null,
-        suspensionReason:
-          status === "SUSPENDED"
-            ? `${SEED_PREFIX} Temporarily suspended for QA testing.`
-            : null,
-      },
-    });
-    facilities[status] = {
-      id: facility.id,
-      name: facility.name,
-      verificationStatus: status,
-    };
-  }
-
-  return facilities;
 }
 
 async function createCategories() {
@@ -894,7 +812,6 @@ async function main() {
     symptomLogs,
     mentalHealthInteractions,
   );
-  const facilities = await createFacilities(users);
   const consultations = await createConsultations(users, doctors);
   const reports = await createSafetyReports(users);
   await createSettingsAndResources(users);
@@ -911,25 +828,13 @@ async function main() {
   await createNotifications(users);
 
   console.log("✅ Seed completed.");
-  const facilityEmails = await prisma.user.findMany({
-    where: { role: "FACILITY_ADMIN", email: { endsWith: `@${SEED_DOMAIN}` } },
-    select: { email: true, role: true },
-  });
-  const facilityEntries = facilityEmails.map((u) => {
-    const status = u.email.replace(/@.*$/, "").replace("facility_", "");
-    return { key: `FACILITY_${status.toUpperCase()}`, email: u.email, role: u.role };
-  });
-
   console.log("Login examples, all using password: Password123!");
   console.table(
-    [
-      ...Object.entries(users).map(([key, user]) => ({
-        key,
-        email: user.email,
-        role: user.role,
-      })),
-      ...facilityEntries,
-    ],
+    Object.entries(users).map(([key, user]) => ({
+      key,
+      email: user.email,
+      role: user.role,
+    })),
   );
 }
 
