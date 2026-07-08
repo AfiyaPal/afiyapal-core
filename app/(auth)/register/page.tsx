@@ -1,10 +1,15 @@
 import { RegisterForm } from "@/features/auth/components/register-form";
+import { buildMetadata } from "@/lib/seo/metadata";
 
-export const metadata = { title: "Create account" };
+export const metadata = buildMetadata({
+  title: "Create account",
+  description: "Create a free AfiyaPal account for AI health guidance, trusted articles, and pathways to verified care.",
+  path: "/register"
+});
 
 export default function Page() {
   return (
-    <main className="container-page flex min-h-[70vh] items-center justify-center py-12">
+    <main className="container-page flex min-h-[80vh] items-center justify-center py-10 md:py-14">
       <RegisterForm />
     </main>
   );

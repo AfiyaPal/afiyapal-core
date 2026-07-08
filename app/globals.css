@@ -3,9 +3,26 @@
 @theme {
   --color-brand-50: #effdf7;
   --color-brand-100: #d9fbe9;
+  --color-brand-200: #b2f4d6;
+  --color-brand-300: #7ce7ba;
+  --color-brand-400: #41d197;
   --color-brand-500: #17a36b;
   --color-brand-600: #118255;
   --color-brand-700: #0f6847;
+  --color-brand-800: #0e523a;
+  --color-brand-900: #0c4431;
+  --color-brand-950: #05261b;
+  /* Accent scales sampled from the AfiyaPal logo gradient (green -> blue -> violet) */
+  --color-accent-blue-50: #eff6ff;
+  --color-accent-blue-100: #dbeafe;
+  --color-accent-blue-500: #3b82f6;
+  --color-accent-blue-600: #2563eb;
+  --color-accent-blue-700: #1d4ed8;
+  --color-accent-violet-50: #f5f3ff;
+  --color-accent-violet-100: #ede9fe;
+  --color-accent-violet-500: #8b5cf6;
+  --color-accent-violet-600: #7c3aed;
+  --color-accent-violet-700: #6d28d9;
   --color-theme-primary: var(--theme-primary);
   --color-theme-primary-light: var(--theme-primary-light);
   --color-theme-primary-dark: var(--theme-primary-dark);
@@ -25,12 +42,12 @@
   --theme-primary: #2563eb;
   --theme-primary-light: #dbeafe;
   --theme-primary-dark: #1d4ed8;
-  --theme-accent: #14b8a6;
-  --theme-surface: #ffffff;
-  --theme-background: #f8fafc;
+  --theme-accent: #7c3aed;
+  --theme-surface: #f8fafc;
+  --theme-background: #dce8f2;
   --theme-foreground: #0f172a;
   --theme-ring: #93c5fd;
-  --theme-border: #e2e8f0;
+  --theme-border: #cbd5e1;
   --theme-shadow: 0 18px 50px rgba(37, 99, 235, 0.12);
 }
 
@@ -76,10 +93,12 @@ html {
 
 body {
   background-color: var(--theme-background);
+  /* Logo gradient washes: green top, violet right, blue bottom-left */
   background-image:
-    radial-gradient(ellipse 120% 80% at 50% -30%, rgb(23 163 107 / 0.14), transparent 55%),
-    radial-gradient(ellipse 70% 50% at 100% 20%, rgb(20 184 166 / 0.09), transparent 50%),
-    radial-gradient(ellipse 60% 40% at 0% 80%, rgb(37 99 235 / 0.06), transparent 45%);
+    radial-gradient(ellipse 120% 80% at 50% -30%, rgb(23 163 107 / 0.32), transparent 55%),
+    radial-gradient(ellipse 70% 50% at 100% 20%, rgb(124 58 237 / 0.20), transparent 50%),
+    radial-gradient(ellipse 60% 40% at 0% 80%, rgb(37 99 235 / 0.18), transparent 45%),
+    linear-gradient(180deg, rgb(217 251 233 / 0.45) 0%, transparent 35%, rgb(237 233 254 / 0.35) 100%);
   background-attachment: fixed;
   color: var(--theme-foreground);
 }

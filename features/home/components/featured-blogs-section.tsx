@@ -5,16 +5,17 @@ import { Button } from "@/components/ui/button";
 import { featuredBlogs } from "../data/home-content";
 
 const categoryColors: Record<string, string> = {
-  nutrition: "bg-lime-50 text-lime-700 ring-lime-100",
-  sleep: "bg-indigo-50 text-indigo-700 ring-indigo-100",
-  mental: "bg-purple-50 text-purple-700 ring-purple-100"
+  nutrition: "bg-brand-50 text-brand-700 ring-brand-100",
+  sleep: "bg-accent-blue-50 text-accent-blue-700 ring-accent-blue-100",
+  mental: "bg-accent-violet-50 text-accent-violet-700 ring-accent-violet-100"
 };
 
 const blogCategories = ["nutrition", "sleep", "mental"];
 
 export function FeaturedBlogsSection() {
   return (
-    <section className="container-page py-20 md:py-24">
+    <section className="bg-gradient-to-br from-brand-50/90 via-accent-blue-50/70 to-accent-violet-50/80 py-20 md:py-24">
+      <div className="container-page">
       <div className="flex flex-col justify-between gap-6 md:flex-row md:items-end">
         <div className="max-w-xl">
           <span className="text-sm font-semibold uppercase tracking-wider text-brand-600">Learn</span>
@@ -35,7 +36,7 @@ export function FeaturedBlogsSection() {
           return (
             <article
               key={blog.slug}
-              className="group relative flex flex-col overflow-hidden rounded-3xl border border-slate-200/80 bg-white/90 shadow-md outline-none motion-safe:transition motion-safe:duration-300 hover:-translate-y-1.5 hover:border-brand-100 hover:shadow-2xl hover:shadow-brand-500/10 motion-reduce:hover:translate-y-0 focus-within:ring-2 focus-within:ring-brand-400 focus-within:ring-offset-2"
+              className="group relative flex flex-col overflow-hidden rounded-3xl border border-brand-200/60 bg-white/75 shadow-md backdrop-blur-sm outline-none motion-safe:transition motion-safe:duration-300 hover:-translate-y-1.5 hover:border-accent-blue-200/80 hover:shadow-2xl hover:shadow-accent-violet-500/15 motion-reduce:hover:translate-y-0 focus-within:ring-2 focus-within:ring-brand-400 focus-within:ring-offset-2"
             >
               <Link href={`/blogs/${blog.slug}`} className="relative block h-56 overflow-hidden">
                 <Image
@@ -67,6 +68,7 @@ export function FeaturedBlogsSection() {
             </article>
           );
         })}
+      </div>
       </div>
     </section>
   );

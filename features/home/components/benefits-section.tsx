@@ -3,7 +3,7 @@ import { benefits } from "../data/home-content";
 
 export function BenefitsSection() {
   return (
-    <section className="relative overflow-hidden bg-white/70 py-20 backdrop-blur-[2px]">
+    <section className="relative overflow-hidden border-y border-brand-200/40 bg-gradient-to-b from-accent-blue-50/80 via-brand-50/70 to-accent-violet-50/60 py-20">
       <div aria-hidden className="pointer-events-none absolute left-1/2 top-0 h-px w-[min(100%,48rem)] -translate-x-1/2 bg-gradient-to-r from-transparent via-brand-200 to-transparent" />
       <div className="container-page">
         <div className="mx-auto max-w-2xl text-center">
@@ -18,7 +18,7 @@ export function BenefitsSection() {
           {benefits.map((item) => (
             <article
               key={item.title}
-              className="group relative overflow-hidden rounded-3xl border border-emerald-100/90 bg-gradient-to-b from-[#fafffd] to-[#f3fcf8] p-6 shadow-sm outline-none motion-safe:transition motion-safe:duration-300 hover:-translate-y-2 hover:border-brand-200/90 hover:shadow-xl hover:shadow-brand-500/15 motion-reduce:hover:translate-y-0 focus-within:ring-2 focus-within:ring-brand-400 focus-within:ring-offset-2"
+              className="group relative overflow-hidden rounded-3xl border border-brand-200/70 bg-white/75 p-6 shadow-sm backdrop-blur-sm outline-none motion-safe:transition motion-safe:duration-300 hover:-translate-y-2 hover:border-accent-blue-200/90 hover:shadow-xl hover:shadow-accent-violet-500/15 motion-reduce:hover:translate-y-0 focus-within:ring-2 focus-within:ring-brand-400 focus-within:ring-offset-2"
             >
               {/* Step number */}
               <span className="absolute right-5 top-4 text-4xl font-black text-brand-100/70 select-none group-hover:text-brand-200/80 motion-safe:transition">

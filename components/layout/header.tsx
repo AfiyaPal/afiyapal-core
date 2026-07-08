@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Menu, X } from "lucide-react";
@@ -10,10 +11,9 @@ import { cn } from "@/lib/utils";
 
 const navItems = [
   { label: "Home",   href: routes.home },
-  { label: "Events", href: "/events" },
+  { label: "About",  href: routes.about },
   { label: "Blogs",  href: routes.blogs },
-  { label: "Chatbot", href: routes.chatbot },
-  { label: "Admin",  href: routes.admin }
+  { label: "Chatbot", href: routes.chatbot }
 ];
 
 export function Header() {
@@ -41,7 +41,7 @@ export function Header() {
   return (
     <header
       className={cn(
-        "sticky top-0 z-50 border-b border-emerald-100/80 bg-white/75 backdrop-blur-md backdrop-saturate-150 motion-safe:transition-all motion-safe:duration-200",
+        "sticky top-0 z-50 border-b border-brand-200/60 bg-gradient-to-r from-brand-100/90 via-accent-blue-50/85 to-accent-violet-100/80 backdrop-blur-md backdrop-saturate-150 motion-safe:transition-all motion-safe:duration-200",
         scrolled ? "h-14 shadow-md shadow-brand-500/5" : "h-16"
       )}
     >
@@ -50,8 +50,8 @@ export function Header() {
           href="/"
           className="group flex items-center gap-2.5 rounded-xl outline-none transition hover:opacity-95 focus-visible:ring-2 focus-visible:ring-brand-500 focus-visible:ring-offset-2"
         >
-          <span className="relative flex h-9 w-9 items-center justify-center overflow-hidden rounded-xl bg-gradient-to-br from-brand-500 via-brand-600 to-teal-600 shadow-lg shadow-brand-600/25 ring-2 ring-white transition duration-300 group-hover:shadow-xl group-hover:shadow-brand-600/30">
-            <span className="text-base font-black tracking-tight text-white">A</span>
+          <span className="relative flex h-9 w-9 items-center justify-center overflow-hidden rounded-xl shadow-lg shadow-brand-600/25 ring-2 ring-white transition duration-300 group-hover:shadow-xl group-hover:shadow-brand-600/30">
+            <Image src="/brand/favicon-source.png" alt="" width={36} height={36} className="h-full w-full object-cover" priority />
           </span>
           <span className={cn("font-bold tracking-tight text-slate-900 transition group-hover:text-brand-700", scrolled ? "text-lg" : "text-xl")}>
             AfiyaPal
@@ -113,7 +113,7 @@ export function Header() {
       <div
         id="mobile-nav"
         className={cn(
-          "fixed inset-x-0 top-16 z-40 origin-top border-b border-emerald-100/90 bg-white/95 backdrop-blur-lg md:hidden motion-safe:transition motion-safe:duration-200 motion-safe:ease-out",
+          "fixed inset-x-0 top-16 z-40 origin-top border-b border-brand-200/60 bg-gradient-to-b from-brand-50/98 via-accent-blue-50/95 to-accent-violet-50/95 backdrop-blur-lg md:hidden motion-safe:transition motion-safe:duration-200 motion-safe:ease-out",
           mobileOpen ? "pointer-events-auto translate-y-0 opacity-100" : "pointer-events-none -translate-y-2 opacity-0"
         )}
       >

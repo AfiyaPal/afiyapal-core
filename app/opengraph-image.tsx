@@ -1,3 +1,5 @@
+import { readFileSync } from "fs";
+import { join } from "path";
 import { ImageResponse } from "next/og";
 import { siteConfig } from "@/lib/seo/config";
 
@@ -7,6 +9,10 @@ export const size = {
 };
 
 export const contentType = "image/png";
+
+const logoDataUrl = `data:image/png;base64,${readFileSync(
+  join(process.cwd(), "public", "brand", "favicon-source.png")
+).toString("base64")}`;
 
 export default function Image() {
   return new ImageResponse(
@@ -26,11 +32,27 @@ export default function Image() {
       <div
         style={{
           display: "flex",
-          fontSize: 34,
-          fontWeight: 800,
+          alignItems: "center",
+          gap: 18,
         }}
       >
-        {siteConfig.name}
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src={logoDataUrl}
+          width={56}
+          height={56}
+          alt=""
+          style={{ borderRadius: 16 }}
+        />
+        <div
+          style={{
+            display: "flex",
+            fontSize: 34,
+            fontWeight: 800,
+          }}
+        >
+          {siteConfig.name}
+        </div>
       </div>
 
       <div

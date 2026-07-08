@@ -1,10 +1,15 @@
 import { DoctorRegisterForm } from "@/features/auth/components/doctor-register-form";
+import { buildMetadata } from "@/lib/seo/metadata";
 
-export const metadata = { title: "Join as a health professional" };
+export const metadata = buildMetadata({
+  title: "Join as a health professional",
+  description: "Register as a verified doctor or health professional on AfiyaPal and connect with patients across Africa.",
+  path: "/register/doctor"
+});
 
 export default function Page() {
   return (
-    <main className="container-page flex min-h-[70vh] items-center justify-center py-12">
+    <main className="container-page flex min-h-[80vh] items-center justify-center py-10 md:py-14">
       <DoctorRegisterForm />
     </main>
   );

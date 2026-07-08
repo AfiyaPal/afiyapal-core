@@ -1,42 +1,42 @@
 "use client";
 
-import { useActionState, useState } from "react";
-import { Eye, EyeOff } from "lucide-react";
+import Link from "next/link";
+import { useActionState } from "react";
+import { UserRound } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { FormMessage } from "@/components/ui/form-message";
-import { Input } from "@/components/ui/input";
 import { registerAction } from "../actions/auth-actions";
 import { AuthCard } from "./auth-card";
+import { AuthFormField } from "./auth-form-field";
+import { AuthFormSection } from "./auth-form-section";
+import { PasswordField } from "./password-field";
+import { RegisterTypeNav } from "./register-type-nav";
+import { routes } from "@/lib/routes";
 
 const initialState = { ok: false, message: null as string | null };
 
 export function RegisterForm() {
   const [state, formAction, pending] = useActionState(registerAction, initialState);
-  const [showPw, setShowPw]   = useState(false);
-  const [showCpw, setShowCpw] = useState(false);
 
   return (
-    <AuthCard title="Create account" description="Join AfiyaPal — free health guidance for everyone.">
-      <form action={formAction} className="space-y-4">
-        <Input name="username" type="text" placeholder="Username" required />
-        <Input name="email"    type="email" placeholder="Email address" required />
-        <Input name="phone"    type="tel"   placeholder="Phone (optional)" />
+    <AuthCard
+      variant="patient"
+      title="Create your account"
+      description="Join AfiyaPal for free AI health guidance, trusted articles, and pathways to verified care."
+    >
+      <RegisterTypeNav active="patient" />
 
-        <div className="relative">
-          <Input name="password" type={showPw ? "text" : "password"} placeholder="Password" required className="pr-11" />
-          <button type="button" onClick={() => setShowPw((v) => !v)} aria-label={showPw ? "Hide password" : "Show password"}
-            className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 focus-visible:outline-none">
-            {showPw ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
-          </button>
-        </div>
+      <form action={formAction} className="mt-6 space-y-6">
+        <AuthFormSection title="Your details" description="We'll use this to set up your personal AfiyaPal account." icon={UserRound}>
+          <AuthFormField label="Username" name="username" placeholder="Choose a username" required autoComplete="username" />
+          <AuthFormField label="Email" name="email" type="email" placeholder="you@example.com" required autoComplete="email" />
+          <AuthFormField label="Phone" name="phone" type="tel" placeholder="+254 7XX XXX XXX" optional autoComplete="tel" />
+        </AuthFormSection>
 
-        <div className="relative">
-          <Input name="confirmPassword" type={showCpw ? "text" : "password"} placeholder="Confirm password" required className="pr-11" />
-          <button type="button" onClick={() => setShowCpw((v) => !v)} aria-label={showCpw ? "Hide password" : "Show password"}
-            className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 focus-visible:outline-none">
-            {showCpw ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
-          </button>
-        </div>
+        <AuthFormSection title="Security" description="Choose a strong password to protect your account.">
+          <PasswordField name="password" label="Password" placeholder="At least 8 characters" required autoComplete="new-password" />
+          <PasswordField name="confirmPassword" label="Confirm password" placeholder="Re-enter your password" required autoComplete="new-password" />
+        </AuthFormSection>
 
         <FormMessage message={state.message} type={state.ok ? "success" : "error"} />
 
@@ -47,12 +47,16 @@ export function RegisterForm() {
               <span className="typing-dot bg-white" />
               <span className="typing-dot bg-white" />
             </span>
-          ) : "Create account"}
+          ) : (
+            "Create account"
+          )}
         </Button>
 
         <p className="text-center text-sm text-slate-500">
-          Are you a health professional?{" "}
-          <a href="/register/doctor" className="font-semibold text-brand-600 hover:text-brand-700">Register here</a>
+          Already have an account?{" "}
+          <Link href={routes.login} className="font-semibold text-brand-600 hover:text-brand-700">
+            Sign in
+          </Link>
         </p>
       </form>
     </AuthCard>

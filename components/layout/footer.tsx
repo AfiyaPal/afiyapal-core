@@ -1,8 +1,10 @@
+import Image from "next/image";
 import Link from "next/link";
 import { routes } from "@/lib/routes";
 import { Heart } from "lucide-react";
 
 const quickLinks = [
+  { label: "About us",        href: routes.about },
   { label: "Symptom checker", href: routes.chatbot },
   { label: "Health blogs",    href: routes.blogs },
   { label: "Events",          href: "/events" },
@@ -18,9 +20,9 @@ const platformLinks = [
 
 export function Footer() {
   return (
-    <footer className="relative mt-24 overflow-hidden border-t border-emerald-100/90 bg-white/80 backdrop-blur-sm">
-      <div aria-hidden className="pointer-events-none absolute -left-24 bottom-0 h-48 w-48 rounded-full bg-brand-100/40 blur-3xl" />
-      <div aria-hidden className="pointer-events-none absolute -right-16 top-0 h-40 w-40 rounded-full bg-teal-100/35 blur-3xl" />
+    <footer className="relative mt-24 overflow-hidden border-t border-brand-200/50 bg-gradient-to-br from-brand-100/70 via-accent-blue-100/50 to-accent-violet-100/60 backdrop-blur-sm">
+      <div aria-hidden className="pointer-events-none absolute -left-24 bottom-0 h-48 w-48 rounded-full bg-brand-300/30 blur-3xl" />
+      <div aria-hidden className="pointer-events-none absolute -right-16 top-0 h-40 w-40 rounded-full bg-accent-violet-200/35 blur-3xl" />
 
       <div className="container-page relative py-14">
         <div className="grid gap-10 md:grid-cols-2 lg:grid-cols-4">
@@ -28,8 +30,8 @@ export function Footer() {
           {/* Brand column */}
           <div className="space-y-4 lg:col-span-2">
             <div className="flex items-center gap-2.5">
-              <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-brand-500 to-teal-600 shadow-lg ring-2 ring-white">
-                <span className="text-base font-black text-white">A</span>
+              <span className="flex h-9 w-9 items-center justify-center overflow-hidden rounded-xl shadow-lg ring-2 ring-white">
+                <Image src="/brand/favicon-source.png" alt="" width={36} height={36} className="h-full w-full object-cover" />
               </span>
               <span className="text-lg font-bold tracking-tight text-slate-900">AfiyaPal</span>
             </div>

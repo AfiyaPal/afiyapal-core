@@ -51,12 +51,13 @@ export function HeroSlider() {
 
   return (
     <section
-      className="container-page grid min-h-[580px] items-center gap-10 py-14 md:grid-cols-2 md:gap-14"
+      className="border-b border-brand-200/40 bg-gradient-to-br from-brand-100/70 via-accent-blue-50/50 to-accent-violet-50/40"
       onMouseEnter={() => setHeroPausedByHover(true)}
       onMouseLeave={() => setHeroPausedByHover(false)}
       onFocus={() => setHeroPausedByHover(true)}
       onBlur={(e) => { if (!e.currentTarget.contains(e.relatedTarget)) setHeroPausedByHover(false); }}
     >
+      <div className="container-page grid min-h-[580px] items-center gap-10 py-14 md:grid-cols-2 md:gap-14">
       {/* Text column */}
       <div className="space-y-6">
         <div key={`badge-${activeIndex}`} className="animate-slide-in-left">
@@ -158,6 +159,7 @@ export function HeroSlider() {
             {activeIndex + 1}/{heroSlides.length}
           </div>
         </div>
+      </div>
       </div>
     </section>
   );

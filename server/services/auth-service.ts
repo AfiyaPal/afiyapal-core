@@ -76,14 +76,6 @@ type DoctorRegisterInput = {
   email: string;
   phone?: string;
   password: string;
-  fullName: string;
-  licenseNumber: string;
-  specialty: string;
-  yearsOfExperience?: number;
-  country?: string;
-  cityRegion?: string;
-  languagesSpoken?: string;
-  bio?: string;
 };
 
 export async function registerDoctorUser(input: DoctorRegisterInput) {
@@ -95,16 +87,9 @@ export async function registerDoctorUser(input: DoctorRegisterInput) {
 
   await createDoctorApplication({
     userId: user.id,
-    fullName: input.fullName,
+    fullName: input.username,
     email: input.email,
-    phone: input.phone,
-    country: input.country,
-    cityRegion: input.cityRegion,
-    licenseNumber: input.licenseNumber,
-    specialty: input.specialty,
-    languagesSpoken: input.languagesSpoken,
-    yearsOfExperience: input.yearsOfExperience,
-    bio: input.bio
+    phone: input.phone
   });
 
   await createUserSession(user.id);
