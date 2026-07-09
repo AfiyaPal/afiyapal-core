@@ -1,10 +1,11 @@
+import type { ComponentProps } from "react";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
 
 type AuthFormFieldProps = {
   label: string;
   name: string;
-  type?: React.HTMLInputElement["type"];
+  type?: ComponentProps<"input">["type"];
   placeholder?: string;
   required?: boolean;
   optional?: boolean;

@@ -3,6 +3,7 @@ import { MessageCircle, BookOpen, UserCheck, ShieldCheck, Stethoscope } from "lu
 import { BenefitsSection } from "./benefits-section";
 import { FeaturedBlogsSection } from "./featured-blogs-section";
 import { HeroSlider } from "./hero-slider";
+import { ContactSection } from "./contact-section";
 import { platformStats } from "../data/home-content";
 import { routes } from "@/lib/routes";
 
@@ -77,7 +78,7 @@ export function HomePage() {
       <FeaturedBlogsSection />
 
       {/* Connect with a doctor */}
-      <section className="container-page pb-24">
+      <section className="container-page pb-16">
         <div className="relative overflow-hidden rounded-[2rem] bg-gradient-to-r from-[#056636] via-brand-700 to-[#008958] px-8 py-14 text-center shadow-2xl shadow-brand-900/25 md:px-16 md:py-16">
           <div aria-hidden className="pointer-events-none absolute -left-16 -top-16 h-64 w-64 rounded-full bg-white/10 blur-3xl" />
           <div aria-hidden className="pointer-events-none absolute -bottom-12 -right-12 h-56 w-56 rounded-full bg-brand-400/20 blur-3xl" />
@@ -101,6 +102,8 @@ export function HomePage() {
           </div>
         </div>
       </section>
+
+      <ContactSection />
     </main>
   );
 }

@@ -72,7 +72,8 @@ export const ModelName = {
   Facility: 'Facility',
   FacilityProfessional: 'FacilityProfessional',
   Event: 'Event',
-  Notification: 'Notification'
+  Notification: 'Notification',
+  ContactSubmission: 'ContactSubmission'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -127,6 +128,7 @@ export const BlogScalarFieldEnum = {
   status: 'status',
   language: 'language',
   contentCategory: 'contentCategory',
+  tags: 'tags',
   medicalReviewStatus: 'medicalReviewStatus',
   reviewedById: 'reviewedById',
   reviewedAt: 'reviewedAt',
@@ -465,6 +467,29 @@ export const NotificationScalarFieldEnum = {
 } as const
 
 export type NotificationScalarFieldEnum = (typeof NotificationScalarFieldEnum)[keyof typeof NotificationScalarFieldEnum]
+
+
+export const ContactSubmissionScalarFieldEnum = {
+  id: 'id',
+  fullName: 'fullName',
+  email: 'email',
+  phone: 'phone',
+  subject: 'subject',
+  jobPosition: 'jobPosition',
+  services: 'services',
+  message: 'message',
+  status: 'status',
+  source: 'source',
+  ipHash: 'ipHash',
+  userAgent: 'userAgent',
+  adminNotes: 'adminNotes',
+  reviewedAt: 'reviewedAt',
+  reviewedById: 'reviewedById',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type ContactSubmissionScalarFieldEnum = (typeof ContactSubmissionScalarFieldEnum)[keyof typeof ContactSubmissionScalarFieldEnum]
 
 
 export const SortOrder = {

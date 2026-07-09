@@ -49,6 +49,7 @@ export type BlogMinAggregateOutputType = {
   status: string | null
   language: string | null
   contentCategory: string | null
+  tags: string | null
   medicalReviewStatus: string | null
   reviewedById: number | null
   reviewedAt: Date | null
@@ -70,6 +71,7 @@ export type BlogMaxAggregateOutputType = {
   status: string | null
   language: string | null
   contentCategory: string | null
+  tags: string | null
   medicalReviewStatus: string | null
   reviewedById: number | null
   reviewedAt: Date | null
@@ -91,6 +93,7 @@ export type BlogCountAggregateOutputType = {
   status: number
   language: number
   contentCategory: number
+  tags: number
   medicalReviewStatus: number
   reviewedById: number
   reviewedAt: number
@@ -128,6 +131,7 @@ export type BlogMinAggregateInputType = {
   status?: true
   language?: true
   contentCategory?: true
+  tags?: true
   medicalReviewStatus?: true
   reviewedById?: true
   reviewedAt?: true
@@ -149,6 +153,7 @@ export type BlogMaxAggregateInputType = {
   status?: true
   language?: true
   contentCategory?: true
+  tags?: true
   medicalReviewStatus?: true
   reviewedById?: true
   reviewedAt?: true
@@ -170,6 +175,7 @@ export type BlogCountAggregateInputType = {
   status?: true
   language?: true
   contentCategory?: true
+  tags?: true
   medicalReviewStatus?: true
   reviewedById?: true
   reviewedAt?: true
@@ -278,6 +284,7 @@ export type BlogGroupByOutputType = {
   status: string
   language: string
   contentCategory: string
+  tags: string
   medicalReviewStatus: string
   reviewedById: number | null
   reviewedAt: Date | null
@@ -322,6 +329,7 @@ export type BlogWhereInput = {
   status?: Prisma.StringFilter<"Blog"> | string
   language?: Prisma.StringFilter<"Blog"> | string
   contentCategory?: Prisma.StringFilter<"Blog"> | string
+  tags?: Prisma.StringFilter<"Blog"> | string
   medicalReviewStatus?: Prisma.StringFilter<"Blog"> | string
   reviewedById?: Prisma.IntNullableFilter<"Blog"> | number | null
   reviewedAt?: Prisma.DateTimeNullableFilter<"Blog"> | Date | string | null
@@ -348,6 +356,7 @@ export type BlogOrderByWithRelationInput = {
   status?: Prisma.SortOrder
   language?: Prisma.SortOrder
   contentCategory?: Prisma.SortOrder
+  tags?: Prisma.SortOrder
   medicalReviewStatus?: Prisma.SortOrder
   reviewedById?: Prisma.SortOrderInput | Prisma.SortOrder
   reviewedAt?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -377,6 +386,7 @@ export type BlogWhereUniqueInput = Prisma.AtLeast<{
   status?: Prisma.StringFilter<"Blog"> | string
   language?: Prisma.StringFilter<"Blog"> | string
   contentCategory?: Prisma.StringFilter<"Blog"> | string
+  tags?: Prisma.StringFilter<"Blog"> | string
   medicalReviewStatus?: Prisma.StringFilter<"Blog"> | string
   reviewedById?: Prisma.IntNullableFilter<"Blog"> | number | null
   reviewedAt?: Prisma.DateTimeNullableFilter<"Blog"> | Date | string | null
@@ -403,6 +413,7 @@ export type BlogOrderByWithAggregationInput = {
   status?: Prisma.SortOrder
   language?: Prisma.SortOrder
   contentCategory?: Prisma.SortOrder
+  tags?: Prisma.SortOrder
   medicalReviewStatus?: Prisma.SortOrder
   reviewedById?: Prisma.SortOrderInput | Prisma.SortOrder
   reviewedAt?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -432,6 +443,7 @@ export type BlogScalarWhereWithAggregatesInput = {
   status?: Prisma.StringWithAggregatesFilter<"Blog"> | string
   language?: Prisma.StringWithAggregatesFilter<"Blog"> | string
   contentCategory?: Prisma.StringWithAggregatesFilter<"Blog"> | string
+  tags?: Prisma.StringWithAggregatesFilter<"Blog"> | string
   medicalReviewStatus?: Prisma.StringWithAggregatesFilter<"Blog"> | string
   reviewedById?: Prisma.IntNullableWithAggregatesFilter<"Blog"> | number | null
   reviewedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Blog"> | Date | string | null
@@ -452,6 +464,7 @@ export type BlogCreateInput = {
   status?: string
   language?: string
   contentCategory?: string
+  tags?: string
   medicalReviewStatus?: string
   reviewedById?: number | null
   reviewedAt?: Date | string | null
@@ -476,6 +489,7 @@ export type BlogUncheckedCreateInput = {
   status?: string
   language?: string
   contentCategory?: string
+  tags?: string
   medicalReviewStatus?: string
   reviewedById?: number | null
   reviewedAt?: Date | string | null
@@ -499,6 +513,7 @@ export type BlogUpdateInput = {
   status?: Prisma.StringFieldUpdateOperationsInput | string
   language?: Prisma.StringFieldUpdateOperationsInput | string
   contentCategory?: Prisma.StringFieldUpdateOperationsInput | string
+  tags?: Prisma.StringFieldUpdateOperationsInput | string
   medicalReviewStatus?: Prisma.StringFieldUpdateOperationsInput | string
   reviewedById?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   reviewedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -523,6 +538,7 @@ export type BlogUncheckedUpdateInput = {
   status?: Prisma.StringFieldUpdateOperationsInput | string
   language?: Prisma.StringFieldUpdateOperationsInput | string
   contentCategory?: Prisma.StringFieldUpdateOperationsInput | string
+  tags?: Prisma.StringFieldUpdateOperationsInput | string
   medicalReviewStatus?: Prisma.StringFieldUpdateOperationsInput | string
   reviewedById?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   reviewedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -547,6 +563,7 @@ export type BlogCreateManyInput = {
   status?: string
   language?: string
   contentCategory?: string
+  tags?: string
   medicalReviewStatus?: string
   reviewedById?: number | null
   reviewedAt?: Date | string | null
@@ -567,6 +584,7 @@ export type BlogUpdateManyMutationInput = {
   status?: Prisma.StringFieldUpdateOperationsInput | string
   language?: Prisma.StringFieldUpdateOperationsInput | string
   contentCategory?: Prisma.StringFieldUpdateOperationsInput | string
+  tags?: Prisma.StringFieldUpdateOperationsInput | string
   medicalReviewStatus?: Prisma.StringFieldUpdateOperationsInput | string
   reviewedById?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   reviewedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -586,6 +604,7 @@ export type BlogUncheckedUpdateManyInput = {
   status?: Prisma.StringFieldUpdateOperationsInput | string
   language?: Prisma.StringFieldUpdateOperationsInput | string
   contentCategory?: Prisma.StringFieldUpdateOperationsInput | string
+  tags?: Prisma.StringFieldUpdateOperationsInput | string
   medicalReviewStatus?: Prisma.StringFieldUpdateOperationsInput | string
   reviewedById?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   reviewedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -617,6 +636,7 @@ export type BlogCountOrderByAggregateInput = {
   status?: Prisma.SortOrder
   language?: Prisma.SortOrder
   contentCategory?: Prisma.SortOrder
+  tags?: Prisma.SortOrder
   medicalReviewStatus?: Prisma.SortOrder
   reviewedById?: Prisma.SortOrder
   reviewedAt?: Prisma.SortOrder
@@ -645,6 +665,7 @@ export type BlogMaxOrderByAggregateInput = {
   status?: Prisma.SortOrder
   language?: Prisma.SortOrder
   contentCategory?: Prisma.SortOrder
+  tags?: Prisma.SortOrder
   medicalReviewStatus?: Prisma.SortOrder
   reviewedById?: Prisma.SortOrder
   reviewedAt?: Prisma.SortOrder
@@ -666,6 +687,7 @@ export type BlogMinOrderByAggregateInput = {
   status?: Prisma.SortOrder
   language?: Prisma.SortOrder
   contentCategory?: Prisma.SortOrder
+  tags?: Prisma.SortOrder
   medicalReviewStatus?: Prisma.SortOrder
   reviewedById?: Prisma.SortOrder
   reviewedAt?: Prisma.SortOrder
@@ -836,6 +858,7 @@ export type BlogCreateWithoutCreatorInput = {
   status?: string
   language?: string
   contentCategory?: string
+  tags?: string
   medicalReviewStatus?: string
   reviewedById?: number | null
   reviewedAt?: Date | string | null
@@ -859,6 +882,7 @@ export type BlogUncheckedCreateWithoutCreatorInput = {
   status?: string
   language?: string
   contentCategory?: string
+  tags?: string
   medicalReviewStatus?: string
   reviewedById?: number | null
   reviewedAt?: Date | string | null
@@ -910,6 +934,7 @@ export type BlogScalarWhereInput = {
   status?: Prisma.StringFilter<"Blog"> | string
   language?: Prisma.StringFilter<"Blog"> | string
   contentCategory?: Prisma.StringFilter<"Blog"> | string
+  tags?: Prisma.StringFilter<"Blog"> | string
   medicalReviewStatus?: Prisma.StringFilter<"Blog"> | string
   reviewedById?: Prisma.IntNullableFilter<"Blog"> | number | null
   reviewedAt?: Prisma.DateTimeNullableFilter<"Blog"> | Date | string | null
@@ -930,6 +955,7 @@ export type BlogCreateWithoutCategoryInput = {
   status?: string
   language?: string
   contentCategory?: string
+  tags?: string
   medicalReviewStatus?: string
   reviewedById?: number | null
   reviewedAt?: Date | string | null
@@ -953,6 +979,7 @@ export type BlogUncheckedCreateWithoutCategoryInput = {
   status?: string
   language?: string
   contentCategory?: string
+  tags?: string
   medicalReviewStatus?: string
   reviewedById?: number | null
   reviewedAt?: Date | string | null
@@ -1000,6 +1027,7 @@ export type BlogCreateWithoutCommentsInput = {
   status?: string
   language?: string
   contentCategory?: string
+  tags?: string
   medicalReviewStatus?: string
   reviewedById?: number | null
   reviewedAt?: Date | string | null
@@ -1023,6 +1051,7 @@ export type BlogUncheckedCreateWithoutCommentsInput = {
   status?: string
   language?: string
   contentCategory?: string
+  tags?: string
   medicalReviewStatus?: string
   reviewedById?: number | null
   reviewedAt?: Date | string | null
@@ -1061,6 +1090,7 @@ export type BlogUpdateWithoutCommentsInput = {
   status?: Prisma.StringFieldUpdateOperationsInput | string
   language?: Prisma.StringFieldUpdateOperationsInput | string
   contentCategory?: Prisma.StringFieldUpdateOperationsInput | string
+  tags?: Prisma.StringFieldUpdateOperationsInput | string
   medicalReviewStatus?: Prisma.StringFieldUpdateOperationsInput | string
   reviewedById?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   reviewedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1084,6 +1114,7 @@ export type BlogUncheckedUpdateWithoutCommentsInput = {
   status?: Prisma.StringFieldUpdateOperationsInput | string
   language?: Prisma.StringFieldUpdateOperationsInput | string
   contentCategory?: Prisma.StringFieldUpdateOperationsInput | string
+  tags?: Prisma.StringFieldUpdateOperationsInput | string
   medicalReviewStatus?: Prisma.StringFieldUpdateOperationsInput | string
   reviewedById?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   reviewedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1106,6 +1137,7 @@ export type BlogCreateWithoutMediaInput = {
   status?: string
   language?: string
   contentCategory?: string
+  tags?: string
   medicalReviewStatus?: string
   reviewedById?: number | null
   reviewedAt?: Date | string | null
@@ -1129,6 +1161,7 @@ export type BlogUncheckedCreateWithoutMediaInput = {
   status?: string
   language?: string
   contentCategory?: string
+  tags?: string
   medicalReviewStatus?: string
   reviewedById?: number | null
   reviewedAt?: Date | string | null
@@ -1167,6 +1200,7 @@ export type BlogUpdateWithoutMediaInput = {
   status?: Prisma.StringFieldUpdateOperationsInput | string
   language?: Prisma.StringFieldUpdateOperationsInput | string
   contentCategory?: Prisma.StringFieldUpdateOperationsInput | string
+  tags?: Prisma.StringFieldUpdateOperationsInput | string
   medicalReviewStatus?: Prisma.StringFieldUpdateOperationsInput | string
   reviewedById?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   reviewedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1190,6 +1224,7 @@ export type BlogUncheckedUpdateWithoutMediaInput = {
   status?: Prisma.StringFieldUpdateOperationsInput | string
   language?: Prisma.StringFieldUpdateOperationsInput | string
   contentCategory?: Prisma.StringFieldUpdateOperationsInput | string
+  tags?: Prisma.StringFieldUpdateOperationsInput | string
   medicalReviewStatus?: Prisma.StringFieldUpdateOperationsInput | string
   reviewedById?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   reviewedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1212,6 +1247,7 @@ export type BlogCreateWithoutVotesInput = {
   status?: string
   language?: string
   contentCategory?: string
+  tags?: string
   medicalReviewStatus?: string
   reviewedById?: number | null
   reviewedAt?: Date | string | null
@@ -1235,6 +1271,7 @@ export type BlogUncheckedCreateWithoutVotesInput = {
   status?: string
   language?: string
   contentCategory?: string
+  tags?: string
   medicalReviewStatus?: string
   reviewedById?: number | null
   reviewedAt?: Date | string | null
@@ -1273,6 +1310,7 @@ export type BlogUpdateWithoutVotesInput = {
   status?: Prisma.StringFieldUpdateOperationsInput | string
   language?: Prisma.StringFieldUpdateOperationsInput | string
   contentCategory?: Prisma.StringFieldUpdateOperationsInput | string
+  tags?: Prisma.StringFieldUpdateOperationsInput | string
   medicalReviewStatus?: Prisma.StringFieldUpdateOperationsInput | string
   reviewedById?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   reviewedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1296,6 +1334,7 @@ export type BlogUncheckedUpdateWithoutVotesInput = {
   status?: Prisma.StringFieldUpdateOperationsInput | string
   language?: Prisma.StringFieldUpdateOperationsInput | string
   contentCategory?: Prisma.StringFieldUpdateOperationsInput | string
+  tags?: Prisma.StringFieldUpdateOperationsInput | string
   medicalReviewStatus?: Prisma.StringFieldUpdateOperationsInput | string
   reviewedById?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   reviewedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1319,6 +1358,7 @@ export type BlogCreateManyCreatorInput = {
   status?: string
   language?: string
   contentCategory?: string
+  tags?: string
   medicalReviewStatus?: string
   reviewedById?: number | null
   reviewedAt?: Date | string | null
@@ -1338,6 +1378,7 @@ export type BlogUpdateWithoutCreatorInput = {
   status?: Prisma.StringFieldUpdateOperationsInput | string
   language?: Prisma.StringFieldUpdateOperationsInput | string
   contentCategory?: Prisma.StringFieldUpdateOperationsInput | string
+  tags?: Prisma.StringFieldUpdateOperationsInput | string
   medicalReviewStatus?: Prisma.StringFieldUpdateOperationsInput | string
   reviewedById?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   reviewedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1361,6 +1402,7 @@ export type BlogUncheckedUpdateWithoutCreatorInput = {
   status?: Prisma.StringFieldUpdateOperationsInput | string
   language?: Prisma.StringFieldUpdateOperationsInput | string
   contentCategory?: Prisma.StringFieldUpdateOperationsInput | string
+  tags?: Prisma.StringFieldUpdateOperationsInput | string
   medicalReviewStatus?: Prisma.StringFieldUpdateOperationsInput | string
   reviewedById?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   reviewedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1384,6 +1426,7 @@ export type BlogUncheckedUpdateManyWithoutCreatorInput = {
   status?: Prisma.StringFieldUpdateOperationsInput | string
   language?: Prisma.StringFieldUpdateOperationsInput | string
   contentCategory?: Prisma.StringFieldUpdateOperationsInput | string
+  tags?: Prisma.StringFieldUpdateOperationsInput | string
   medicalReviewStatus?: Prisma.StringFieldUpdateOperationsInput | string
   reviewedById?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   reviewedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1404,6 +1447,7 @@ export type BlogCreateManyCategoryInput = {
   status?: string
   language?: string
   contentCategory?: string
+  tags?: string
   medicalReviewStatus?: string
   reviewedById?: number | null
   reviewedAt?: Date | string | null
@@ -1423,6 +1467,7 @@ export type BlogUpdateWithoutCategoryInput = {
   status?: Prisma.StringFieldUpdateOperationsInput | string
   language?: Prisma.StringFieldUpdateOperationsInput | string
   contentCategory?: Prisma.StringFieldUpdateOperationsInput | string
+  tags?: Prisma.StringFieldUpdateOperationsInput | string
   medicalReviewStatus?: Prisma.StringFieldUpdateOperationsInput | string
   reviewedById?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   reviewedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1446,6 +1491,7 @@ export type BlogUncheckedUpdateWithoutCategoryInput = {
   status?: Prisma.StringFieldUpdateOperationsInput | string
   language?: Prisma.StringFieldUpdateOperationsInput | string
   contentCategory?: Prisma.StringFieldUpdateOperationsInput | string
+  tags?: Prisma.StringFieldUpdateOperationsInput | string
   medicalReviewStatus?: Prisma.StringFieldUpdateOperationsInput | string
   reviewedById?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   reviewedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1469,6 +1515,7 @@ export type BlogUncheckedUpdateManyWithoutCategoryInput = {
   status?: Prisma.StringFieldUpdateOperationsInput | string
   language?: Prisma.StringFieldUpdateOperationsInput | string
   contentCategory?: Prisma.StringFieldUpdateOperationsInput | string
+  tags?: Prisma.StringFieldUpdateOperationsInput | string
   medicalReviewStatus?: Prisma.StringFieldUpdateOperationsInput | string
   reviewedById?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   reviewedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1538,6 +1585,7 @@ export type BlogSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   status?: boolean
   language?: boolean
   contentCategory?: boolean
+  tags?: boolean
   medicalReviewStatus?: boolean
   reviewedById?: boolean
   reviewedAt?: boolean
@@ -1565,6 +1613,7 @@ export type BlogSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   status?: boolean
   language?: boolean
   contentCategory?: boolean
+  tags?: boolean
   medicalReviewStatus?: boolean
   reviewedById?: boolean
   reviewedAt?: boolean
@@ -1588,6 +1637,7 @@ export type BlogSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   status?: boolean
   language?: boolean
   contentCategory?: boolean
+  tags?: boolean
   medicalReviewStatus?: boolean
   reviewedById?: boolean
   reviewedAt?: boolean
@@ -1611,6 +1661,7 @@ export type BlogSelectScalar = {
   status?: boolean
   language?: boolean
   contentCategory?: boolean
+  tags?: boolean
   medicalReviewStatus?: boolean
   reviewedById?: boolean
   reviewedAt?: boolean
@@ -1623,7 +1674,7 @@ export type BlogSelectScalar = {
   updatedAt?: boolean
 }
 
-export type BlogOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "title" | "slug" | "excerpt" | "content" | "status" | "language" | "contentCategory" | "medicalReviewStatus" | "reviewedById" | "reviewedAt" | "reviewNotes" | "publishedAt" | "archivedAt" | "creatorId" | "categoryId" | "createdAt" | "updatedAt", ExtArgs["result"]["blog"]>
+export type BlogOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "title" | "slug" | "excerpt" | "content" | "status" | "language" | "contentCategory" | "tags" | "medicalReviewStatus" | "reviewedById" | "reviewedAt" | "reviewNotes" | "publishedAt" | "archivedAt" | "creatorId" | "categoryId" | "createdAt" | "updatedAt", ExtArgs["result"]["blog"]>
 export type BlogInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   creator?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   category?: boolean | Prisma.Blog$categoryArgs<ExtArgs>
@@ -1659,6 +1710,7 @@ export type $BlogPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     status: string
     language: string
     contentCategory: string
+    tags: string
     medicalReviewStatus: string
     reviewedById: number | null
     reviewedAt: Date | null
@@ -2105,6 +2157,7 @@ export interface BlogFieldRefs {
   readonly status: Prisma.FieldRef<"Blog", 'String'>
   readonly language: Prisma.FieldRef<"Blog", 'String'>
   readonly contentCategory: Prisma.FieldRef<"Blog", 'String'>
+  readonly tags: Prisma.FieldRef<"Blog", 'String'>
   readonly medicalReviewStatus: Prisma.FieldRef<"Blog", 'String'>
   readonly reviewedById: Prisma.FieldRef<"Blog", 'Int'>
   readonly reviewedAt: Prisma.FieldRef<"Blog", 'DateTime'>

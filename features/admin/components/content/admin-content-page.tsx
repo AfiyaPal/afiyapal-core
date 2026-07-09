@@ -57,13 +57,28 @@ export async function AdminContentPage({ searchParams }: { searchParams: SearchP
     {
       key: "article",
       header: "Article",
-      render: (article) => (
-        <div>
-          <Link href={`${routes.adminContent}/${article.id}`} className="font-black text-slate-950 transition hover:text-brand-700">{article.title}</Link>
-          <p className="mt-1 line-clamp-2 max-w-md text-xs leading-5 text-slate-500">{article.excerpt ?? article.content.slice(0, 140)}</p>
-          {article.isOutdated ? <p className="mt-2 text-xs font-black text-amber-700">Review reminder: older than 6 months.</p> : null}
-        </div>
-      )
+      render: (article) => {
+        const tags = ((article as ArticleRow & { tags?: string | null }).tags ?? "")
+          .split(",")
+          .map((tag: string) => tag.trim())
+          .filter(Boolean)
+          .slice(0, 4);
+
+        return (
+          <div>
+            <Link href={`${routes.adminContent}/${article.id}`} className="font-black text-slate-950 transition hover:text-brand-700">{article.title}</Link>
+            <p className="mt-1 line-clamp-2 max-w-md text-xs leading-5 text-slate-500">{article.excerpt ?? article.content.slice(0, 140)}</p>
+            {tags.length > 0 ? (
+              <div className="mt-2 flex max-w-md flex-wrap gap-1.5">
+                {tags.map((tag) => (
+                  <span key={tag} className="rounded-full bg-slate-50 px-2 py-0.5 text-[11px] font-bold text-slate-500 ring-1 ring-slate-100">#{tag}</span>
+                ))}
+              </div>
+            ) : null}
+            {article.isOutdated ? <p className="mt-2 text-xs font-black text-amber-700">Review reminder: older than 6 months.</p> : null}
+          </div>
+        );
+      }
     },
     { key: "status", header: "Status", render: (article) => <AdminStatusBadge tone={statusTone(article.status)}>{articleStatusLabel(article.status)}</AdminStatusBadge> },
     { key: "review", header: "Medical review", render: (article) => <AdminStatusBadge tone={reviewTone(article.medicalReviewStatus)}>{medicalReviewStatusLabel(article.medicalReviewStatus)}</AdminStatusBadge> },

@@ -151,3 +151,8 @@ export type Event = Prisma.EventModel
  * 
  */
 export type Notification = Prisma.NotificationModel
+/**
+ * Model ContactSubmission
+ * 
+ */
+export type ContactSubmission = Prisma.ContactSubmissionModel

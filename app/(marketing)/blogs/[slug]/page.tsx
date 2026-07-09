@@ -18,7 +18,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
     type: "article",
     publishedTime: blog.createdAt ? new Date(blog.createdAt).toISOString() : undefined,
     modifiedTime: blog.createdAt ? new Date(blog.createdAt).toISOString() : undefined,
-    keywords: [blog.category ?? "health education", "medical blog Africa", "AfiyaPal health article"],
+    keywords: [blog.category ?? "health education", ...(blog.tags ?? []), "medical blog Africa", "AfiyaPal health article"],
     authors: ["AfiyaPal Editorial Team"]
   });
 }

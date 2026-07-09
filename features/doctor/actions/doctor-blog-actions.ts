@@ -34,6 +34,15 @@ async function uniqueSlug(base: string, currentArticleId?: number) {
   }
 }
 
+function normalizeTags(value: string) {
+  return value
+    .split(",")
+    .map((tag) => tag.trim())
+    .filter(Boolean)
+    .slice(0, 12)
+    .join(", ");
+}
+
 async function requireDoctor() {
   const user = await getCurrentUser();
   if (!user || user.role !== "DOCTOR") redirect(routes.login);
@@ -47,6 +56,7 @@ export async function createDoctorBlogAction(_: unknown, formData: FormData) {
   const excerpt = getText(formData, "excerpt");
   const contentCategory = getText(formData, "contentCategory") || "GENERAL_WELLNESS";
   const language = getText(formData, "language") || "en";
+  const tags = normalizeTags(getText(formData, "tags"));
 
   if (title.length < 4) return { ok: false, message: "Title must be at least 4 characters." };
   if (content.length < 40) return { ok: false, message: "Content must be at least 40 characters." };
@@ -61,6 +71,7 @@ export async function createDoctorBlogAction(_: unknown, formData: FormData) {
       content,
       contentCategory,
       language,
+      tags,
       status: "DRAFT",
       medicalReviewStatus: "NOT_SUBMITTED",
       creatorId: user.id
@@ -84,6 +95,7 @@ export async function updateDoctorBlogAction(_: unknown, formData: FormData) {
   const excerpt = getText(formData, "excerpt");
   const contentCategory = getText(formData, "contentCategory") || existing.contentCategory;
   const language = getText(formData, "language") || existing.language;
+  const tags = normalizeTags(getText(formData, "tags"));
 
   if (title.length < 4) return { ok: false, message: "Title must be at least 4 characters." };
   if (content.length < 40) return { ok: false, message: "Content must be at least 40 characters." };
@@ -99,6 +111,7 @@ export async function updateDoctorBlogAction(_: unknown, formData: FormData) {
       content,
       contentCategory,
       language,
+      tags,
       ...(existing.status === "PUBLISHED" ? { status: "PENDING_REVIEW", medicalReviewStatus: "PENDING" } : {})
     }
   });

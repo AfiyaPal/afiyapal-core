@@ -39,6 +39,7 @@ function DetailItem({ label, value }: { label: string; value: ReactNode }) {
 export async function AdminContentDetailPage({ articleId }: { articleId: number }) {
   const article = await getAdminContentDetail(articleId);
   if (!article) notFound();
+  const articleTags = (article as typeof article & { tags?: string | null }).tags ?? "";
 
   return (
     <div className="space-y-6">
@@ -61,6 +62,7 @@ export async function AdminContentDetailPage({ articleId }: { articleId: number 
           <AdminStatusBadge tone="slate">{articleCategoryLabel(article.contentCategory)}</AdminStatusBadge>
           <AdminStatusBadge tone="slate">{articleLanguageLabel(article.language)}</AdminStatusBadge>
           {article.isOutdated ? <AdminStatusBadge tone="amber">Needs freshness review</AdminStatusBadge> : null}
+          {articleTags ? <AdminStatusBadge tone="blue">Tagged</AdminStatusBadge> : null}
         </div>
         <div className="mt-5 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
           <DetailItem label="Slug" value={article.slug} />
@@ -72,6 +74,7 @@ export async function AdminContentDetailPage({ articleId }: { articleId: number 
           <DetailItem label="Reviewed by" value={article.reviewedBy ? `${article.reviewedBy.username} (${article.reviewedBy.email})` : "Not reviewed"} />
           <DetailItem label="Reviewed on" value={formatDateTime(article.reviewedAt)} />
           <DetailItem label="Featured image" value={article.imageUrl || "Not provided"} />
+          <DetailItem label="Tags" value={articleTags || "No tags added"} />
         </div>
         {article.reviewNotes ? <div className="mt-5 rounded-2xl bg-amber-50 p-4 text-sm leading-6 text-amber-950"><strong>Review notes:</strong> {article.reviewNotes}</div> : null}
       </section>

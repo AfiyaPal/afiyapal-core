@@ -39,7 +39,7 @@ export const siteConfig = {
     "mental health support Africa",
     "AI-powered health education"
   ],
-  publicRoutes: ["/", "/about", "/blogs", "/chatbot", "/events", "/login", "/register", "/register/doctor", "/register/facility"],
+  publicRoutes: ["/", "/about", "/blogs", "/chatbot", "/events", "/login", "/register"],
   protectedPrefixes: ["/admin", "/dashboard", "/facility"],
   emergencyNotice:
     "AfiyaPal does not provide emergency medical services. For severe symptoms or emergencies, call local emergency services or visit the nearest health facility immediately.",

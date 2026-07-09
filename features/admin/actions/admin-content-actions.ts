@@ -17,6 +17,7 @@ type ArticleFormData = {
   content: string;
   contentCategory: string;
   language: string;
+  tags?: string;
   imageUrl?: string;
   imageAlt?: string;
 };
@@ -54,6 +55,15 @@ async function uniqueSlug(base: string, currentArticleId?: number) {
   }
 }
 
+function normalizeTags(value: string) {
+  return value
+    .split(",")
+    .map((tag) => tag.trim())
+    .filter(Boolean)
+    .slice(0, 12)
+    .join(", ");
+}
+
 function parseArticleForm(formData: FormData): ArticleFormData {
   const title = getText(formData, "title");
   const content = getText(formData, "content");
@@ -61,6 +71,7 @@ function parseArticleForm(formData: FormData): ArticleFormData {
   const slug = getText(formData, "slug");
   const imageUrl = getText(formData, "imageUrl");
   const imageAlt = getText(formData, "imageAlt");
+  const tags = normalizeTags(getText(formData, "tags"));
   const contentCategory = getText(formData, "contentCategory") || "GENERAL_WELLNESS";
   const language = getText(formData, "language") || "en";
 
@@ -69,7 +80,7 @@ function parseArticleForm(formData: FormData): ArticleFormData {
   if (!ARTICLE_CATEGORIES.some((item) => item.value === contentCategory)) throw new Error("Invalid article category.");
   if (!ARTICLE_LANGUAGES.some((item) => item.value === language)) throw new Error("Invalid article language.");
 
-  return { title, content, excerpt, slug, contentCategory, language, imageUrl, imageAlt };
+  return { title, content, excerpt, slug, contentCategory, language, tags, imageUrl, imageAlt };
 }
 
 function assertStatus(value: string) {
@@ -104,6 +115,7 @@ export async function createArticleAction(formData: FormData) {
       content: input.content,
       contentCategory: input.contentCategory,
       language: input.language,
+      tags: input.tags ?? "",
       status: "DRAFT",
       medicalReviewStatus: "NOT_SUBMITTED",
       creatorId: actor.id,
@@ -136,6 +148,7 @@ export async function updateArticleAction(formData: FormData) {
       content: input.content,
       contentCategory: input.contentCategory,
       language: input.language,
+      tags: input.tags ?? "",
       ...(existing.status === "PUBLISHED" ? { medicalReviewStatus: "PENDING", status: "PENDING_REVIEW", publishedAt: null } : {}),
       ...(input.imageUrl
         ? {

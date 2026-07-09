@@ -3,8 +3,8 @@ export const heroSlides = [
     title: "AfiyaPal — AI-powered public health intelligence for Africa",
     description:
       "Ask health questions, understand symptoms, find community health events, and learn from accessible healthcare education built for patients, doctors, NGOs, and students.",
-    image: "/images/hero/Symptom-Checker.jpg",
-    alt: "A person using an AI symptom checker for first-step health guidance",
+    image: "/images/hero/telemedicine-african-consultation.jpg",
+    alt: "A doctor using a laptop for an online consultation with an African patient",
     href: "/chatbot",
     cta: "Start the Symptom Checker",
     badge: "AI Symptom Checker"
@@ -12,8 +12,8 @@ export const heroSlides = [
   {
     title: "Trusted Health Education for African Communities",
     description: "Reliable, evidence-based information and blogs at your fingertips. Stay informed, stay healthy — in English or Swahili.",
-    image: "/images/hero/health education.png",
-    alt: "Healthcare education illustration for African communities",
+    image: "/images/hero/community-health-education-africa.svg",
+    alt: "Illustration of an African community health educator teaching trusted health guidance",
     href: "/blogs",
     cta: "Explore Health Articles",
     badge: "Health Education"
@@ -21,8 +21,8 @@ export const heroSlides = [
   {
     title: "Connect with Verified Doctors Near You",
     description: "Request a consultation with a qualified, verified healthcare provider. Urgent or routine — we help you get the right care.",
-    image: "/images/hero/Symptom-Checker.jpg",
-    alt: "Connect with doctors",
+    image: "/images/hero/uganda-nurse-clinic.jpg",
+    alt: "African nurse in a clinic ready to connect patients with professional care",
     href: "/register",
     cta: "Request a Consultation",
     badge: "Telemedicine"
@@ -48,19 +48,25 @@ export const featuredBlogs = [
     title: "10 Simple Tips for a Balanced Diet",
     image: "/images/blogs/Healthy-Eating.jpg",
     excerpt: "Good nutrition does not have to be complicated. Learn practical ways to build balanced meals and healthy routines.",
-    slug: "balanced-diet"
+    slug: "balanced-diet",
+    contentCategory: "NUTRITION",
+    tags: ["Nutrition", "Family health", "Prevention"]
   },
   {
     title: "Why Quality Sleep Matters",
     image: "/images/blogs/Sleep-Health.webp",
     excerpt: "Sleep affects energy, focus, immunity, and mental wellbeing. Discover why rest is part of preventive health.",
-    slug: "sleep-health"
+    slug: "sleep-health",
+    contentCategory: "GENERAL_WELLNESS",
+    tags: ["Sleep", "Wellness", "Mental health"]
   },
   {
     title: "Managing Stress in Daily Life",
     image: "/images/blogs/mental-health.jpg",
     excerpt: "Stress is common, but it can be managed. Learn simple ways to cope and when to seek trusted human support.",
-    slug: "managing-stress"
+    slug: "managing-stress",
+    contentCategory: "MENTAL_HEALTH",
+    tags: ["Stress", "Mental health", "Self-care"]
   }
 ];
 

@@ -1,0 +1,76 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 850" role="img" aria-labelledby="title desc">
+  <title id="title">Community health education in Africa</title>
+  <desc id="desc">An illustrated African community health educator sharing trusted guidance with families and students.</desc>
+  <defs>
+    <linearGradient id="sky" x1="0" x2="1" y1="0" y2="1">
+      <stop offset="0" stop-color="#eafff5"/>
+      <stop offset="0.55" stop-color="#d9fbe9"/>
+      <stop offset="1" stop-color="#b2f4d6"/>
+    </linearGradient>
+    <linearGradient id="board" x1="0" x2="1">
+      <stop offset="0" stop-color="#0e523a"/>
+      <stop offset="1" stop-color="#118255"/>
+    </linearGradient>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="18" stdDeviation="18" flood-color="#05261b" flood-opacity="0.18"/>
+    </filter>
+  </defs>
+  <rect width="1280" height="850" fill="url(#sky)"/>
+  <circle cx="1088" cy="132" r="158" fill="#41d197" opacity=".2"/>
+  <circle cx="124" cy="100" r="110" fill="#17a36b" opacity=".16"/>
+  <path d="M0 636c148-72 273-80 414-45 172 42 271 21 423-35 169-62 306-45 443 19v275H0Z" fill="#effdf7"/>
+  <path d="M0 696c189-65 343-62 506-20 172 44 337 21 514-41 88-30 172-37 260-16v231H0Z" fill="#d9fbe9" opacity=".85"/>
+
+  <g filter="url(#shadow)">
+    <rect x="130" y="138" width="1020" height="590" rx="46" fill="#fff" opacity=".92"/>
+    <rect x="174" y="186" width="502" height="320" rx="28" fill="url(#board)"/>
+    <text x="220" y="258" fill="#eafff5" font-family="Inter, Arial, sans-serif" font-size="44" font-weight="800">Trusted Health Education</text>
+    <text x="220" y="318" fill="#b2f4d6" font-family="Inter, Arial, sans-serif" font-size="28" font-weight="700">Clear guidance • Prevention • Care access</text>
+    <g stroke="#eafff5" stroke-linecap="round" stroke-width="10" opacity=".9">
+      <path d="M226 388h170"/>
+      <path d="M226 430h280"/>
+      <path d="M226 472h224"/>
+    </g>
+    <g transform="translate(538 356)">
+      <circle cx="54" cy="54" r="54" fill="#effdf7" opacity=".9"/>
+      <path d="M54 22v64M22 54h64" stroke="#17a36b" stroke-width="18" stroke-linecap="round"/>
+    </g>
+  </g>
+
+  <g transform="translate(725 216)">
+    <ellipse cx="151" cy="394" rx="212" ry="45" fill="#05261b" opacity=".14"/>
+    <g>
+      <path d="M172 162c-46 22-72 64-76 124l-13 194h164l-7-196c-2-66-24-106-68-122Z" fill="#0f6847"/>
+      <path d="M115 292c-44 42-68 95-82 155" stroke="#6b3f25" stroke-width="30" stroke-linecap="round" fill="none"/>
+      <path d="M232 292c44 42 68 95 82 155" stroke="#6b3f25" stroke-width="30" stroke-linecap="round" fill="none"/>
+      <circle cx="166" cy="112" r="70" fill="#7a4a2d"/>
+      <path d="M93 107c8-70 58-103 113-83 44 16 55 50 60 88-53-8-105-18-173-5Z" fill="#2a1711"/>
+      <path d="M111 123c-13-13-32-5-32 12 0 17 19 26 35 12" fill="#7a4a2d"/>
+      <path d="M215 123c13-13 32-5 32 12 0 17-19 26-35 12" fill="#7a4a2d"/>
+      <path d="M135 134c18 17 43 18 62 0" stroke="#3b2118" stroke-width="8" stroke-linecap="round" fill="none"/>
+      <circle cx="139" cy="104" r="6" fill="#21110d"/>
+      <circle cx="193" cy="104" r="6" fill="#21110d"/>
+      <path d="M96 194c37 40 107 40 143 0l18 48c-45 43-134 43-179 0Z" fill="#17a36b"/>
+      <path d="M113 480h52v116h-52zM184 480h52v116h-52z" fill="#274158"/>
+      <path d="M100 592h76v28H88c-4-14 1-23 12-28ZM180 592h76v28h-88c-4-14 1-23 12-28Z" fill="#05261b"/>
+    </g>
+  </g>
+
+  <g transform="translate(205 525)">
+    <ellipse cx="124" cy="119" rx="110" ry="32" fill="#05261b" opacity=".12"/>
+    <circle cx="65" cy="28" r="31" fill="#6b3f25"/>
+    <path d="M31 70c17-36 52-45 79-18 25 25 33 68 33 116H20c1-42 3-75 11-98Z" fill="#3b82f6"/>
+    <path d="M44 61c21 19 49 19 70 0" stroke="#dbeafe" stroke-width="9" stroke-linecap="round"/>
+    <circle cx="178" cy="38" r="38" fill="#7a4a2d"/>
+    <path d="M133 91c20-45 64-58 98-25 31 30 41 83 42 141H119c1-50 4-90 14-116Z" fill="#f59e0b"/>
+    <path d="M154 79c25 23 58 23 82 0" stroke="#fff7ed" stroke-width="10" stroke-linecap="round"/>
+  </g>
+
+  <g transform="translate(512 558)">
+    <ellipse cx="134" cy="91" rx="132" ry="28" fill="#05261b" opacity=".12"/>
+    <rect x="9" y="2" width="252" height="106" rx="22" fill="#fff"/>
+    <path d="M54 36h164M54 67h106" stroke="#17a36b" stroke-width="12" stroke-linecap="round"/>
+    <circle cx="29" cy="36" r="8" fill="#41d197"/>
+    <circle cx="29" cy="67" r="8" fill="#41d197"/>
+  </g>
+</svg>

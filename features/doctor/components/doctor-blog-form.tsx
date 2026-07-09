@@ -15,6 +15,7 @@ type Props = {
     content: string;
     contentCategory: string;
     language: string;
+    tags?: string | null;
   };
 };
 
@@ -31,9 +32,10 @@ export function DoctorBlogForm({ blog }: Props) {
       <div className="space-y-4">
         <Input name="title" type="text" placeholder="Article title" defaultValue={blog?.title} required />
         <Input name="excerpt" type="text" placeholder="Short excerpt (optional)" defaultValue={blog?.excerpt ?? ""} />
+        <Input name="tags" type="text" placeholder="Tags (comma-separated): malaria, prevention, community health" defaultValue={blog?.tags ?? ""} />
         <textarea
           name="content"
-          placeholder="Write your article content here..."
+          placeholder="Write your article content here. Markdown is supported for headings, image sections, tables, and bullet lists..."
           defaultValue={blog?.content}
           required
           rows={16}

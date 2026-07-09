@@ -35,7 +35,8 @@ export async function getAdminContent(filters: ContentFilters = {}) {
           OR: [
             { title: { contains: search } },
             { slug: { contains: search } },
-            { excerpt: { contains: search } }
+            { excerpt: { contains: search } },
+            { tags: { contains: search } }
           ]
         }
       : {}),

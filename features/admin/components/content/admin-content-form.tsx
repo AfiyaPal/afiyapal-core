@@ -10,6 +10,7 @@ type ArticleFormValue = {
   content?: string;
   contentCategory?: string;
   language?: string;
+  tags?: string | null;
   imageUrl?: string | null;
 };
 
@@ -48,12 +49,24 @@ export function AdminContentForm({ article }: { article?: ArticleFormValue }) {
       </div>
 
       <label className="block space-y-2">
+        <FieldLabel>Tags</FieldLabel>
+        <input
+          name="tags"
+          defaultValue={article?.tags ?? ""}
+          className="w-full rounded-2xl border border-emerald-100 px-4 py-3 text-sm font-semibold text-slate-800 outline-none focus:border-brand-600"
+          placeholder="Comma-separated topics: malaria, prevention, community health"
+        />
+        <span className="block text-xs font-semibold text-slate-500">Tags power public blog filtering and help readers find related articles.</span>
+      </label>
+
+      <label className="block space-y-2">
         <FieldLabel>Excerpt / short summary</FieldLabel>
         <textarea name="excerpt" rows={3} defaultValue={article?.excerpt ?? ""} className="w-full rounded-2xl border border-emerald-100 px-4 py-3 text-sm font-semibold text-slate-800 outline-none focus:border-brand-600" placeholder="Brief user-facing summary. If blank, AFIYAPAL uses the first part of the article." />
       </label>
 
       <label className="block space-y-2">
         <FieldLabel>Article content</FieldLabel>
+        <span className="block text-xs font-semibold text-slate-500">Markdown is supported for headings, image sections, tables, and bullet lists.</span>
         <textarea name="content" required minLength={40} rows={14} defaultValue={article?.content ?? ""} className="w-full rounded-2xl border border-emerald-100 px-4 py-3 text-sm font-semibold leading-7 text-slate-800 outline-none focus:border-brand-600" placeholder="Write medically responsible health education content here..." />
       </label>
 

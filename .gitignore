@@ -12,3 +12,5 @@ coverage
 prisma/dev.db
 *.db
 dev.db
+.vercel
+.env*

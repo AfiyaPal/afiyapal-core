@@ -6,6 +6,7 @@ export type BlogSummary = {
   imageUrl?: string | null;
   createdAt?: Date | string | null;
   contentCategory?: string | null;
+  tags?: string[];
 };
 
 export type BlogDetailModel = BlogSummary & {

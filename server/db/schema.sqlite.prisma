@@ -44,6 +44,7 @@ model Blog {
   status              String    @default("DRAFT")
   language            String    @default("en")
   contentCategory     String    @default("GENERAL_WELLNESS")
+  tags                String    @default("")
   medicalReviewStatus String    @default("NOT_SUBMITTED")
   reviewedById        Int?
   reviewedAt          DateTime?
@@ -453,4 +454,31 @@ model Notification {
   @@index([status])
   @@index([targetType, targetId])
   @@index([createdAt])
+}
+
+
+model ContactSubmission {
+  id          Int       @id @default(autoincrement())
+  fullName    String
+  email       String
+  phone       String?
+  subject     String    @default("")
+  jobPosition String?
+  services    String    @default("")
+  message     String
+  status      String    @default("NEW")
+  source      String    @default("HOME_CONTACT_FORM")
+  ipHash      String
+  userAgent   String?
+  adminNotes  String?
+  reviewedAt  DateTime?
+  reviewedById Int?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  @@index([status])
+  @@index([email])
+  @@index([ipHash])
+  @@index([createdAt])
+  @@index([reviewedAt])
 }

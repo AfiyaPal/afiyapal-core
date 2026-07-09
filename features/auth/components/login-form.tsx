@@ -53,7 +53,7 @@ export function LoginForm() {
           No account?{" "}
           <a href="/register" className="font-semibold text-brand-600 hover:text-brand-700">Create one</a>
           {" · "}
-          <a href="/register/doctor" className="font-semibold text-brand-600 hover:text-brand-700">Join as doctor</a>
+          <a href="/register?type=doctor" className="font-semibold text-brand-600 hover:text-brand-700">Join as doctor</a>
         </p>
       </form>
     </AuthCard>
