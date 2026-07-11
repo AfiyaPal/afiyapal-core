@@ -41,8 +41,8 @@ export function Header() {
   return (
     <header
       className={cn(
-        "sticky top-0 z-50 border-b border-brand-200/60 bg-gradient-to-r from-brand-100/90 via-accent-blue-50/85 to-accent-violet-100/80 backdrop-blur-md backdrop-saturate-150 motion-safe:transition-all motion-safe:duration-200",
-        scrolled ? "h-14 shadow-md shadow-brand-500/5" : "h-16"
+        "sticky top-0 z-50 h-16 border-b border-brand-200/60 bg-gradient-to-r from-brand-100/90 via-accent-blue-50/85 to-accent-violet-100/80",
+        scrolled && "shadow-md shadow-brand-500/5"
       )}
     >
       <div className="container-page flex h-full items-center justify-between gap-4">
