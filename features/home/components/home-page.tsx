@@ -21,7 +21,7 @@ export function HomePage() {
       <HeroSlider />
 
       {/* Stats bar */}
-      <div className="border-y border-brand-200/50 bg-gradient-to-r from-brand-100/90 via-accent-blue-100/75 to-accent-violet-100/80 backdrop-blur-sm">
+      <div className="border-y border-brand-200/50 bg-gradient-to-r from-brand-100/90 via-accent-blue-100/75 to-accent-violet-100/80">
         <div className="container-page grid grid-cols-2 gap-4 py-6 md:grid-cols-4">
           {platformStats.map((stat) => (
             <div key={stat.label} className="text-center animate-count-up">
