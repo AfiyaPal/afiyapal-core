@@ -1,3 +1,4 @@
+import type { Metadata, Viewport } from "next";
 import { JsonLd } from "@/components/seo/json-ld";
 import { ChatbotWidget } from "@/features/chatbot/components/chatbot-widget";
 import { buildMetadata } from "@/lib/seo/metadata";
@@ -25,22 +26,34 @@ const chatbotFaqs = [
   },
 ];
 
-export const metadata = buildMetadata({
-  title: "AI Health Assistant and Symptom Checker",
-  description:
-    "Use AfiyaPal's AI health assistant for educational symptom guidance, healthcare navigation, and safe next-step information for adults in Kenya and Africa.",
-  path: "/chatbot",
-  keywords: [
-    "AI health assistant",
-    "symptom checker Kenya",
-    "symptom checker Africa",
-    "AI medical assistant Africa",
-  ],
-});
+export const metadata: Metadata = {
+  ...buildMetadata({
+    title: "AI Health Assistant and Symptom Checker",
+    description:
+      "Use AfiyaPal's AI health assistant for educational symptom guidance, healthcare navigation, and safe next-step information for adults in Kenya and Africa.",
+    path: "/chatbot",
+    keywords: [
+      "AI health assistant",
+      "symptom checker Kenya",
+      "symptom checker Africa",
+      "AI medical assistant Africa",
+    ],
+  }),
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: "black-translucent",
+    title: "AfiyaPal"
+  }
+};
+
+export const viewport: Viewport = {
+  themeColor: "#05261b",
+  colorScheme: "dark"
+};
 
 export default function Page() {
   return (
-    <main className="container-page py-10">
+    <main className="h-dvh overflow-hidden bg-brand-950">
       <JsonLd
         data={[
           webApplicationSchema(),

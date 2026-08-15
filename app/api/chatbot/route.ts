@@ -11,5 +11,5 @@ export async function POST(request: Request) {
   }
 
   const reply = await generateChatbotReply(parsed.data.message, parsed.data.emergency);
-  return NextResponse.json({ text: reply });
+  return NextResponse.json(reply);
 }

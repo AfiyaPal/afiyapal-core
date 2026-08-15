@@ -3,6 +3,7 @@ const marketingOnlyPaths = [
   "/register",
   "/password-reset",
   "/unauthorized",
+  "/chatbot",
 ];
 
 const marketingOnlyPrefixes = [

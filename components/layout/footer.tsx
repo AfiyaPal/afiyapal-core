@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { routes } from "@/lib/routes";
+import { shouldShowMarketingChrome } from "@/lib/layout-chrome";
 import { Heart, Mail, MapPin, ShieldCheck, Sparkles } from "lucide-react";
 import { SocialIconLink } from "@/components/shared/social-icons";
 
@@ -34,7 +35,7 @@ export function Footer() {
   const year = getCurrentYear();
   const copyright = year > 2025 ? `2025-${year}` : "2025";
 
-  if (pathname.startsWith("/dashboard")) return null;
+  if (!shouldShowMarketingChrome(pathname)) return null;
 
   return (
     <footer className="relative mt-24 overflow-hidden border-t border-brand-200/60 bg-gradient-to-br from-brand-50 via-white to-emerald-50/80 backdrop-blur-sm">

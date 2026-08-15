@@ -36,7 +36,7 @@ type ContextProfessional = {
   country: string | null;
 };
 
-type ChatbotContext = {
+export type ChatbotContext = {
   blogs: ContextBlog[];
   events: ContextEvent[];
   professionals: ContextProfessional[];

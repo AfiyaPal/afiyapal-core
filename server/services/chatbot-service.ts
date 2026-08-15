@@ -4,7 +4,14 @@ import { getCurrentUser } from "@/server/auth/session";
 import { logMentalHealthInteraction, isMentalHealthCompanionMessage } from "@/server/services/mental-health-logging-service";
 import { logSymptomCheckRequest } from "@/server/services/symptom-check-logging-service";
 import { ensureAssistantSafetyGuidance } from "@/server/services/ai-assistant-safety-service";
-import { retrieveChatbotContext, formatContextForPrompt } from "@/server/services/chatbot-context-service";
+import { retrieveChatbotContext, formatContextForPrompt, type ChatbotContext } from "@/server/services/chatbot-context-service";
+
+export type ChatbotReference = {
+  kind: "blog" | "professional";
+  href: string;
+  title: string;
+  excerpt: string | null;
+};
 
 const SYSTEM_PROMPT = `You are AfiyaPal, a careful AI health assistant serving underserved communities in Kenya and across Africa.
 Provide evidence-aware first-step guidance, explain when professional care is needed, and keep language clear.
@@ -35,7 +42,7 @@ End every response with: "Help is on the way. Stay calm and follow the steps abo
 export async function generateChatbotReply(
   userMessage: string,
   emergency?: { active: true; type: "maternal" | "medical" },
-) {
+): Promise<{ text: string; references: ChatbotReference[] }> {
   const currentUser = await getCurrentUser();
 
   let systemPrompt = SYSTEM_PROMPT;
@@ -66,5 +73,38 @@ export async function generateChatbotReply(
     });
   }
 
-  return reply;
+  return { text: reply, references: buildReferences(reply, context) };
+}
+
+function buildReferences(reply: string, context: ChatbotContext): ChatbotReference[] {
+  const refs: ChatbotReference[] = [];
+  const seen = new Set<string>();
+  const blogBySlug = new Map(context.blogs.map((blog) => [blog.slug, blog]));
+  const professionalById = new Map(context.professionals.map((professional) => [String(professional.id), professional]));
+
+  const blogPattern = /\/blogs\/([a-zA-Z0-9-]+)/g;
+  let match: RegExpExecArray | null;
+  while ((match = blogPattern.exec(reply)) !== null) {
+    const blog = blogBySlug.get(match[1]);
+    if (!blog || seen.has(blog.slug)) continue;
+    seen.add(blog.slug);
+    refs.push({ kind: "blog", href: `/blogs/${blog.slug}`, title: blog.title, excerpt: blog.excerpt });
+  }
+
+  const professionalPattern = /\/professionals\/([a-zA-Z0-9]+)/g;
+  while ((match = professionalPattern.exec(reply)) !== null) {
+    const professional = professionalById.get(match[1]);
+    if (!professional || seen.has(String(professional.id))) continue;
+    seen.add(String(professional.id));
+    const location = [professional.cityRegion, professional.country].filter(Boolean).join(", ");
+    const excerpt = [professional.specialty, location].filter(Boolean).join(" · ") || null;
+    refs.push({
+      kind: "professional",
+      href: `/professionals/${professional.id}`,
+      title: professional.fullName,
+      excerpt
+    });
+  }
+
+  return refs;
 }
