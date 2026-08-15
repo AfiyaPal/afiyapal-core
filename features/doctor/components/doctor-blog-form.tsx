@@ -17,11 +17,14 @@ type Props = {
     language: string;
     tags?: string | null;
   };
+  initialTitle?: string;
+  initialTags?: string;
+  initialCategory?: string;
 };
 
 const initialState = { ok: false, message: null as string | null };
 
-export function DoctorBlogForm({ blog }: Props) {
+export function DoctorBlogForm({ blog, initialTitle, initialTags, initialCategory }: Props) {
   const action = blog ? updateDoctorBlogAction : createDoctorBlogAction;
   const [state, formAction, pending] = useActionState(action, initialState);
 
@@ -30,9 +33,9 @@ export function DoctorBlogForm({ blog }: Props) {
       {blog && <input type="hidden" name="blogId" value={blog.id} />}
 
       <div className="space-y-4">
-        <Input name="title" type="text" placeholder="Article title" defaultValue={blog?.title} required />
+        <Input name="title" type="text" placeholder="Article title" defaultValue={blog?.title ?? initialTitle ?? ""} required />
         <Input name="excerpt" type="text" placeholder="Short excerpt (optional)" defaultValue={blog?.excerpt ?? ""} />
-        <Input name="tags" type="text" placeholder="Tags (comma-separated): malaria, prevention, community health" defaultValue={blog?.tags ?? ""} />
+        <Input name="tags" type="text" placeholder="Tags (comma-separated): malaria, prevention, community health" defaultValue={blog?.tags ?? initialTags ?? ""} />
         <textarea
           name="content"
           placeholder="Write your article content here. Markdown is supported for headings, image sections, tables, and bullet lists..."
@@ -48,7 +51,7 @@ export function DoctorBlogForm({ blog }: Props) {
           <label className="text-xs font-bold uppercase tracking-wide text-slate-600">Category</label>
           <select
             name="contentCategory"
-            defaultValue={blog?.contentCategory ?? "GENERAL_WELLNESS"}
+            defaultValue={blog?.contentCategory ?? initialCategory ?? "GENERAL_WELLNESS"}
             className="w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm outline-none transition focus:border-brand-500 focus:ring-4 focus:ring-brand-100"
           >
             {ARTICLE_CATEGORIES.map((cat) => (

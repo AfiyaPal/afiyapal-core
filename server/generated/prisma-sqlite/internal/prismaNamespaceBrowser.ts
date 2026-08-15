@@ -73,7 +73,9 @@ export const ModelName = {
   FacilityProfessional: 'FacilityProfessional',
   Event: 'Event',
   Notification: 'Notification',
-  ContactSubmission: 'ContactSubmission'
+  ContactSubmission: 'ContactSubmission',
+  ChatLogAnalysis: 'ChatLogAnalysis',
+  CommunityInsight: 'CommunityInsight'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -487,6 +489,44 @@ export const ContactSubmissionScalarFieldEnum = {
 } as const
 
 export type ContactSubmissionScalarFieldEnum = (typeof ContactSubmissionScalarFieldEnum)[keyof typeof ContactSubmissionScalarFieldEnum]
+
+
+export const ChatLogAnalysisScalarFieldEnum = {
+  id: 'id',
+  symptomCheckLogId: 'symptomCheckLogId',
+  mentalHealthInteractionId: 'mentalHealthInteractionId',
+  sentiment: 'sentiment',
+  sentimentConfidence: 'sentimentConfidence',
+  topicSlug: 'topicSlug',
+  topicLabel: 'topicLabel',
+  summary: 'summary',
+  urgencyKeywords: 'urgencyKeywords',
+  model: 'model',
+  status: 'status',
+  error: 'error',
+  analyzedAt: 'analyzedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type ChatLogAnalysisScalarFieldEnum = (typeof ChatLogAnalysisScalarFieldEnum)[keyof typeof ChatLogAnalysisScalarFieldEnum]
+
+
+export const CommunityInsightScalarFieldEnum = {
+  id: 'id',
+  periodStart: 'periodStart',
+  periodEnd: 'periodEnd',
+  source: 'source',
+  topicSlug: 'topicSlug',
+  topicLabel: 'topicLabel',
+  messageCount: 'messageCount',
+  sentimentBreakdown: 'sentimentBreakdown',
+  sentimentScore: 'sentimentScore',
+  summary: 'summary',
+  createdAt: 'createdAt'
+} as const
+
+export type CommunityInsightScalarFieldEnum = (typeof CommunityInsightScalarFieldEnum)[keyof typeof CommunityInsightScalarFieldEnum]
 
 
 export const SortOrder = {

@@ -30,3 +30,15 @@ All commits landed on `login-n-streamline` today (shorthand per feature):
 
 - **chore: stop tracking tsconfig build cache artifact** (`9ea4afa`)
   - `tsconfig.tsbuildinfo` gitignored and untracked (housekeeping).
+
+- **docs: community-insights spec + changelog** (`e727efc`)
+  - Added `mandatory_feature.md` (research + full build plan) and this changelog.
+
+- **feat(insights): community insights from chat logs** (uncommitted — see below)
+  - `ChatLogAnalysis` + `CommunityInsight` Prisma models (both schemas, db pushed). SQLite + Postgres in sync.
+  - Structured-output Gemini client (`server/ai/gemini-structured.ts`) on new `GEMINI_ANALYSIS_MODEL` env (default `gemini-3.5-flash-lite`, same key as chatbot).
+  - Nightly analyzer + aggregator (`server/services/community-insights/`): incremental per-log analysis (≤700-char messages only, no identity), per-day per-topic aggregation, resumable across cron timeouts.
+  - Cron route `/api/cron/chat-insights` (GET, `CRON_SECRET` bearer + `x-vercel-cron`) + first `vercel.json` (3:00 UTC daily).
+  - Doctor dashboard "Community topics to write about" card → `/dashboard/blogs/new` pre-fills title/tags/category.
+  - Facility dashboard "Topics for events & camps" card (verified facilities) → `/facility/events/new` pre-fills title/type.
+  - Empty states shown until the first nightly analysis runs.

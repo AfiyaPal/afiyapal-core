@@ -18,6 +18,8 @@ type Props = {
     location: string | null;
     isPublic: boolean;
   };
+  initialTitle?: string;
+  initialType?: string;
 };
 
 const initialState = { ok: false, message: null as string | null };
@@ -28,7 +30,7 @@ function getMinStartDate() {
   return d.toISOString().slice(0, 16);
 }
 
-export function FacilityEventForm({ event }: Props) {
+export function FacilityEventForm({ event, initialTitle, initialType }: Props) {
   const action = event ? updateEventAction : createEventAction;
   const [state, formAction, pending] = useActionState(action, initialState);
 
@@ -46,7 +48,7 @@ export function FacilityEventForm({ event }: Props) {
       {event && <input type="hidden" name="eventId" value={event.id} />}
 
       <div className="space-y-4">
-        <Input name="title" type="text" placeholder="Event title" defaultValue={event?.title} required />
+        <Input name="title" type="text" placeholder="Event title" defaultValue={event?.title ?? initialTitle ?? ""} required />
         <textarea
           name="description"
           placeholder="Event description (optional)"
@@ -61,7 +63,7 @@ export function FacilityEventForm({ event }: Props) {
           <label className="text-xs font-bold uppercase tracking-wide text-slate-600">Event type</label>
           <select
             name="type"
-            defaultValue={event?.type ?? "HEALTH_TALK"}
+            defaultValue={event?.type ?? initialType ?? "HEALTH_TALK"}
             className="w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm outline-none transition focus:border-brand-500 focus:ring-4 focus:ring-brand-100"
           >
             {EVENT_TYPES.map((t) => <option key={t.value} value={t.value}>{t.label}</option>)}
