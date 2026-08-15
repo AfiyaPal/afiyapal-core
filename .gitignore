@@ -9,6 +9,7 @@ out
 .env.*.local
 .DS_Store
 coverage
+tsconfig.tsbuildinfo
 prisma/dev.db
 *.db
 dev.db
