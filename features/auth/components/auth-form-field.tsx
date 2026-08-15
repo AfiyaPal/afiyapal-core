@@ -12,6 +12,7 @@ type AuthFormFieldProps = {
   min?: number;
   max?: number;
   autoComplete?: string;
+  hint?: string;
   className?: string;
 };
 
@@ -25,6 +26,7 @@ export function AuthFormField({
   min,
   max,
   autoComplete,
+  hint,
   className
 }: AuthFormFieldProps) {
   return (
@@ -43,6 +45,7 @@ export function AuthFormField({
         max={max}
         autoComplete={autoComplete}
       />
+      {hint ? <p className="text-xs text-slate-400">{hint}</p> : null}
     </div>
   );
 }

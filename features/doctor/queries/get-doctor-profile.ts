@@ -13,6 +13,7 @@ export async function getDoctorProfile(userId: number) {
       country: true,
       cityRegion: true,
       licenseNumber: true,
+      phone: true,
       yearsOfExperience: true,
       languagesSpoken: true,
       bio: true,
