@@ -1,8 +1,8 @@
 import Link from "next/link";
 import { FileText, LayoutDashboard, Plus } from "lucide-react";
 import { getCurrentUser } from "@/server/auth/session";
-import { getRoleLabel } from "@/server/auth/roles";
 import { getDoctorNotifications } from "@/features/doctor/queries/get-doctor-blogs";
+import { DoctorMobileNav } from "@/features/doctor/components/doctor-mobile-nav";
 import { UserDropdown } from "./user-dropdown";
 import { NotificationBell } from "./notification-bell";
 
@@ -27,9 +27,9 @@ export async function DoctorNavbar() {
         <div className="flex items-center gap-6">
           <Link href="/dashboard" className="flex items-center gap-2">
             <span className="text-base font-bold text-theme-primary-dark">AfiyaPal</span>
-            <span className="hidden rounded-full bg-theme-primary-light px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wider text-theme-primary-dark md:inline">Doctor</span>
+            <span className="hidden rounded-full bg-theme-primary-light px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wider text-theme-primary-dark md:inline">Professional</span>
           </Link>
-          <nav className="hidden items-center gap-1 md:flex">
+          <nav className="hidden items-center gap-1 lg:flex">
             {navLinks.map((link) => {
               const Icon = link.icon;
               return (
@@ -46,15 +46,16 @@ export async function DoctorNavbar() {
           </nav>
         </div>
         <div className="flex items-center gap-2">
+          <DoctorMobileNav />
           <Link
             href="/dashboard/blogs/new"
-            className="hidden items-center gap-1.5 rounded-full bg-theme-primary px-4 py-1.5 text-sm font-bold text-white shadow-sm transition hover:brightness-110 md:inline-flex"
+            className="hidden items-center gap-1.5 rounded-full bg-theme-primary px-4 py-1.5 text-sm font-bold text-white shadow-sm transition hover:brightness-110 lg:inline-flex"
           >
             <Plus aria-hidden="true" className="size-4" />
             Write article
           </Link>
           <NotificationBell count={unreadCount} href="/dashboard" />
-          <UserDropdown username={user.username} email={user.email} roleLabel={getRoleLabel(user.role)} initials={initials} />
+          <UserDropdown username={user.username} email={user.email} roleLabel="Professional" initials={initials} />
         </div>
       </div>
     </header>

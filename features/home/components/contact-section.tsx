@@ -1,6 +1,6 @@
 "use client";
 
-import { FormEvent, useMemo, useState } from "react";
+import { FormEvent, useState } from "react";
 import {
   ArrowRight,
   CheckCircle2,
@@ -22,7 +22,6 @@ export function ContactSection() {
   const [status, setStatus] = useState<SubmitState>("idle");
   const [message, setMessage] = useState<string | null>(null);
   const [text, setText] = useState("");
-  const startedAt = useMemo(() => Date.now(), []);
 
   async function onSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -30,6 +29,7 @@ export function ContactSection() {
 
     const form = event.currentTarget;
     const formData = new FormData(form);
+    const startedAt = Date.now();
     const payload = {
       fullName: String(formData.get("fullName") ?? ""),
       email: String(formData.get("email") ?? ""),

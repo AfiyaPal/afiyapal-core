@@ -6,7 +6,7 @@ import { RoleThemeProvider } from "@/components/theme/role-theme-provider";
 import { DoctorNavbar } from "@/components/nav/doctor-navbar";
 import { buildNoIndexMetadata } from "@/lib/seo/metadata";
 
-export const metadata = buildNoIndexMetadata("Doctor Dashboard", "Protected AfiyaPal doctor workspace.");
+export const metadata = buildNoIndexMetadata("Professional Dashboard", "Protected AfiyaPal professional workspace.");
 
 export default async function DashboardLayout({ children }: { children: React.ReactNode }) {
   const user = await getCurrentUser();
@@ -18,7 +18,7 @@ export default async function DashboardLayout({ children }: { children: React.Re
         <DoctorNavbar />
         <div className="flex">
           <DoctorSidebar />
-          <main className="flex-1 px-6 py-8 md:px-10 lg:px-14">
+          <main className="flex-1 px-4 py-8 sm:px-6 md:px-10 lg:px-14">
             {children}
           </main>
         </div>

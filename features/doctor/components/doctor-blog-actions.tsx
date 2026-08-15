@@ -1,9 +1,10 @@
 "use client";
 
 import { useRouter } from "next/navigation";
+import { cn } from "@/lib/utils";
 import { deleteDoctorBlogAction, submitDoctorBlogForReviewAction } from "@/features/doctor/actions/doctor-blog-actions";
 
-export function DoctorBlogActions({ blogId, status }: { blogId: number; status: string }) {
+export function DoctorBlogActions({ blogId, status, large = false }: { blogId: number; status: string; large?: boolean }) {
   const router = useRouter();
 
   async function handleDelete() {
@@ -26,14 +27,20 @@ export function DoctorBlogActions({ blogId, status }: { blogId: number; status: 
       {status === "DRAFT" && (
         <button
           onClick={handleSubmitForReview}
-          className="text-sm font-semibold text-amber-600 hover:text-amber-700"
+          className={cn(
+            "text-sm font-semibold text-amber-600 transition hover:text-amber-700",
+            large && "min-h-11 flex-1 rounded-full border border-amber-200 bg-amber-50 px-4 text-center hover:bg-amber-100"
+          )}
         >
           Submit
         </button>
       )}
       <button
         onClick={handleDelete}
-        className="text-sm font-semibold text-rose-600 hover:text-rose-700"
+        className={cn(
+          "text-sm font-semibold text-rose-600 transition hover:text-rose-700",
+          large && "min-h-11 flex-1 rounded-full border border-rose-200 bg-rose-50 px-4 text-center hover:bg-rose-100"
+        )}
       >
         Delete
       </button>

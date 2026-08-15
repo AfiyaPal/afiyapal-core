@@ -45,10 +45,10 @@ export function DoctorBlogDetail({
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between gap-4">
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
         <div>
           <Link href="/dashboard/blogs" className="text-sm font-semibold text-brand-600 hover:text-brand-700">&larr; My articles</Link>
-          <h1 className="mt-2 text-3xl font-black tracking-tight text-slate-950">{blog.title}</h1>
+          <h1 className="mt-2 text-2xl font-black tracking-tight text-slate-950 sm:text-3xl">{blog.title}</h1>
           <div className="mt-2 flex flex-wrap items-center gap-3">
             <span className={`inline-flex rounded-full px-3 py-1 text-xs font-black ring-1 ${badge.tone}`}>{badge.label}</span>
             <span className="text-sm text-slate-500">{cat?.label ?? blog.contentCategory}</span>
@@ -62,7 +62,7 @@ export function DoctorBlogDetail({
         </div>
         <Link
           href={`/dashboard/blogs/${blog.id}/edit`}
-          className="inline-flex items-center justify-center rounded-full bg-brand-600 px-5 py-2.5 text-sm font-semibold text-white shadow-soft transition hover:bg-brand-700"
+          className="inline-flex items-center justify-center self-start rounded-full bg-brand-600 px-5 py-2.5 text-sm font-semibold text-white shadow-soft transition hover:bg-brand-700"
         >
           Edit article
         </Link>

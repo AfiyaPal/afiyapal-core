@@ -722,7 +722,7 @@ Telemedicine cannot replace physical examination for every problem. Severe sympt
     },
   ];
 
-  for (const [index, article] of productionBlogs.entries()) {
+  for (const article of productionBlogs) {
     const blog = await prisma.blog.create({
       data: {
         title: article.title,

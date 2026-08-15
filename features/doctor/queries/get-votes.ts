@@ -1,6 +1,5 @@
 import "server-only";
 import { prisma } from "@/server/db/prisma";
-import { getCurrentUser } from "@/server/auth/session";
 
 export async function getVoteCounts(blogId: number) {
   const [up, down] = await Promise.all([

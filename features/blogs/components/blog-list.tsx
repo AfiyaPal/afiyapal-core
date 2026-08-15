@@ -2,7 +2,8 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useEffect, useMemo, useState } from "react";
+import { useSearchParams } from "next/navigation";
+import { useMemo, useState } from "react";
 import {
   ArrowRight,
   BookOpen,
@@ -111,16 +112,16 @@ export function BlogList({ blogs }: { blogs: BlogSummary[] }) {
 
   const quickTags = useMemo(() => tagStats.slice(0, 8), [tagStats]);
 
-  useEffect(() => {
-    const tag = new URLSearchParams(window.location.search).get("tag");
-    if (!tag) return;
-
-    const matchingTag = tags.find(
-      (item) => normalizeTag(item) === normalizeTag(tag),
-    );
-
-    setActiveTag(matchingTag ?? tag);
-  }, [tags]);
+  const searchParams = useSearchParams();
+  const tagParam = searchParams.get("tag");
+  const [handledTagParam, setHandledTagParam] = useState<string | null>(null);
+  if (tagParam !== handledTagParam) {
+    setHandledTagParam(tagParam);
+    if (tagParam) {
+      const matchingTag = tags.find((item) => normalizeTag(item) === normalizeTag(tagParam));
+      setActiveTag(matchingTag ?? tagParam);
+    }
+  }
 
   const featured = blogs[0];
 

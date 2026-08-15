@@ -23,15 +23,19 @@ type Blog = {
   media: { mediaUrl: string; altText: string | null }[];
 };
 
+function formatReviewStatus(status: string) {
+  return status.replaceAll("_", " ").toLowerCase().replace(/\b\w/g, (c) => c.toUpperCase());
+}
+
 export function DoctorBlogList({ blogs }: { blogs: Blog[] }) {
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div>
           <h1 className="text-3xl font-black tracking-tight text-slate-950">My articles</h1>
           <p className="mt-1 text-sm text-slate-600">Manage your health education blog posts.</p>
         </div>
-        <Link href="/dashboard/blogs/new" className="inline-flex items-center justify-center rounded-full bg-brand-600 px-5 py-2.5 text-sm font-semibold text-white shadow-soft transition hover:bg-brand-700">
+        <Link href="/dashboard/blogs/new" className="inline-flex items-center justify-center rounded-full bg-brand-600 px-5 py-2.5 text-center text-sm font-semibold text-white shadow-soft transition hover:bg-brand-700">
           Write new article
         </Link>
       </div>
@@ -45,49 +49,82 @@ export function DoctorBlogList({ blogs }: { blogs: Blog[] }) {
           </Link>
         </div>
       ) : (
-        <div className="overflow-hidden rounded-3xl border border-emerald-100 bg-white shadow-sm">
-          <table className="min-w-full divide-y divide-emerald-100 text-left text-sm">
-            <thead className="bg-emerald-50/70 text-xs uppercase tracking-wide text-brand-700">
-              <tr>
-                <th className="px-5 py-3 font-black">Title</th>
-                <th className="px-5 py-3 font-black">Category</th>
-                <th className="px-5 py-3 font-black">Status</th>
-                <th className="px-5 py-3 font-black">Review</th>
-                <th className="px-5 py-3 font-black">Updated</th>
-                <th className="px-5 py-3 font-black">Actions</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-emerald-50">
-              {blogs.map((blog) => {
-                const badge = statusBadge[blog.status] ?? statusBadge.DRAFT;
-                const cat = ARTICLE_CATEGORIES.find((c) => c.value === blog.contentCategory);
-                return (
-                  <tr key={blog.id} className="transition hover:bg-emerald-50/40">
-                    <td className="px-5 py-4">
-                      <Link href={`/dashboard/blogs/${blog.id}`} className="font-bold text-slate-950 hover:text-brand-600">
-                        {blog.title}
-                      </Link>
-                    </td>
-                    <td className="px-5 py-4 text-slate-600">{cat?.label ?? blog.contentCategory}</td>
-                    <td className="px-5 py-4">
-                      <span className={`inline-flex rounded-full px-3 py-1 text-xs font-black ring-1 ${badge.tone}`}>{badge.label}</span>
-                    </td>
-                    <td className="px-5 py-4 text-slate-600">{blog.medicalReviewStatus.replaceAll("_", " ").toLowerCase().replace(/\b\w/g, (c) => c.toUpperCase())}</td>
-                    <td className="px-5 py-4 text-slate-600">{new Date(blog.updatedAt).toLocaleDateString()}</td>
-                    <td className="px-5 py-4">
-                      <div className="flex gap-2">
-                        <Link href={`/dashboard/blogs/${blog.id}/edit`} className="text-sm font-semibold text-brand-600 hover:text-brand-700">
-                          Edit
+        <>
+          <div className="space-y-4 lg:hidden">
+            {blogs.map((blog) => {
+              const badge = statusBadge[blog.status] ?? statusBadge.DRAFT;
+              const cat = ARTICLE_CATEGORIES.find((c) => c.value === blog.contentCategory);
+              return (
+                <article key={blog.id} className="rounded-3xl border border-emerald-100 bg-white p-5 shadow-sm">
+                  <div className="flex items-start justify-between gap-3">
+                    <Link href={`/dashboard/blogs/${blog.id}`} className="font-bold leading-snug text-slate-950 hover:text-brand-600">
+                      {blog.title}
+                    </Link>
+                    <span className={`shrink-0 rounded-full px-3 py-1 text-xs font-black ring-1 ${badge.tone}`}>{badge.label}</span>
+                  </div>
+                  <div className="mt-2 flex flex-wrap gap-x-4 gap-y-1 text-sm text-slate-600">
+                    <span>{cat?.label ?? blog.contentCategory}</span>
+                    <span>Review: {formatReviewStatus(blog.medicalReviewStatus)}</span>
+                    <span>Updated {new Date(blog.updatedAt).toLocaleDateString()}</span>
+                  </div>
+                  <div className="mt-4 flex items-center gap-2 border-t border-emerald-50 pt-4">
+                    <Link
+                      href={`/dashboard/blogs/${blog.id}/edit`}
+                      className="inline-flex min-h-11 flex-1 items-center justify-center rounded-full border border-brand-200 bg-brand-50 px-4 text-sm font-semibold text-brand-700 transition hover:bg-brand-100"
+                    >
+                      Edit
+                    </Link>
+                    <DoctorBlogActions blogId={blog.id} status={blog.status} large />
+                  </div>
+                </article>
+              );
+            })}
+          </div>
+
+          <div className="hidden overflow-hidden rounded-3xl border border-emerald-100 bg-white shadow-sm lg:block">
+            <table className="min-w-full divide-y divide-emerald-100 text-left text-sm">
+              <thead className="bg-emerald-50/70 text-xs uppercase tracking-wide text-brand-700">
+                <tr>
+                  <th className="px-5 py-3 font-black">Title</th>
+                  <th className="px-5 py-3 font-black">Category</th>
+                  <th className="px-5 py-3 font-black">Status</th>
+                  <th className="px-5 py-3 font-black">Review</th>
+                  <th className="px-5 py-3 font-black">Updated</th>
+                  <th className="px-5 py-3 font-black">Actions</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-emerald-50">
+                {blogs.map((blog) => {
+                  const badge = statusBadge[blog.status] ?? statusBadge.DRAFT;
+                  const cat = ARTICLE_CATEGORIES.find((c) => c.value === blog.contentCategory);
+                  return (
+                    <tr key={blog.id} className="transition hover:bg-emerald-50/40">
+                      <td className="px-5 py-4">
+                        <Link href={`/dashboard/blogs/${blog.id}`} className="font-bold text-slate-950 hover:text-brand-600">
+                          {blog.title}
                         </Link>
-                        <DoctorBlogActions blogId={blog.id} status={blog.status} />
-                      </div>
-                    </td>
-                  </tr>
-                );
-              })}
-            </tbody>
-          </table>
-        </div>
+                      </td>
+                      <td className="px-5 py-4 text-slate-600">{cat?.label ?? blog.contentCategory}</td>
+                      <td className="px-5 py-4">
+                        <span className={`inline-flex rounded-full px-3 py-1 text-xs font-black ring-1 ${badge.tone}`}>{badge.label}</span>
+                      </td>
+                      <td className="px-5 py-4 text-slate-600">{formatReviewStatus(blog.medicalReviewStatus)}</td>
+                      <td className="px-5 py-4 text-slate-600">{new Date(blog.updatedAt).toLocaleDateString()}</td>
+                      <td className="px-5 py-4">
+                        <div className="flex gap-2">
+                          <Link href={`/dashboard/blogs/${blog.id}/edit`} className="text-sm font-semibold text-brand-600 hover:text-brand-700">
+                            Edit
+                          </Link>
+                          <DoctorBlogActions blogId={blog.id} status={blog.status} />
+                        </div>
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
+        </>
       )}
     </div>
   );
