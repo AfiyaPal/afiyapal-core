@@ -1,12 +1,13 @@
 import { z } from "zod";
+import { usernameRule } from "@/lib/validation/username";
 
 export const loginSchema = z.object({
   email: z.string().email(),
   password: z.string().min(8)
 });
 
-export const registerSchema = z.object({
-  username: z.string().trim().min(3).max(50),
+export const doctorRegisterSchema = z.object({
+  username: usernameRule,
   email: z.string().email(),
   phone: z.string().trim().max(20).optional(),
   password: z.string().min(8),
@@ -16,10 +17,8 @@ export const registerSchema = z.object({
   message: "Passwords do not match"
 });
 
-export const doctorRegisterSchema = registerSchema;
-
 export const facilityRegisterSchema = z.object({
-  username: z.string().trim().min(3).max(50),
+  username: usernameRule,
   email: z.string().email(),
   phone: z.string().trim().max(20).optional(),
   password: z.string().min(8),

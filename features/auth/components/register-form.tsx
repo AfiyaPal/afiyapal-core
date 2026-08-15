@@ -1,12 +1,13 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useState, useActionState } from "react";
+import { useActionState } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 import { BadgeCheck, Building2, Stethoscope, UserRound } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { FormMessage } from "@/components/ui/form-message";
 import { FACILITY_TYPES } from "@/features/facility/data/facility-management";
-import { registerAction, doctorRegisterAction, facilityRegisterAction } from "../actions/auth-actions";
+import { doctorRegisterAction, facilityRegisterAction } from "../actions/auth-actions";
 import { AuthCard } from "./auth-card";
 import { AuthFormField } from "./auth-form-field";
 import { AuthFormSection } from "./auth-form-section";
@@ -17,10 +18,6 @@ import { routes } from "@/lib/routes";
 const initialState = { ok: false, message: null as string | null };
 
 const cardCopy: Record<RegisterType, { title: string; description: string }> = {
-  patient: {
-    title: "Create your account",
-    description: "Join AfiyaPal for free AI health guidance, trusted articles, and pathways to verified care."
-  },
   doctor: {
     title: "Join as a health professional",
     description: "Create your account now. You'll complete your professional profile from your dashboard after signing up."
@@ -41,45 +38,13 @@ function PendingDots() {
   );
 }
 
-function PatientRegistrationPanel() {
-  const [state, formAction, pending] = useActionState(registerAction, initialState);
-
-  return (
-    <form action={formAction} className="mt-6 space-y-6">
-      <AuthFormSection title="Your details" description="We'll use this to set up your personal AfiyaPal account." icon={UserRound}>
-        <AuthFormField label="Username" name="username" placeholder="Choose a username" required autoComplete="username" />
-        <AuthFormField label="Email" name="email" type="email" placeholder="you@example.com" required autoComplete="email" />
-        <AuthFormField label="Phone" name="phone" type="tel" placeholder="+254 7XX XXX XXX" optional autoComplete="tel" />
-      </AuthFormSection>
-
-      <AuthFormSection title="Security" description="Choose a strong password to protect your account.">
-        <PasswordField name="password" label="Password" placeholder="At least 8 characters" required autoComplete="new-password" />
-        <PasswordField name="confirmPassword" label="Confirm password" placeholder="Re-enter your password" required autoComplete="new-password" />
-      </AuthFormSection>
-
-      <FormMessage message={state.message} type={state.ok ? "success" : "error"} />
-
-      <Button disabled={pending} className="w-full">
-        {pending ? <PendingDots /> : "Create account"}
-      </Button>
-
-      <p className="text-center text-sm text-slate-500">
-        Already have an account?{" "}
-        <Link href={routes.login} className="font-semibold text-brand-600 hover:text-brand-700">
-          Sign in
-        </Link>
-      </p>
-    </form>
-  );
-}
-
 function DoctorRegistrationPanel() {
   const [state, formAction, pending] = useActionState(doctorRegisterAction, initialState);
 
   return (
     <form action={formAction} className="mt-6 space-y-6">
       <AuthFormSection title="Account details" description="Sign-in credentials for your professional account." icon={Stethoscope}>
-        <AuthFormField label="Username" name="username" placeholder="Choose a username" required autoComplete="username" />
+        <AuthFormField label="Display name" name="username" placeholder="e.g. Edwin Gichira" hint="Shown on your profile. Use your real name." required autoComplete="username" />
         <AuthFormField label="Email" name="email" type="email" placeholder="you@clinic.com" required autoComplete="email" />
         <AuthFormField label="Phone" name="phone" type="tel" placeholder="+254 7XX XXX XXX" optional autoComplete="tel" />
         <PasswordField name="password" label="Password" placeholder="At least 8 characters" required autoComplete="new-password" />
@@ -114,7 +79,7 @@ function FacilityRegistrationPanel() {
     <form action={formAction} className="mt-6 space-y-6">
       <AuthFormSection title="Account details" description="Credentials for the facility administrator." icon={UserRound}>
         <div className="grid gap-4 sm:grid-cols-2">
-          <AuthFormField label="Username" name="username" placeholder="Choose a username" required autoComplete="username" />
+          <AuthFormField label="Display name" name="username" placeholder="e.g. Sunrise Admin" hint="Shown across the portal." required autoComplete="username" />
           <AuthFormField label="Email" name="email" type="email" placeholder="admin@facility.org" required autoComplete="email" />
         </div>
         <AuthFormField label="Phone" name="phone" type="tel" placeholder="+254 7XX XXX XXX" optional autoComplete="tel" />
@@ -176,17 +141,14 @@ function FacilityRegistrationPanel() {
 }
 
 export function RegisterForm() {
-  const [activeType, setActiveType] = useState<RegisterType>("patient");
-
-  useEffect(() => {
-    const requestedType = new URLSearchParams(window.location.search).get("type");
-    if (isRegisterType(requestedType)) setActiveType(requestedType);
-  }, []);
+  const searchParams = useSearchParams();
+  const router = useRouter();
+  const requestedType = searchParams.get("type");
+  const activeType = isRegisterType(requestedType) ? requestedType : "doctor";
 
   function handleTypeChange(type: RegisterType) {
-    setActiveType(type);
-    const url = type === "patient" ? routes.register : `${routes.register}?type=${type}`;
-    window.history.replaceState(null, "", url);
+    const url = type === "doctor" ? routes.register : `${routes.register}?type=${type}`;
+    router.replace(url, { scroll: false });
   }
 
   const copy = cardCopy[activeType];
@@ -194,7 +156,6 @@ export function RegisterForm() {
   return (
     <AuthCard variant={activeType} title={copy.title} description={copy.description}>
       <RegisterTypeNav active={activeType} onChange={handleTypeChange} />
-      {activeType === "patient" ? <PatientRegistrationPanel /> : null}
       {activeType === "doctor" ? <DoctorRegistrationPanel /> : null}
       {activeType === "facility" ? <FacilityRegistrationPanel /> : null}
     </AuthCard>

@@ -2,6 +2,7 @@ import type { MetadataRoute } from "next";
 import { getBaseUrl, siteConfig } from "@/lib/seo/config";
 import { getPublishedBlogs } from "@/features/blogs/queries/get-published-blogs";
 import { getPublicEvents } from "@/features/facility/queries/get-public-events";
+import { getPublicProfessionals } from "@/features/professionals/queries/get-public-professionals";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const baseUrl = getBaseUrl();
@@ -46,5 +47,18 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     eventRoutes = [];
   }
 
-  return [...staticRoutes, ...blogRoutes, ...eventRoutes];
+  let professionalRoutes: MetadataRoute.Sitemap = [];
+  try {
+    const professionals = await getPublicProfessionals();
+    professionalRoutes = professionals.map((professional) => ({
+      url: `${baseUrl}/professionals/${professional.id}`,
+      lastModified: now,
+      changeFrequency: "weekly",
+      priority: 0.6
+    }));
+  } catch {
+    professionalRoutes = [];
+  }
+
+  return [...staticRoutes, ...blogRoutes, ...eventRoutes, ...professionalRoutes];
 }

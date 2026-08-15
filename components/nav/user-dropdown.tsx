@@ -5,8 +5,11 @@ import { logoutAction } from "@/features/admin/actions/admin-session-actions";
 export function UserDropdown({ username, email, roleLabel, initials }: { username: string; email: string; roleLabel: string; initials: string }) {
   return (
     <details className="group relative">
-      <summary className="flex cursor-pointer list-none items-center gap-2 rounded-full border border-theme-border bg-theme-surface py-1 pl-1 pr-3 shadow-sm transition hover:border-theme-primary">
-        <span className="grid size-8 place-items-center rounded-full bg-theme-primary text-xs font-black text-white">{initials}</span>
+      <summary
+        aria-label="Account menu"
+        className="flex min-h-11 cursor-pointer list-none items-center gap-2 rounded-full border border-theme-border bg-theme-surface py-1 pl-1 pr-3 shadow-sm transition hover:border-theme-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-theme-primary focus-visible:ring-offset-2"
+      >
+        <span className="grid size-9 place-items-center rounded-full bg-theme-primary text-xs font-black text-white">{initials}</span>
         <span className="hidden text-left md:block">
           <span className="block text-sm font-bold text-theme-foreground">{username}</span>
           <span className="block text-xs text-slate-500">{roleLabel}</span>

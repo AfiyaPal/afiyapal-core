@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import { BlogList } from "@/features/blogs/components/blog-list";
 import { getPublishedBlogs } from "@/features/blogs/queries/get-published-blogs";
 import { buildMetadata } from "@/lib/seo/metadata";
@@ -12,5 +13,9 @@ export const metadata = buildMetadata({
 
 export default async function Page() {
   const blogs = await getPublishedBlogs();
-  return <BlogList blogs={blogs} />;
+  return (
+    <Suspense>
+      <BlogList blogs={blogs} />
+    </Suspense>
+  );
 }

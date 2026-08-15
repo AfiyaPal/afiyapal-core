@@ -132,3 +132,13 @@ export type Notification = Prisma.NotificationModel
  * 
  */
 export type ContactSubmission = Prisma.ContactSubmissionModel
+/**
+ * Model ChatLogAnalysis
+ * 
+ */
+export type ChatLogAnalysis = Prisma.ChatLogAnalysisModel
+/**
+ * Model CommunityInsight
+ * 
+ */
+export type CommunityInsight = Prisma.CommunityInsightModel

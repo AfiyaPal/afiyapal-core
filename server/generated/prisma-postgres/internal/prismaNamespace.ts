@@ -406,7 +406,9 @@ export const ModelName = {
   FacilityProfessional: 'FacilityProfessional',
   Event: 'Event',
   Notification: 'Notification',
-  ContactSubmission: 'ContactSubmission'
+  ContactSubmission: 'ContactSubmission',
+  ChatLogAnalysis: 'ChatLogAnalysis',
+  CommunityInsight: 'CommunityInsight'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -422,7 +424,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "category" | "blog" | "comment" | "media" | "blogVote" | "doctorProfile" | "symptomCheckLog" | "aiInteractionFlag" | "consultationRequest" | "safetyReport" | "safetyReportActionHistory" | "mentalHealthInteraction" | "mentalHealthResource" | "adminAuditLog" | "adminSensitiveHealthAccessGrant" | "platformSetting" | "healthResource" | "facility" | "facilityProfessional" | "event" | "notification" | "contactSubmission"
+    modelProps: "user" | "category" | "blog" | "comment" | "media" | "blogVote" | "doctorProfile" | "symptomCheckLog" | "aiInteractionFlag" | "consultationRequest" | "safetyReport" | "safetyReportActionHistory" | "mentalHealthInteraction" | "mentalHealthResource" | "adminAuditLog" | "adminSensitiveHealthAccessGrant" | "platformSetting" | "healthResource" | "facility" | "facilityProfessional" | "event" | "notification" | "contactSubmission" | "chatLogAnalysis" | "communityInsight"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -2128,6 +2130,154 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    ChatLogAnalysis: {
+      payload: Prisma.$ChatLogAnalysisPayload<ExtArgs>
+      fields: Prisma.ChatLogAnalysisFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.ChatLogAnalysisFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ChatLogAnalysisPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.ChatLogAnalysisFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ChatLogAnalysisPayload>
+        }
+        findFirst: {
+          args: Prisma.ChatLogAnalysisFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ChatLogAnalysisPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.ChatLogAnalysisFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ChatLogAnalysisPayload>
+        }
+        findMany: {
+          args: Prisma.ChatLogAnalysisFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ChatLogAnalysisPayload>[]
+        }
+        create: {
+          args: Prisma.ChatLogAnalysisCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ChatLogAnalysisPayload>
+        }
+        createMany: {
+          args: Prisma.ChatLogAnalysisCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.ChatLogAnalysisCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ChatLogAnalysisPayload>[]
+        }
+        delete: {
+          args: Prisma.ChatLogAnalysisDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ChatLogAnalysisPayload>
+        }
+        update: {
+          args: Prisma.ChatLogAnalysisUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ChatLogAnalysisPayload>
+        }
+        deleteMany: {
+          args: Prisma.ChatLogAnalysisDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.ChatLogAnalysisUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.ChatLogAnalysisUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ChatLogAnalysisPayload>[]
+        }
+        upsert: {
+          args: Prisma.ChatLogAnalysisUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ChatLogAnalysisPayload>
+        }
+        aggregate: {
+          args: Prisma.ChatLogAnalysisAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateChatLogAnalysis>
+        }
+        groupBy: {
+          args: Prisma.ChatLogAnalysisGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.ChatLogAnalysisGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.ChatLogAnalysisCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.ChatLogAnalysisCountAggregateOutputType> | number
+        }
+      }
+    }
+    CommunityInsight: {
+      payload: Prisma.$CommunityInsightPayload<ExtArgs>
+      fields: Prisma.CommunityInsightFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.CommunityInsightFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CommunityInsightPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.CommunityInsightFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CommunityInsightPayload>
+        }
+        findFirst: {
+          args: Prisma.CommunityInsightFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CommunityInsightPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.CommunityInsightFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CommunityInsightPayload>
+        }
+        findMany: {
+          args: Prisma.CommunityInsightFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CommunityInsightPayload>[]
+        }
+        create: {
+          args: Prisma.CommunityInsightCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CommunityInsightPayload>
+        }
+        createMany: {
+          args: Prisma.CommunityInsightCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.CommunityInsightCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CommunityInsightPayload>[]
+        }
+        delete: {
+          args: Prisma.CommunityInsightDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CommunityInsightPayload>
+        }
+        update: {
+          args: Prisma.CommunityInsightUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CommunityInsightPayload>
+        }
+        deleteMany: {
+          args: Prisma.CommunityInsightDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.CommunityInsightUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.CommunityInsightUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CommunityInsightPayload>[]
+        }
+        upsert: {
+          args: Prisma.CommunityInsightUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CommunityInsightPayload>
+        }
+        aggregate: {
+          args: Prisma.CommunityInsightAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateCommunityInsight>
+        }
+        groupBy: {
+          args: Prisma.CommunityInsightGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.CommunityInsightGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.CommunityInsightCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.CommunityInsightCountAggregateOutputType> | number
+        }
+      }
+    }
   }
 } & {
   other: {
@@ -2567,6 +2717,44 @@ export const ContactSubmissionScalarFieldEnum = {
 export type ContactSubmissionScalarFieldEnum = (typeof ContactSubmissionScalarFieldEnum)[keyof typeof ContactSubmissionScalarFieldEnum]
 
 
+export const ChatLogAnalysisScalarFieldEnum = {
+  id: 'id',
+  symptomCheckLogId: 'symptomCheckLogId',
+  mentalHealthInteractionId: 'mentalHealthInteractionId',
+  sentiment: 'sentiment',
+  sentimentConfidence: 'sentimentConfidence',
+  topicSlug: 'topicSlug',
+  topicLabel: 'topicLabel',
+  summary: 'summary',
+  urgencyKeywords: 'urgencyKeywords',
+  model: 'model',
+  status: 'status',
+  error: 'error',
+  analyzedAt: 'analyzedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type ChatLogAnalysisScalarFieldEnum = (typeof ChatLogAnalysisScalarFieldEnum)[keyof typeof ChatLogAnalysisScalarFieldEnum]
+
+
+export const CommunityInsightScalarFieldEnum = {
+  id: 'id',
+  periodStart: 'periodStart',
+  periodEnd: 'periodEnd',
+  source: 'source',
+  topicSlug: 'topicSlug',
+  topicLabel: 'topicLabel',
+  messageCount: 'messageCount',
+  sentimentBreakdown: 'sentimentBreakdown',
+  sentimentScore: 'sentimentScore',
+  summary: 'summary',
+  createdAt: 'createdAt'
+} as const
+
+export type CommunityInsightScalarFieldEnum = (typeof CommunityInsightScalarFieldEnum)[keyof typeof CommunityInsightScalarFieldEnum]
+
+
 export const SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -2792,6 +2980,8 @@ export type GlobalOmitConfig = {
   event?: Prisma.EventOmit
   notification?: Prisma.NotificationOmit
   contactSubmission?: Prisma.ContactSubmissionOmit
+  chatLogAnalysis?: Prisma.ChatLogAnalysisOmit
+  communityInsight?: Prisma.CommunityInsightOmit
 }
 
 /* Types for Logging */

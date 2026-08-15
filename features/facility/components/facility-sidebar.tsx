@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
-import { Building2, CalendarDays, Stethoscope, LayoutDashboard } from "lucide-react";
+import { CalendarDays, Stethoscope, LayoutDashboard } from "lucide-react";
 
 const navItems = [
   { name: "Dashboard", href: "/facility", icon: LayoutDashboard },

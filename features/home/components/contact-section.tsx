@@ -1,13 +1,12 @@
 "use client";
 
-import { FormEvent, useMemo, useState } from "react";
+import { FormEvent, useEffect, useRef, useState } from "react";
 import {
   ArrowRight,
   CheckCircle2,
   Mail,
   MessageSquare,
   Phone,
-  Sparkles,
   User,
   X,
 } from "lucide-react";
@@ -22,14 +21,17 @@ export function ContactSection() {
   const [status, setStatus] = useState<SubmitState>("idle");
   const [message, setMessage] = useState<string | null>(null);
   const [text, setText] = useState("");
-  const startedAt = useMemo(() => Date.now(), []);
+  const submittingRef = useRef(false);
+  const dialogRef = useRef<HTMLDivElement>(null);
 
   async function onSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    if (status === "submitting") return;
+    if (submittingRef.current) return;
+    submittingRef.current = true;
 
     const form = event.currentTarget;
     const formData = new FormData(form);
+    const startedAt = Date.now();
     const payload = {
       fullName: String(formData.get("fullName") ?? ""),
       email: String(formData.get("email") ?? ""),
@@ -72,8 +74,46 @@ export function ContactSection() {
           ? error.message
           : "Something went wrong. Please try again.",
       );
+    } finally {
+      submittingRef.current = false;
     }
   }
+
+  useEffect(() => {
+    if (status !== "success") return;
+    const dialog = dialogRef.current;
+    const previouslyFocused = document.activeElement as HTMLElement | null;
+    dialog?.focus();
+
+    function onKeyDown(event: KeyboardEvent) {
+      if (event.key === "Escape") {
+        setStatus("idle");
+        return;
+      }
+      if (event.key !== "Tab" || !dialog) return;
+      const focusables = Array.from(
+        dialog.querySelectorAll<HTMLElement>(
+          'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])',
+        ),
+      );
+      if (focusables.length === 0) return;
+      const first = focusables[0];
+      const last = focusables[focusables.length - 1];
+      if (event.shiftKey && document.activeElement === first) {
+        event.preventDefault();
+        last.focus();
+      } else if (!event.shiftKey && document.activeElement === last) {
+        event.preventDefault();
+        first.focus();
+      }
+    }
+
+    document.addEventListener("keydown", onKeyDown);
+    return () => {
+      document.removeEventListener("keydown", onKeyDown);
+      previouslyFocused?.focus();
+    };
+  }, [status]);
 
   const remaining = Math.max(0, 1200 - text.length);
 
@@ -92,7 +132,6 @@ export function ContactSection() {
         <div className="relative grid gap-10 lg:grid-cols-[0.85fr_1.35fr] lg:gap-16">
           <div className="flex flex-col justify-center">
             <span className="inline-flex w-fit items-center gap-2 rounded-full bg-brand-50 px-3 py-1 text-sm font-bold text-brand-700 ring-1 ring-brand-100">
-              <Sparkles className="h-4 w-4" aria-hidden />
               Contact us
             </span>
             <h2 className="mt-5 text-4xl font-black tracking-tight text-slate-950 md:text-5xl">
@@ -220,7 +259,7 @@ export function ContactSection() {
                 <textarea
                   name="message"
                   required
-                  minLength={10}
+                  minLength={5}
                   maxLength={1200}
                   value={text}
                   onChange={(event) => setText(event.target.value)}
@@ -259,7 +298,11 @@ export function ContactSection() {
           aria-modal="true"
           aria-labelledby="contact-success-title"
         >
-          <div className="relative w-full max-w-md rounded-[2rem] bg-white p-7 text-center shadow-2xl">
+          <div
+            ref={dialogRef}
+            tabIndex={-1}
+            className="relative w-full max-w-md rounded-[2rem] bg-white p-7 text-center shadow-2xl outline-none"
+          >
             <button
               type="button"
               onClick={() => setStatus("idle")}

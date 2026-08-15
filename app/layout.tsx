@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import "./globals.css";
 import { AppShell } from "@/components/layout/app-shell";
 import { ChatLauncher } from "@/features/chatbot/components/chat-launcher";
+import { ServiceWorkerRegister } from "@/components/pwa/service-worker-register";
 import { JsonLd } from "@/components/seo/json-ld";
 import { buildMetadata } from "@/lib/seo/metadata";
 import { organizationSchema, websiteSchema, webApplicationSchema } from "@/lib/seo/schema";
@@ -26,6 +27,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
         <JsonLd data={[organizationSchema(), websiteSchema(), webApplicationSchema()]} />
         <AppShell>{children}</AppShell>
         <ChatLauncher />
+        <ServiceWorkerRegister />
         <div className="sr-only" aria-live="polite">
           {siteConfig.medicalDisclaimer}
         </div>

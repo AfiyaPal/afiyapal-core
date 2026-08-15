@@ -28,14 +28,23 @@ type ContextEvent = {
   facility: { name: string; city: string | null; country: string };
 };
 
-type ChatbotContext = {
+type ContextProfessional = {
+  id: number;
+  fullName: string;
+  specialty: string | null;
+  cityRegion: string | null;
+  country: string | null;
+};
+
+export type ChatbotContext = {
   blogs: ContextBlog[];
   events: ContextEvent[];
+  professionals: ContextProfessional[];
 };
 
 export async function retrieveChatbotContext(userMessage: string): Promise<ChatbotContext> {
   const keywords = extractKeywords(userMessage);
-  if (keywords.length === 0) return { blogs: [], events: [] };
+  if (keywords.length === 0) return { blogs: [], events: [], professionals: [] };
 
   const blogWhere = {
     status: "PUBLISHED",
@@ -60,7 +69,22 @@ export async function retrieveChatbotContext(userMessage: string): Promise<Chatb
     }))
   };
 
-  const [blogs, events] = await Promise.all([
+  const professionalWhere = {
+    verificationStatus: "VERIFIED",
+    availabilityStatus: "AVAILABLE",
+    OR: keywords.map((kw) => ({
+      OR: [
+        { fullName: { contains: kw } },
+        { specialty: { contains: kw } },
+        { languagesSpoken: { contains: kw } },
+        { cityRegion: { contains: kw } },
+        { country: { contains: kw } },
+        { bio: { contains: kw } }
+      ]
+    }))
+  };
+
+  const [blogs, events, professionals] = await Promise.all([
     prisma.blog.findMany({
       where: blogWhere,
       select: { id: true, title: true, slug: true, excerpt: true, contentCategory: true },
@@ -79,10 +103,16 @@ export async function retrieveChatbotContext(userMessage: string): Promise<Chatb
       },
       take: 3,
       orderBy: { startDate: "asc" }
+    }),
+    prisma.doctorProfile.findMany({
+      where: professionalWhere,
+      select: { id: true, fullName: true, specialty: true, cityRegion: true, country: true },
+      take: 3,
+      orderBy: { fullName: "asc" }
     })
   ]);
 
-  return { blogs, events };
+  return { blogs, events, professionals };
 }
 
 export function formatContextForPrompt(context: ChatbotContext): string {
@@ -100,6 +130,14 @@ export function formatContextForPrompt(context: ChatbotContext): string {
     context.events.forEach((e) => {
       const date = new Date(e.startDate).toLocaleDateString("en-US", { month: "short", day: "numeric" });
       parts.push(`- ${e.title} (${e.type.replaceAll("_", " ").toLowerCase()}) on ${date} at ${e.facility.name}${e.location ? `, ${e.location}` : `, ${e.facility.city ?? e.facility.country}`}`);
+    });
+  }
+
+  if (context.professionals.length > 0) {
+    parts.push("---\nVerified professionals on AfiyaPal:");
+    context.professionals.forEach((p) => {
+      const location = [p.cityRegion, p.country].filter(Boolean).join(", ") || "Location on request";
+      parts.push(`- ${p.fullName} (${p.specialty ?? "health professional"}) in ${location}, currently available → View profile at /professionals/${p.id}`);
     });
   }
 
