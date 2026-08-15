@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { MessageCircle, BookOpen, UserCheck, ShieldCheck, Stethoscope } from "lucide-react";
+import { MessageCircle, BookOpen, UserCheck, ShieldCheck } from "lucide-react";
 import { BenefitsSection } from "./benefits-section";
 import { FeaturedBlogsSection } from "./featured-blogs-section";
 import { HeroSlider } from "./hero-slider";
@@ -77,7 +77,7 @@ export function HomePage() {
 
       <FeaturedBlogsSection />
 
-      {/* Connect with a doctor */}
+      {/* Chat with AfiyaPal — the chatbot triages, references health articles, and can point visitors to verified professionals */}
       <section className="container-page pb-16">
         <div className="relative overflow-hidden rounded-[2rem] bg-gradient-to-r from-[#056636] via-brand-700 to-[#008958] px-8 py-14 text-center shadow-2xl shadow-brand-900/25 md:px-16 md:py-16">
           <div aria-hidden className="pointer-events-none absolute -left-16 -top-16 h-64 w-64 rounded-full bg-white/10 blur-3xl" />
@@ -85,19 +85,19 @@ export function HomePage() {
 
           <p className="relative text-sm font-semibold uppercase tracking-widest text-brand-100">Care when you need it</p>
           <h2 className="relative mt-3 text-3xl font-black tracking-tight text-white md:text-4xl lg:text-5xl">
-            Connect with a doctor
+            Chat with AfiyaPal
           </h2>
           <p className="relative mx-auto mt-4 max-w-2xl text-lg leading-relaxed text-brand-50/95 md:text-xl">
-            Request a consultation with a verified healthcare provider near you.
+            Describe how you&apos;re feeling — AfiyaPal shares first-step guidance, relevant health articles, and connects you with verified professionals near you.
           </p>
 
           <div className="relative mt-8 flex flex-wrap justify-center gap-4">
             <Link
-              href={routes.register}
+              href={routes.chatbot}
               className="inline-flex items-center gap-2 rounded-full bg-white px-7 py-3 text-sm font-bold text-brand-700 shadow-lg transition hover:bg-brand-50 hover:shadow-xl active:scale-[0.98]"
             >
-              <Stethoscope className="h-4 w-4" aria-hidden />
-              Request a consultation
+              <MessageCircle className="h-4 w-4" aria-hidden />
+              Get started with AI triage
             </Link>
           </div>
         </div>

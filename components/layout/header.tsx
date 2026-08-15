@@ -13,6 +13,7 @@ const navItems = [
   { label: "Home",   href: routes.home },
   { label: "About",  href: routes.about },
   { label: "Blogs",  href: routes.blogs },
+  { label: "Professionals", href: "/professionals" },
   { label: "Chatbot", href: routes.chatbot }
 ];
 
@@ -21,7 +22,11 @@ export function Header() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
 
-  useEffect(() => { setMobileOpen(false); }, [pathname]);
+  const [prevPathname, setPrevPathname] = useState(pathname);
+  if (prevPathname !== pathname) {
+    setPrevPathname(pathname);
+    setMobileOpen(false);
+  }
 
   useEffect(() => {
     if (!mobileOpen) return;

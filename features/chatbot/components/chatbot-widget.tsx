@@ -1,10 +1,9 @@
 "use client";
 
-import { FormEvent, useEffect, useRef, useState } from "react";
+import { FormEvent, useEffect, useRef, useState, type ReactNode } from "react";
+import Link from "next/link";
 import { Send, AlertTriangle } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
-import { MaternalEmergencyButton } from "@/features/maternal/components/maternal-emergency-button";
 import type { ChatMessage } from "../types/chat-message";
 
 const DISCLAIMER = "AfiyaPal provides informational health guidance only and does not diagnose or replace a qualified clinician.";
@@ -22,6 +21,47 @@ const WELCOME: ChatMessage = {
   sender: "ai",
   text: "Habari! I am AfiyaPal 👋 Tell me how you are feeling and I will share careful first-step guidance.\n\nFor emergencies, please visit the nearest facility immediately."
 };
+
+const LINK_PATTERN =
+  /\[([^\]]+)\]\(((?:https?:\/\/|\/(?:blogs|professionals|events))[^\s)]+)\)|(https?:\/\/[^\s)]+)|(\/(?:blogs|professionals|events)[^\s)]*)/g;
+
+function linkify(text: string): ReactNode[] {
+  const parts: ReactNode[] = [];
+  let lastIndex = 0;
+  let match: RegExpExecArray | null;
+  let key = 0;
+
+  while ((match = LINK_PATTERN.exec(text)) !== null) {
+    if (match.index > lastIndex) parts.push(text.slice(lastIndex, match.index));
+
+    const markdownLabel = match[1];
+    const markdownUrl = match[2];
+    const bareUrl = match[3];
+    const barePath = match[4];
+    const href = markdownUrl ?? bareUrl ?? barePath;
+    const label = markdownLabel ?? href;
+    const external = /^https?:\/\//.test(href);
+
+    const linkProps = {
+      key: key++,
+      href,
+      className: "font-semibold text-brand-700 underline underline-offset-2 hover:text-brand-800"
+    };
+
+    parts.push(
+      external ? (
+        <a {...linkProps} target="_blank" rel="noopener noreferrer">{label}</a>
+      ) : (
+        <Link {...linkProps}>{label}</Link>
+      )
+    );
+
+    lastIndex = match.index + match[0].length;
+  }
+
+  if (lastIndex < text.length) parts.push(text.slice(lastIndex));
+  return parts;
+}
 
 function formatTime(date: Date) {
   return date.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
@@ -123,7 +163,7 @@ export function ChatbotWidget({ mode = "page" }: { mode?: "page" | "frame" }) {
                     : "rounded-bl-sm bg-white text-slate-700 ring-1 ring-slate-100"
                 }`}
               >
-                {item.text}
+                {linkify(item.text)}
               </p>
             </div>
             {timestamps.get(item.id) && (
