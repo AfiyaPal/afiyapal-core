@@ -1,10 +1,10 @@
 "use client";
 
-import { FormEvent, useEffect, useRef, useState, type ReactNode } from "react";
-import Link from "next/link";
+import { FormEvent, useEffect, useRef, useState } from "react";
 import { AlertTriangle, BookOpen, Send, UserRound } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Modal } from "@/components/ui/modal";
+import { ChatMarkdown } from "./chat-markdown";
 import { ChatNav } from "./chat-nav";
 import { useInstallPrompt } from "../hooks/use-install-prompt";
 import { InstallPromptButton, InstallPromptBanner, InstallIosModal } from "./install-prompt";
@@ -31,9 +31,6 @@ const WELCOME: ChatMessage = {
 const STORAGE_KEY = "afiyapal-chat-thread";
 const MAX = 500;
 
-const LINK_PATTERN =
-  /\[([^\]]+)\]\(((?:https?:\/\/|\/(?:blogs|professionals|events))[^\s)]+)\)|(https?:\/\/[^\s)]+)|(\/(?:blogs|professionals|events)[^\s)]*)/g;
-
 type PersistedThread = { messages: ChatMessage[]; timestamps: Record<string, string> };
 
 function loadThread(): PersistedThread | null {
@@ -47,59 +44,6 @@ function loadThread(): PersistedThread | null {
   } catch {
     return null;
   }
-}
-
-function linkify(
-  text: string,
-  references: ChatReference[] | undefined,
-  onOpenRef: (ref: ChatReference) => void
-): ReactNode[] {
-  const parts: ReactNode[] = [];
-  const refs = references ?? [];
-  let lastIndex = 0;
-  let match: RegExpExecArray | null;
-  let key = 0;
-
-  while ((match = LINK_PATTERN.exec(text)) !== null) {
-    if (match.index > lastIndex) parts.push(text.slice(lastIndex, match.index));
-
-    const markdownLabel = match[1];
-    const markdownUrl = match[2];
-    const bareUrl = match[3];
-    const barePath = match[4];
-    const href = markdownUrl ?? bareUrl ?? barePath;
-    const label = markdownLabel ?? href;
-    const external = /^https?:\/\//.test(href);
-    const base = "font-semibold text-brand-300 underline underline-offset-2 transition hover:text-brand-200";
-
-    if (external) {
-      parts.push(
-        <a key={key++} href={href} target="_blank" rel="noopener noreferrer" className={base}>
-          {label}
-        </a>
-      );
-    } else {
-      const ref = refs.find((r) => r.href === href);
-      if (ref) {
-        parts.push(
-          <button key={key++} type="button" onClick={() => onOpenRef(ref)} className={base}>
-            {label}
-          </button>
-        );
-      } else {
-        parts.push(
-          <Link key={key++} href={href} className={base}>
-            {label}
-          </Link>
-        );
-      }
-    }
-
-    lastIndex = match.index + match[0].length;
-  }
-
-  if (lastIndex < text.length) parts.push(text.slice(lastIndex));
-  return parts;
 }
 
 function Avatar() {
@@ -269,16 +213,15 @@ export function ChatbotWidget({ mode = "page" }: { mode?: "page" | "frame" }) {
               <div className={cn("flex items-end gap-2", item.sender === "user" && "flex-row-reverse")}>
                 {item.sender === "ai" && <Avatar />}
                 <div className={cn("flex flex-col gap-2", item.sender === "user" ? "items-end" : "items-start")}>
-                  <p
-                    className={cn(
-                      "max-w-[85%] whitespace-pre-wrap rounded-2xl px-4 py-3 text-sm leading-6 shadow-lg shadow-black/10",
-                      item.sender === "user"
-                        ? "rounded-br-sm bg-gradient-to-br from-brand-600 to-brand-700 text-white"
-                        : "rounded-bl-sm bg-brand-900 text-slate-100 ring-1 ring-brand-800"
-                    )}
-                  >
-                    {linkify(item.text, item.references, setPendingRef)}
-                  </p>
+                  {item.sender === "user" ? (
+                    <p className="max-w-[85%] whitespace-pre-wrap rounded-2xl rounded-br-sm bg-gradient-to-br from-brand-600 to-brand-700 px-4 py-3 text-sm leading-6 text-white shadow-lg shadow-black/10">
+                      {item.text}
+                    </p>
+                  ) : (
+                    <div className="max-w-[85%] rounded-2xl rounded-bl-sm bg-brand-900 px-4 py-3 text-sm leading-6 text-slate-100 shadow-lg shadow-black/10 ring-1 ring-brand-800">
+                      <ChatMarkdown text={item.text} references={item.references} onOpenRef={setPendingRef} />
+                    </div>
+                  )}
                   {item.sender === "ai" && item.references && item.references.length > 0 && (
                     <div className="flex w-full flex-col gap-2">
                       {item.references.map((ref) => (
