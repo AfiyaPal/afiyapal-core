@@ -7,7 +7,6 @@ import {
   Mail,
   MessageSquare,
   Phone,
-  Sparkles,
   User,
   X,
 } from "lucide-react";
@@ -133,7 +132,6 @@ export function ContactSection() {
         <div className="relative grid gap-10 lg:grid-cols-[0.85fr_1.35fr] lg:gap-16">
           <div className="flex flex-col justify-center">
             <span className="inline-flex w-fit items-center gap-2 rounded-full bg-brand-50 px-3 py-1 text-sm font-bold text-brand-700 ring-1 ring-brand-100">
-              <Sparkles className="h-4 w-4" aria-hidden />
               Contact us
             </span>
             <h2 className="mt-5 text-4xl font-black tracking-tight text-slate-950 md:text-5xl">
