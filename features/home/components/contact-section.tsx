@@ -1,6 +1,6 @@
 "use client";
 
-import { FormEvent, useState } from "react";
+import { FormEvent, useEffect, useRef, useState } from "react";
 import {
   ArrowRight,
   CheckCircle2,
@@ -22,10 +22,13 @@ export function ContactSection() {
   const [status, setStatus] = useState<SubmitState>("idle");
   const [message, setMessage] = useState<string | null>(null);
   const [text, setText] = useState("");
+  const submittingRef = useRef(false);
+  const dialogRef = useRef<HTMLDivElement>(null);
 
   async function onSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    if (status === "submitting") return;
+    if (submittingRef.current) return;
+    submittingRef.current = true;
 
     const form = event.currentTarget;
     const formData = new FormData(form);
@@ -72,8 +75,46 @@ export function ContactSection() {
           ? error.message
           : "Something went wrong. Please try again.",
       );
+    } finally {
+      submittingRef.current = false;
     }
   }
+
+  useEffect(() => {
+    if (status !== "success") return;
+    const dialog = dialogRef.current;
+    const previouslyFocused = document.activeElement as HTMLElement | null;
+    dialog?.focus();
+
+    function onKeyDown(event: KeyboardEvent) {
+      if (event.key === "Escape") {
+        setStatus("idle");
+        return;
+      }
+      if (event.key !== "Tab" || !dialog) return;
+      const focusables = Array.from(
+        dialog.querySelectorAll<HTMLElement>(
+          'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])',
+        ),
+      );
+      if (focusables.length === 0) return;
+      const first = focusables[0];
+      const last = focusables[focusables.length - 1];
+      if (event.shiftKey && document.activeElement === first) {
+        event.preventDefault();
+        last.focus();
+      } else if (!event.shiftKey && document.activeElement === last) {
+        event.preventDefault();
+        first.focus();
+      }
+    }
+
+    document.addEventListener("keydown", onKeyDown);
+    return () => {
+      document.removeEventListener("keydown", onKeyDown);
+      previouslyFocused?.focus();
+    };
+  }, [status]);
 
   const remaining = Math.max(0, 1200 - text.length);
 
@@ -220,7 +261,7 @@ export function ContactSection() {
                 <textarea
                   name="message"
                   required
-                  minLength={10}
+                  minLength={5}
                   maxLength={1200}
                   value={text}
                   onChange={(event) => setText(event.target.value)}
@@ -259,7 +300,11 @@ export function ContactSection() {
           aria-modal="true"
           aria-labelledby="contact-success-title"
         >
-          <div className="relative w-full max-w-md rounded-[2rem] bg-white p-7 text-center shadow-2xl">
+          <div
+            ref={dialogRef}
+            tabIndex={-1}
+            className="relative w-full max-w-md rounded-[2rem] bg-white p-7 text-center shadow-2xl outline-none"
+          >
             <button
               type="button"
               onClick={() => setStatus("idle")}

@@ -19,6 +19,7 @@ export const NOTIFICATION_TYPES = [
   "CONTENT_APPROVED",
   "CONTENT_CHANGES_REQUESTED",
   "CONTENT_REJECTED",
+  "CONTACT_SUBMISSION_SUBMITTED",
   "REPORT_RESOLVED",
   "SAFETY_REPORT_SUBMITTED"
 ] as const;
@@ -148,6 +149,17 @@ export async function notifyAdminsContentPendingReview(input: { articleId: numbe
     priority: "NORMAL",
     targetType: "Blog",
     targetId: input.articleId
+  });
+}
+
+export async function notifyAdminsContactSubmissionSubmitted(input: { submissionId: number; fullName: string; subject: string }) {
+  return notifyAdminsWithPermission(ADMIN_PERMISSIONS.MANAGE_CONTACT_SUBMISSIONS, {
+    type: "CONTACT_SUBMISSION_SUBMITTED",
+    title: "New contact form submission",
+    message: `${input.fullName} sent a contact message: "${input.subject}".`,
+    priority: "NORMAL",
+    targetType: "ContactSubmission",
+    targetId: input.submissionId
   });
 }
 
