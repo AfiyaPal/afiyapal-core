@@ -1,6 +1,7 @@
 "use client";
 
 import { useActionState, useState } from "react";
+import { useSearchParams } from "next/navigation";
 import { Eye, EyeOff } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { FormMessage } from "@/components/ui/form-message";
@@ -13,10 +14,13 @@ const initialState = { ok: false, message: null as string | null };
 export function LoginForm() {
   const [state, formAction, pending] = useActionState(loginAction, initialState);
   const [showPw, setShowPw] = useState(false);
+  const searchParams = useSearchParams();
+  const next = searchParams.get("next");
 
   return (
     <AuthCard title="Welcome back" description="Sign in to your AfiyaPal account.">
       <form action={formAction} className="space-y-4">
+        {next ? <input type="hidden" name="next" value={next} /> : null}
         <Input name="email" type="email" placeholder="Email address" required />
 
         <div className="relative">
@@ -50,10 +54,8 @@ export function LoginForm() {
         </Button>
 
         <p className="text-center text-sm text-slate-500">
-          No account?{" "}
-          <a href="/register" className="font-semibold text-brand-600 hover:text-brand-700">Create one</a>
-          {" · "}
-          <a href="/register?type=doctor" className="font-semibold text-brand-600 hover:text-brand-700">Join as doctor</a>
+          Health professional?{" "}
+          <a href="/register" className="font-semibold text-brand-600 hover:text-brand-700">Create an account</a>
         </p>
       </form>
     </AuthCard>

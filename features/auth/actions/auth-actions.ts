@@ -1,20 +1,32 @@
 "use server";
 
-import { loginSchema, passwordResetConfirmSchema, passwordResetSchema, registerSchema, doctorRegisterSchema, facilityRegisterSchema } from "../schemas/auth-schemas";
-import { loginUser, registerUser, requestPasswordReset, resetPassword, registerDoctorUser, registerFacilityUser } from "@/server/services/auth-service";
+import { loginSchema, passwordResetConfirmSchema, passwordResetSchema, doctorRegisterSchema, facilityRegisterSchema } from "../schemas/auth-schemas";
+import { loginUser, requestPasswordReset, resetPassword, registerDoctorUser, registerFacilityUser } from "@/server/services/auth-service";
 import { redirect } from "next/navigation";
 import { routes } from "@/lib/routes";
+import { isAdminRole } from "@/server/auth/roles";
+
+function roleHome(role: string) {
+  if (role === "DOCTOR") return routes.dashboard;
+  if (role === "FACILITY_ADMIN") return routes.facilityDashboard;
+  if (isAdminRole(role)) return routes.admin;
+  return routes.home;
+}
 
 export async function loginAction(_: unknown, formData: FormData) {
   const parsed = loginSchema.safeParse(Object.fromEntries(formData));
   if (!parsed.success) return { ok: false, message: "Please check your email and password." };
-  return loginUser(parsed.data);
-}
 
-export async function registerAction(_: unknown, formData: FormData) {
-  const parsed = registerSchema.safeParse(Object.fromEntries(formData));
-  if (!parsed.success) return { ok: false, message: parsed.error.issues[0]?.message ?? "Invalid registration details." };
-  return registerUser(parsed.data);
+  const result = await loginUser(parsed.data);
+  if (!result.ok || !result.role) return result;
+
+  const rawNext = formData.get("next");
+  const next = typeof rawNext === "string" ? rawNext : null;
+  if (next && next.startsWith("/") && !next.startsWith("//") && !next.startsWith("/login")) {
+    redirect(next);
+  }
+
+  redirect(roleHome(result.role));
 }
 
 export async function facilityRegisterAction(_: unknown, formData: FormData) {

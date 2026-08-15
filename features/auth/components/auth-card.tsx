@@ -14,7 +14,7 @@ import { cn } from "@/lib/utils";
 
 type Highlight = { icon: LucideIcon; text: string };
 
-type AuthCardVariant = "default" | "patient" | "doctor" | "facility";
+type AuthCardVariant = "default" | "doctor" | "facility";
 
 const greenPanel = "from-[#056636] via-brand-700 to-[#008958]";
 
@@ -29,16 +29,6 @@ const variantConfig: Record<
       { icon: MessageCircle, text: "AI symptom checker in English & Swahili" },
       { icon: ShieldCheck, text: "Safe, evidence-aware health guidance" },
       { icon: UserCheck, text: "Pathways to verified healthcare providers" }
-    ]
-  },
-  patient: {
-    panel: greenPanel,
-    tagline: "Free first-step health guidance — whenever you need it.",
-    badge: "For patients & families",
-    highlights: [
-      { icon: MessageCircle, text: "Ask health questions in English or Swahili" },
-      { icon: ShieldCheck, text: "Evidence-aware AI symptom guidance" },
-      { icon: UserCheck, text: "Request consultations with verified doctors" }
     ]
   },
   doctor: {

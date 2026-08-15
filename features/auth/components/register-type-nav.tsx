@@ -1,11 +1,10 @@
 import Link from "next/link";
-import { Building2, Stethoscope, UserRound } from "lucide-react";
+import { Building2, Stethoscope } from "lucide-react";
 import { routes } from "@/lib/routes";
 import { cn } from "@/lib/utils";
 
 const registerTypes = [
-  { key: "patient", label: "Patient", href: routes.register, icon: UserRound },
-  { key: "doctor", label: "Doctor", href: routes.registerDoctor, icon: Stethoscope },
+  { key: "doctor", label: "Doctor", href: routes.register, icon: Stethoscope },
   { key: "facility", label: "Facility", href: routes.registerFacility, icon: Building2 }
 ] as const;
 
@@ -17,7 +16,7 @@ export function isRegisterType(value: string | null | undefined): value is Regis
 
 export function RegisterTypeNav({ active, onChange }: { active: RegisterType; onChange?: (type: RegisterType) => void }) {
   return (
-    <nav aria-label="Registration type" className="grid grid-cols-3 gap-2 rounded-2xl bg-slate-100/80 p-1.5 ring-1 ring-slate-200/80">
+    <nav aria-label="Registration type" className="grid grid-cols-2 gap-2 rounded-2xl bg-slate-100/80 p-1.5 ring-1 ring-slate-200/80">
       {registerTypes.map(({ key, label, href, icon: Icon }) => {
         const isActive = key === active;
         const className = cn(
