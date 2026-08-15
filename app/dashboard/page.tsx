@@ -4,7 +4,6 @@ import { routes } from "@/lib/routes";
 import { getDoctorProfile } from "@/features/doctor/queries/get-doctor-profile";
 import { getDoctorBlogs } from "@/features/doctor/queries/get-doctor-blogs";
 import { DoctorDashboardPage } from "@/features/doctor/components/doctor-dashboard-page";
-import { MaternalEmergencyButton } from "@/features/maternal/components/maternal-emergency-button";
 
 export default async function Page() {
   const user = await getCurrentUser();
@@ -16,9 +15,6 @@ export default async function Page() {
   ]);
 
   return (
-    <>
-      <MaternalEmergencyButton />
-      <DoctorDashboardPage profile={profile} name={user.username} blogCount={blogs.length} />
-    </>
+    <DoctorDashboardPage profile={profile} name={user.username} blogCount={blogs.length} />
   );
 }
