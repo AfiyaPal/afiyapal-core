@@ -6,13 +6,13 @@
   - Super Admin
   - Support Admin
   - Medical Reviewer
-  - Doctor Manager
+  - Professional Manager
   - Content Manager
 
 - [ ] Decide which dashboard modules are included in Stage 2 MVP:
   - Overview dashboard
   - User management
-  - Doctor verification
+  - Professional verification
   - Symptom checker logs
   - Flagged AI interactions
   - Blog/content management
@@ -21,7 +21,7 @@
 
 - [ ] Write the core admin user story:
 
-> As an AFIYAPAL admin, I want to manage users, doctors, AI health interactions, health content, consultation requests, and safety reports so that the platform remains safe, trustworthy, and medically responsible.
+> As an AFIYAPAL admin, I want to manage users, professionals, AI health interactions, health content, consultation requests, and safety reports so that the platform remains safe, trustworthy, and medically responsible.
 
 ## Phase 2: Add role-based access
 
@@ -43,7 +43,7 @@
 - [ ] Create helper rules such as:
   - Only Super Admin can create other admins.
   - Medical Reviewer can review health flags and content.
-  - Doctor Manager can approve/reject doctors.
+  - Professional Manager can approve/reject professionals.
   - Content Manager can manage blogs.
   - Support Admin can handle reports and consultation requests.
 
@@ -52,7 +52,7 @@
 - [ ] Create admin route group:
   - `/admin`
   - `/admin/users`
-  - `/admin/doctors`
+  - `/admin/professionals`
   - `/admin/symptom-checks`
   - `/admin/ai-flags`
   - `/admin/content`
@@ -133,7 +133,7 @@
 
 - [ ] Avoid exposing full sensitive health conversations by default.
 
-## Phase 6: Doctor verification
+## Phase 6: Professional verification
 
 - [ ] Create doctor profile model/table.
 
@@ -153,7 +153,7 @@
   - Bio
   - Availability status
 
-- [ ] Create `/admin/doctors`.
+- [ ] Create `/admin/professionals`.
 
 - [ ] Add doctor list.
 
@@ -444,7 +444,7 @@
 - [ ] Add platform settings:
   - Supported languages
   - Emergency message text
-  - Doctor verification requirements
+  - Professional verification requirements
   - AI disclaimer text
   - Default consultation urgency rules
   - Content review interval
@@ -459,13 +459,13 @@
 ## Phase 16: Notifications
 
 - [ ] Notify admins when:
-  - Doctor applies
+  - Professional applies
   - AI flag is critical
   - Consultation request is urgent
   - User reports AI response
   - Content is pending review
 
-- [ ] Notify doctors when:
+- [ ] Notify professionals when:
   - They are approved
   - They are assigned a consultation
   - Their verification is rejected
@@ -481,11 +481,11 @@
 
 - [ ] Suspended user cannot use protected services.
 
-- [ ] Doctor cannot appear publicly before verification.
+- [ ] Professional cannot appear publicly before verification.
 
-- [ ] Doctor Manager can approve doctors.
+- [ ] Professional Manager can approve professionals.
 
-- [ ] Content Manager cannot approve doctors.
+- [ ] Content Manager cannot approve professionals.
 
 - [ ] Medical Reviewer can review AI flags.
 
@@ -511,7 +511,7 @@ Start with this exact order:
 2. Admin layout
 3. Overview dashboard
 4. User management
-5. Doctor verification
+5. Professional verification
 6. Consultation requests
 7. Symptom checker logs
 8. AI safety flags

@@ -15,7 +15,7 @@ export const routes = {
   passwordReset: "/password-reset",
   admin: "/admin",
   adminUsers: "/admin/users",
-  adminDoctors: "/admin/doctors",
+  adminProfessionals: "/admin/professionals",
   adminFacilities: "/admin/facilities",
   adminSymptomChecks: "/admin/symptom-checks",
   adminAiFlags: "/admin/ai-flags",

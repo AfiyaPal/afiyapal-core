@@ -2,10 +2,11 @@ import { PasswordResetConfirmForm } from "@/features/auth/components/password-re
 
 export const metadata = { title: "Set new password" };
 
-export default function Page() {
+export default async function Page({ searchParams }: { searchParams: Promise<{ token?: string }> }) {
+  const { token } = await searchParams;
   return (
     <main className="container-page flex min-h-[70vh] items-center justify-center py-12">
-      <PasswordResetConfirmForm />
+      <PasswordResetConfirmForm token={token ?? ""} />
     </main>
   );
 }

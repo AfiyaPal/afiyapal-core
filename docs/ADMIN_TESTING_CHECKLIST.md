@@ -44,19 +44,19 @@ Do not ship shared default production passwords.
   - Setup: use symptom check or AI flag with health context.
   - Expected: list pages show metadata/summaries only; sensitive details require allowed role, reason, and access grant.
 
-### Doctor verification
+### Professional verification
 
-- [ ] Doctor cannot appear publicly before verification.
-  - Setup: doctor profile with `PENDING`, `REJECTED`, or `SUSPENDED` status.
-  - Expected: only `VERIFIED` doctors are public/assignable.
+- [ ] Professional cannot appear publicly before verification.
+  - Setup: professional profile with `PENDING`, `REJECTED`, or `SUSPENDED` status.
+  - Expected: only `VERIFIED` professionals are public/assignable.
 
-- [ ] Doctor Manager can approve doctors.
-  - Setup: active `DOCTOR_MANAGER` and pending doctor profile.
-  - Expected: doctor becomes `VERIFIED`, doctor notification is created, and audit log is created.
+- [ ] Professional Manager can approve professionals.
+  - Setup: active `DOCTOR_MANAGER` and pending professional profile.
+  - Expected: professional becomes `VERIFIED`, professional notification is created, and audit log is created.
 
-- [ ] Content Manager cannot approve doctors.
+- [ ] Content Manager cannot approve professionals.
   - Setup: active `CONTENT_MANAGER`.
-  - Expected: doctor approval UI/action is inaccessible.
+  - Expected: professional approval UI/action is inaccessible.
 
 ### AI safety and medical review
 

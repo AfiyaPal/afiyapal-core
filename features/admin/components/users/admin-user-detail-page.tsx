@@ -6,8 +6,9 @@ import { getAdminUserDetail } from "@/features/admin/queries/get-admin-users";
 import { AdminDashboardCard } from "@/features/admin/components/admin-dashboard-card";
 import { AdminSectionHeader } from "@/features/admin/components/admin-section-header";
 import { AdminStatusBadge } from "@/features/admin/components/admin-status-badge";
-import { activateUserAction, suspendUserAction, updateUserRoleAction, updateUserStatusAction } from "@/features/admin/actions/admin-user-actions";
+import { activateUserAction, suspendUserAction, updateUserStatusAction } from "@/features/admin/actions/admin-user-actions";
 import { canCreateAdmin } from "@/server/auth/admin-permissions";
+import { RoleChangeForm } from "./role-change-form";
 
 function formatDateTime(date: Date) {
   return new Intl.DateTimeFormat("en-US", { dateStyle: "medium", timeStyle: "short" }).format(date);
@@ -89,18 +90,13 @@ export async function AdminUserDetailPage({ userId, currentUserRole }: { userId:
       </section>
 
       <section className="grid gap-4 md:grid-cols-2">
-        <form action={updateUserRoleAction} className="rounded-3xl border border-emerald-100 bg-white p-5 shadow-sm">
-          <input type="hidden" name="userId" value={user.id} />
+        <div className="rounded-3xl border border-emerald-100 bg-white p-5 shadow-sm">
           <h2 className="text-lg font-black text-slate-950">Change role</h2>
           <p className="mt-1 text-sm leading-6 text-slate-600">Only Super Admin can assign or remove admin-level roles.</p>
-          <select name="role" defaultValue={user.role} className="mt-4 w-full rounded-2xl border border-emerald-100 px-4 py-3 text-sm font-bold text-slate-700 outline-none focus:border-brand-600">
-            {USER_ROLES.map((role) => {
-              const isAdmin = role !== "USER" && role !== "DOCTOR";
-              return <option key={role} value={role} disabled={isAdmin && !canAssignAdminRoles}>{getRoleLabel(role)}</option>;
-            })}
-          </select>
-          <button type="submit" className="mt-4 rounded-full bg-slate-950 px-5 py-2.5 text-sm font-black text-white transition hover:bg-slate-800">Save role</button>
-        </form>
+          <div className="mt-4">
+            <RoleChangeForm userId={user.id} currentRole={user.role} options={USER_ROLES.map((r) => ({ value: r, label: getRoleLabel(r) }))} canAssignAdminRoles={canAssignAdminRoles} />
+          </div>
+        </div>
 
         <form action={updateUserStatusAction} className="rounded-3xl border border-emerald-100 bg-white p-5 shadow-sm">
           <input type="hidden" name="userId" value={user.id} />

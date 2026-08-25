@@ -142,3 +142,8 @@ export type ChatLogAnalysis = Prisma.ChatLogAnalysisModel
  * 
  */
 export type CommunityInsight = Prisma.CommunityInsightModel
+/**
+ * Model PasswordResetToken
+ * 
+ */
+export type PasswordResetToken = Prisma.PasswordResetTokenModel

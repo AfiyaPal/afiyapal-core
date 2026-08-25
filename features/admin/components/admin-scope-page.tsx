@@ -93,12 +93,12 @@ const dashboardCards = [
     label: "Safety scope",
     value: "Core",
     helper:
-      "AI flags, reports, doctors, consultations, and content are included.",
+      "AI flags, reports, professionals, consultations, and content are included.",
   },
 ];
 
 function getModuleOwner(moduleKey: string) {
-  if (moduleKey === "doctors") return "Doctor Manager";
+  if (moduleKey === "doctors") return "Professional Manager";
   if (moduleKey === "ai-flags" || moduleKey === "symptom-checks")
     return "Medical Reviewer";
   if (moduleKey === "content") return "Content Manager";

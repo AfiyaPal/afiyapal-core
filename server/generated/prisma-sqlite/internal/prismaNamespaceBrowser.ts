@@ -75,7 +75,8 @@ export const ModelName = {
   Notification: 'Notification',
   ContactSubmission: 'ContactSubmission',
   ChatLogAnalysis: 'ChatLogAnalysis',
-  CommunityInsight: 'CommunityInsight'
+  CommunityInsight: 'CommunityInsight',
+  PasswordResetToken: 'PasswordResetToken'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -527,6 +528,18 @@ export const CommunityInsightScalarFieldEnum = {
 } as const
 
 export type CommunityInsightScalarFieldEnum = (typeof CommunityInsightScalarFieldEnum)[keyof typeof CommunityInsightScalarFieldEnum]
+
+
+export const PasswordResetTokenScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  tokenHash: 'tokenHash',
+  expiresAt: 'expiresAt',
+  usedAt: 'usedAt',
+  createdAt: 'createdAt'
+} as const
+
+export type PasswordResetTokenScalarFieldEnum = (typeof PasswordResetTokenScalarFieldEnum)[keyof typeof PasswordResetTokenScalarFieldEnum]
 
 
 export const SortOrder = {

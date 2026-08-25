@@ -26,7 +26,7 @@ export function AdminRecentActivityFeed({ items }: { items: readonly AdminRecent
       <div className="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between">
         <div>
           <h2 className="text-lg font-black text-theme-foreground">Recent activity</h2>
-          <p className="mt-1 text-sm leading-6 text-slate-600">Latest admin-relevant events across users, doctors, AI safety, consultations, and content.</p>
+          <p className="mt-1 text-sm leading-6 text-slate-600">Latest admin-relevant events across users, professionals, AI safety, consultations, and content.</p>
         </div>
         <AdminStatusBadge tone="green">Live MVP feed</AdminStatusBadge>
       </div>
@@ -58,7 +58,7 @@ export function AdminRecentActivityFeed({ items }: { items: readonly AdminRecent
           })
         ) : (
           <div className="rounded-2xl border border-dashed border-theme-border bg-theme-primary-light/40 p-6 text-sm leading-6 text-slate-600">
-            No recent activity yet. Once users register, doctors apply, symptom checks run, consultations are requested, AI flags are created, or blogs are published, they will appear here.
+            No recent activity yet. Once users register, professionals apply, symptom checks run, consultations are requested, AI flags are created, or blogs are published, they will appear here.
           </div>
         )}
       </div>

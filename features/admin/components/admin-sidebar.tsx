@@ -13,7 +13,7 @@ export function AdminSidebar({ navItems }: { navItems: readonly AdminNavItem[] }
       <Link href="/admin" className="block rounded-3xl bg-theme-primary-light p-4">
         <p className="text-xs font-bold uppercase tracking-[0.2em] text-theme-primary-dark">AFIYAPAL</p>
         <h1 className="mt-1 text-xl font-black tracking-tight text-slate-950">Admin Center</h1>
-        <p className="mt-2 text-xs leading-5 text-slate-600">Safety, doctors, content, consultations, and platform operations.</p>
+        <p className="mt-2 text-xs leading-5 text-slate-600">Safety, professionals, content, consultations, and platform operations.</p>
       </Link>
       <nav className="mt-6 space-y-1" aria-label="Admin navigation">
         {navItems.map((item) => {

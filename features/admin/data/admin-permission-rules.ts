@@ -30,7 +30,7 @@ export const adminActionRules = [
     allowedRoles: ["SUPER_ADMIN", "MEDICAL_REVIEWER"]
   },
   {
-    rule: "Doctor Manager can approve, reject, or suspend doctors.",
+    rule: "Professional Manager can approve, reject, or suspend professionals.",
     permission: ADMIN_PERMISSIONS.APPROVE_REJECT_DOCTORS,
     allowedRoles: ["SUPER_ADMIN", "DOCTOR_MANAGER"]
   },

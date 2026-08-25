@@ -42,8 +42,8 @@ export async function createDoctorApplication(input: DoctorApplicationInput) {
     }
   });
 
-  await notifyAdminsDoctorApplied({ doctorProfileId: doctor.id, doctorName: doctor.fullName }).catch((error) =>
-    console.error("Failed to notify admins about doctor application", error)
+  await notifyAdminsDoctorApplied({ doctorProfileId: doctor.id, doctorName: doctor.fullName, email: doctor.email }).catch((error) =>
+    console.error("Failed to notify admins about professional application", error)
   );
 
   return doctor;

@@ -69,9 +69,9 @@ export function AdminOverviewPage({ data }: { data: AdminOverviewData }) {
       icon: CalendarCheck
     },
     {
-      label: "Pending doctor verifications",
+      label: "Pending professional verifications",
       value: formatNumber(totals.pendingDoctorVerifications),
-      helper: "Doctor applications that need verification review.",
+      helper: "Professional applications that need verification review.",
       icon: Stethoscope
     },
     {
@@ -99,7 +99,7 @@ export function AdminOverviewPage({ data }: { data: AdminOverviewData }) {
     { metric: "Active users today/week/month", value: `${formatNumber(totals.activeToday)} / ${formatNumber(totals.activeWeek)} / ${formatNumber(totals.activeMonth)}`, owner: "Super Admin", note: "Uses recent user account activity until a dedicated analytics event stream is added.", status: "Live" },
     { metric: "Symptom checks completed", value: formatNumber(totals.totalSymptomChecks), owner: "Medical Reviewer", note: "Core usage metric for the AI health assistant.", status: totals.totalSymptomChecks > 0 ? "Live" : "Needs data" },
     { metric: "Consultation requests", value: formatNumber(totals.totalConsultationRequests), owner: "Support Admin", note: "Shows demand for doctor connection workflows.", status: totals.totalConsultationRequests > 0 ? "Live" : "Needs data" },
-    { metric: "Pending doctor verifications", value: formatNumber(totals.pendingDoctorVerifications), owner: "Doctor Manager", note: "Highlights provider applications awaiting approval.", status: totals.pendingDoctorVerifications > 0 ? "Live" : "Ready" },
+    { metric: "Pending professional verifications", value: formatNumber(totals.pendingDoctorVerifications), owner: "Professional Manager", note: "Highlights provider applications awaiting approval.", status: totals.pendingDoctorVerifications > 0 ? "Live" : "Ready" },
     { metric: "Flagged AI interactions", value: formatNumber(totals.flaggedAiInteractions), owner: "Medical Reviewer", note: "Surfaces AI responses requiring safety or quality review.", status: totals.flaggedAiInteractions > 0 ? "Live" : "Ready" },
     { metric: "Emergency-risk interactions", value: formatNumber(totals.emergencyRiskInteractions), owner: "Medical Reviewer", note: "Helps prioritize critical cases that should be guided toward urgent care.", status: totals.emergencyRiskInteractions > 0 ? "Live" : "Ready" },
     { metric: "Published articles", value: formatNumber(totals.publishedArticles), owner: "Content Manager", note: "Measures currently public health education content.", status: totals.publishedArticles > 0 ? "Live" : "Ready" }
