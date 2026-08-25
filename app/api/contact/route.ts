@@ -147,7 +147,9 @@ export async function POST(request: NextRequest) {
   notifyAdminsContactSubmissionSubmitted({
     submissionId: created.id,
     fullName: input.fullName,
-    subject: input.subject
+    subject: input.subject,
+    email: normalizedEmail,
+    message: input.message
   }).catch((error) => {
     console.error("Failed to notify admins about contact submission", error);
   });

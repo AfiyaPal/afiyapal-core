@@ -152,14 +152,33 @@ export async function notifyAdminsContentPendingReview(input: { articleId: numbe
   });
 }
 
-export async function notifyAdminsContactSubmissionSubmitted(input: { submissionId: number; fullName: string; subject: string }) {
-  return notifyAdminsWithPermission(ADMIN_PERMISSIONS.MANAGE_CONTACT_SUBMISSIONS, {
+export async function notifyAdminsContactSubmissionSubmitted(input: { submissionId: number; fullName: string; subject: string; email?: string; message?: string }) {
+  await notifyAdminsWithPermission(ADMIN_PERMISSIONS.MANAGE_CONTACT_SUBMISSIONS, {
     type: "CONTACT_SUBMISSION_SUBMITTED",
     title: "New contact form submission",
     message: `${input.fullName} sent a contact message: "${input.subject}".`,
     priority: "NORMAL",
     targetType: "ContactSubmission",
     targetId: input.submissionId
+  });
+
+  const to = process.env.CONTACT_EMAIL_TO || process.env.SMTP_USER;
+  if (!to) return;
+
+  const appUrl = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
+  const snippet = input.message ? input.message.slice(0, 200) + (input.message.length > 200 ? "…" : "") : "";
+
+  const { sendEmail } = await import("./email-service");
+  await sendEmail({
+    to,
+    subject: `New contact: ${input.subject}`,
+    replyTo: input.email,
+    html: `<p><strong>${input.fullName}</strong> (${input.email ?? "no email"}) sent a contact message:</p>
+<p><strong>Subject:</strong> ${input.subject}</p>
+<p>${snippet}</p>
+<p><a href="${appUrl}/admin/contact-submissions">View in admin dashboard</a></p>`
+  }).catch((error) => {
+    console.error("Failed to send contact submission email", error);
   });
 }
 

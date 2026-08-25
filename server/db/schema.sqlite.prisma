@@ -22,6 +22,7 @@ model User {
   blogs        Blog[]
   comments     Comment[]
   votes        BlogVote[]
+  passwordResetTokens PasswordResetToken[]
 
   @@index([role])
   @@index([status])
@@ -526,4 +527,18 @@ model CommunityInsight {
   @@index([topicSlug])
   @@index([messageCount])
   @@index([source])
+}
+
+model PasswordResetToken {
+  id        Int      @id @default(autoincrement())
+  userId    Int
+  tokenHash String   @unique
+  expiresAt DateTime
+  usedAt    DateTime?
+  createdAt DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [id])
+
+  @@index([userId])
+  @@index([tokenHash])
+  @@index([expiresAt])
 }
