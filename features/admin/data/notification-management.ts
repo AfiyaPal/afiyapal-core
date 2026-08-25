@@ -9,9 +9,9 @@ export const notificationPriorityLabels: Record<string, string> = {
 };
 
 export const notificationTypeLabels: Record<string, string> = {
-  DOCTOR_APPLICATION_SUBMITTED: "Doctor application",
-  DOCTOR_APPROVED: "Doctor approved",
-  DOCTOR_REJECTED: "Doctor rejected",
+  DOCTOR_APPLICATION_SUBMITTED: "Professional application",
+  DOCTOR_APPROVED: "Professional approved",
+  DOCTOR_REJECTED: "Professional rejected",
   AI_FLAG_CRITICAL: "Critical AI flag",
   CONSULTATION_URGENT: "Urgent consultation",
   CONSULTATION_ASSIGNED: "Consultation assigned",

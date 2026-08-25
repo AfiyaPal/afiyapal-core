@@ -4,7 +4,7 @@ import { routes } from "@/lib/routes";
 import { cn } from "@/lib/utils";
 
 const registerTypes = [
-  { key: "doctor", label: "Doctor", href: routes.register, icon: Stethoscope },
+  { key: "doctor", label: "Professional", href: routes.register, icon: Stethoscope },
   { key: "facility", label: "Facility", href: routes.registerFacility, icon: Building2 }
 ] as const;
 

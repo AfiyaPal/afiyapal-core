@@ -2,7 +2,7 @@ import "server-only";
 import { prisma } from "@/server/db/prisma";
 import { DOCTOR_VERIFICATION_STATUSES, type DoctorVerificationStatus } from "@/features/admin/data/doctor-management";
 
-export type AdminDoctorFilters = { search?: string; status?: string; specialty?: string; language?: string };
+export type AdminProfessionalFilters = { search?: string; status?: string; specialty?: string; language?: string };
 const PAGE_SIZE = 25;
 
 function normalize(value: string | undefined) {
@@ -14,7 +14,7 @@ function isStatus(value: string | undefined): value is DoctorVerificationStatus 
   return !!value && DOCTOR_VERIFICATION_STATUSES.includes(value as DoctorVerificationStatus);
 }
 
-export async function getAdminDoctors(filters: AdminDoctorFilters = {}) {
+export async function getAdminProfessionals(filters: AdminProfessionalFilters = {}) {
   const search = normalize(filters.search);
   const status = normalize(filters.status);
   const specialty = normalize(filters.specialty);

@@ -134,8 +134,8 @@ export async function updateDoctorProfileAction(_: unknown, formData: FormData) 
   });
 
   if (resubmitting) {
-    notifyAdminsDoctorApplied({ doctorProfileId: profile.id, doctorName: profile.fullName }).catch((error) =>
-      console.error("Failed to notify admins about doctor profile review", error)
+    notifyAdminsDoctorApplied({ doctorProfileId: profile.id, doctorName: profile.fullName, email: user.email }).catch((error) =>
+      console.error("Failed to notify admins about professional profile review", error)
     );
   }
 

@@ -10,6 +10,7 @@ export const NOTIFICATION_TYPES = [
   "DOCTOR_APPLICATION_SUBMITTED",
   "DOCTOR_APPROVED",
   "DOCTOR_REJECTED",
+  "DOCTOR_SUSPENDED",
   "AI_FLAG_CRITICAL",
   "CONSULTATION_URGENT",
   "CONSULTATION_ASSIGNED",
@@ -97,14 +98,42 @@ export async function notifyConsultationRequester(consultationRequestId: number,
   return createNotification({ ...input, recipientUserId: request.userId });
 }
 
-export async function notifyAdminsDoctorApplied(input: { doctorProfileId: number; doctorName: string }) {
-  return notifyAdminsWithPermission(ADMIN_PERMISSIONS.APPROVE_REJECT_DOCTORS, {
+async function getProfessionalEmail(doctorProfileId: number): Promise<string | null> {
+  const profile = await prisma.doctorProfile.findUnique({
+    where: { id: doctorProfileId },
+    select: { email: true, userId: true }
+  });
+  if (!profile) return null;
+  if (profile.email) return profile.email;
+  if (!profile.userId) return null;
+  const user = await prisma.user.findUnique({ where: { id: profile.userId }, select: { email: true } });
+  return user?.email ?? null;
+}
+
+export async function notifyAdminsDoctorApplied(input: { doctorProfileId: number; doctorName: string; email?: string | null }) {
+  await notifyAdminsWithPermission(ADMIN_PERMISSIONS.APPROVE_REJECT_DOCTORS, {
     type: "DOCTOR_APPLICATION_SUBMITTED",
-    title: "Doctor application pending review",
-    message: `${input.doctorName} submitted a doctor verification application and needs review.`,
+    title: "Professional application pending review",
+    message: `${input.doctorName} submitted a professional verification application and needs review.`,
     priority: "HIGH",
     targetType: "DoctorProfile",
     targetId: input.doctorProfileId
+  });
+
+  const to = process.env.CONTACT_EMAIL_TO || process.env.SMTP_USER;
+  if (!to) return;
+
+  const appUrl = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
+  const { sendEmail } = await import("./email-service");
+  await sendEmail({
+    to,
+    subject: `New professional application: ${input.doctorName}`,
+    replyTo: input.email ?? undefined,
+    html: `<p><strong>${input.doctorName}</strong> has applied as a professional.</p>
+<p>Email: ${input.email ?? "Not provided"}</p>
+<p><a href="${appUrl}/admin/professionals">Review application</a></p>`
+  }).catch((error) => {
+    console.error("Failed to send professional application email", error);
   });
 }
 
@@ -220,24 +249,82 @@ export async function notifyDoctorArticleReviewed(articleId: number, input: { ti
 }
 
 export async function notifyDoctorApproved(doctorProfileId: number) {
-  return notifyDoctorProfileUser(doctorProfileId, {
+  await notifyDoctorProfileUser(doctorProfileId, {
     type: "DOCTOR_APPROVED",
-    title: "Doctor profile approved",
-    message: "Your AFIYAPAL doctor profile has been approved. You can now be assigned eligible consultation requests.",
+    title: "Professional profile approved",
+    message: "Your AFIYAPAL professional profile has been approved. You can now receive consultation requests from patients.",
     priority: "HIGH",
     targetType: "DoctorProfile",
     targetId: doctorProfileId
   });
+
+  const email = await getProfessionalEmail(doctorProfileId);
+  if (!email) return;
+
+  const appUrl = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
+  const { sendEmail } = await import("./email-service");
+  await sendEmail({
+    to: email,
+    subject: "Your AfiyaPal professional profile has been verified",
+    html: `<p>Congratulations! Your AfiyaPal professional profile has been verified.</p>
+<p>You can now receive consultation requests from patients.</p>
+<p><a href="${appUrl}/dashboard">Go to your dashboard</a></p>`
+  }).catch((error) => {
+    console.error("Failed to send professional approval email", error);
+  });
 }
 
 export async function notifyDoctorRejected(doctorProfileId: number, reason?: string | null) {
-  return notifyDoctorProfileUser(doctorProfileId, {
+  await notifyDoctorProfileUser(doctorProfileId, {
     type: "DOCTOR_REJECTED",
-    title: "Doctor verification was not approved",
-    message: reason ? `Your doctor verification was rejected. Reason: ${reason}` : "Your doctor verification was rejected. Please review your application details and try again if appropriate.",
+    title: "Professional verification was not approved",
+    message: reason ? `Your professional verification was rejected. Reason: ${reason}` : "Your professional verification was rejected. Please review your application details and try again if appropriate.",
     priority: "HIGH",
     targetType: "DoctorProfile",
     targetId: doctorProfileId
+  });
+
+  const email = await getProfessionalEmail(doctorProfileId);
+  if (!email) return;
+
+  const appUrl = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
+  const reasonBlock = reason ? `<p>Reason: ${reason}</p>` : "";
+  const { sendEmail } = await import("./email-service");
+  await sendEmail({
+    to: email,
+    subject: "Update on your AfiyaPal verification",
+    html: `<p>Your professional verification was not approved at this time.</p>
+${reasonBlock}
+<p>You can update your profile and resubmit for verification.</p>
+<p><a href="${appUrl}/dashboard/profile">Update your profile</a></p>`
+  }).catch((error) => {
+    console.error("Failed to send professional rejection email", error);
+  });
+}
+
+export async function notifyDoctorSuspended(doctorProfileId: number, reason?: string | null) {
+  await notifyDoctorProfileUser(doctorProfileId, {
+    type: "DOCTOR_SUSPENDED",
+    title: "Professional profile suspended",
+    message: reason ? `Your professional profile has been suspended. Reason: ${reason}` : "Your professional profile has been suspended.",
+    priority: "HIGH",
+    targetType: "DoctorProfile",
+    targetId: doctorProfileId
+  });
+
+  const email = await getProfessionalEmail(doctorProfileId);
+  if (!email) return;
+
+  const reasonBlock = reason ? `<p>Reason: ${reason}</p>` : "";
+  const { sendEmail } = await import("./email-service");
+  await sendEmail({
+    to: email,
+    subject: "Your AfiyaPal professional profile has been suspended",
+    html: `<p>Your professional profile has been suspended.</p>
+${reasonBlock}
+<p>Please contact support for assistance.</p>`
+  }).catch((error) => {
+    console.error("Failed to send professional suspension email", error);
   });
 }
 

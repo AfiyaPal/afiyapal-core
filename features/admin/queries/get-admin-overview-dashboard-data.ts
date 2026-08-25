@@ -114,11 +114,11 @@ export async function getAdminOverviewDashboardData() {
     })),
     ...recentDoctors.map((item) => ({
       id: `doctor-${item.id}`,
-      type: "Doctor applied",
-      title: item.title ?? "Doctor application",
-      description: item.description ? `Specialty: ${item.description}` : "A doctor application was submitted.",
+      type: "Professional applied",
+      title: item.title ?? "Professional application",
+      description: item.description ? `Specialty: ${item.description}` : "A professional application was submitted.",
       createdAt: asDate(item.createdAt),
-      href: routes.adminDoctors,
+      href: routes.adminProfessionals,
       tone: activityTone(item.status)
     })),
     ...recentSymptomChecks.map((item) => ({

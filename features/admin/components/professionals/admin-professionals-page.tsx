@@ -2,14 +2,14 @@ import { AdminDataTable, type AdminTableColumn } from "@/features/admin/componen
 import { AdminFilters, type AdminFilterConfig } from "@/features/admin/components/admin-filters";
 import { AdminSectionHeader } from "@/features/admin/components/admin-section-header";
 import { AdminStatusBadge } from "@/features/admin/components/admin-status-badge";
-import { approveDoctorAction, rejectDoctorAction, suspendDoctorAction } from "@/features/admin/actions/admin-doctor-actions";
+import { approveDoctorAction, rejectDoctorAction, suspendDoctorAction } from "@/features/admin/actions/admin-professional-actions";
 import { DOCTOR_VERIFICATION_STATUSES, doctorVerificationStatusLabels } from "@/features/admin/data/doctor-management";
-import type { AdminDoctorFilters } from "@/features/admin/queries/get-admin-doctors";
+import type { AdminProfessionalFilters } from "@/features/admin/queries/get-admin-professionals";
 
-type DoctorRow = Awaited<ReturnType<typeof import("@/features/admin/queries/get-admin-doctors").getAdminDoctors>>["doctors"][number];
+type ProfessionalRow = Awaited<ReturnType<typeof import("@/features/admin/queries/get-admin-professionals").getAdminProfessionals>>["doctors"][number];
 
 const filters: AdminFilterConfig[] = [
-  { key: "search", label: "Search", type: "search", placeholder: "Search doctor name, email, phone, license..." },
+  { key: "search", label: "Search", type: "search", placeholder: "Search professional name, email, phone, license..." },
   { key: "status", label: "Status", type: "select", options: [{ value: "", label: "All statuses" }, ...DOCTOR_VERIFICATION_STATUSES.map((status) => ({ value: status, label: doctorVerificationStatusLabels[status] }))] },
   { key: "specialty", label: "Specialty", type: "search", placeholder: "General, mental health, pediatric..." },
   { key: "language", label: "Language", type: "search", placeholder: "English, Swahili..." }
@@ -22,8 +22,8 @@ function toneForStatus(status: string) {
   return "slate" as const;
 }
 
-const columns: AdminTableColumn<DoctorRow>[] = [
-  { key: "doctor", header: "Doctor", render: (row) => <div><p className="font-bold text-slate-950">{row.fullName}</p><p className="text-xs text-slate-500">{row.email ?? row.phone ?? "No contact"}</p></div> },
+const columns: AdminTableColumn<ProfessionalRow>[] = [
+  { key: "doctor", header: "Professional", render: (row) => <div><p className="font-bold text-slate-950">{row.fullName}</p><p className="text-xs text-slate-500">{row.email ?? row.phone ?? "No contact"}</p></div> },
   { key: "specialty", header: "Specialty", render: (row) => <span>{row.specialty ?? "General"}</span> },
   { key: "location", header: "Location", render: (row) => <span>{[row.cityRegion, row.country].filter(Boolean).join(", ") || "—"}</span> },
   { key: "languages", header: "Languages", render: (row) => <span>{row.languagesSpoken ?? "—"}</span> },
@@ -41,12 +41,12 @@ const columns: AdminTableColumn<DoctorRow>[] = [
   }
 ];
 
-export function AdminDoctorsPage({ data, values }: { data: Awaited<ReturnType<typeof import("@/features/admin/queries/get-admin-doctors").getAdminDoctors>>; values: AdminDoctorFilters }) {
+export function AdminProfessionalsPage({ data, values }: { data: Awaited<ReturnType<typeof import("@/features/admin/queries/get-admin-professionals").getAdminProfessionals>>; values: AdminProfessionalFilters }) {
   return (
     <div className="space-y-6">
-      <AdminSectionHeader eyebrow="Provider operations" title="Doctor verification" description="Review provider profiles and approve, reject, or suspend doctors. These sensitive actions are written to the Super Admin audit log." />
-      <AdminFilters filters={filters} values={Object.fromEntries(Object.entries(values).filter(([, value]) => typeof value === "string")) as Record<string, string>} submitLabel="Filter doctors" />
-      <AdminDataTable title={`Doctor profiles (${data.total})`} description={`Showing latest ${data.pageSize} matching doctor profiles.`} columns={columns} rows={data.doctors} emptyMessage="No doctor profiles found." />
+      <AdminSectionHeader eyebrow="Provider operations" title="Professional verification" description="Review provider profiles and approve, reject, or suspend professionals. These sensitive actions are written to the Super Admin audit log." />
+      <AdminFilters filters={filters} values={Object.fromEntries(Object.entries(values).filter(([, value]) => typeof value === "string")) as Record<string, string>} submitLabel="Filter professionals" />
+      <AdminDataTable title={`Professional profiles (${data.total})`} description={`Showing latest ${data.pageSize} matching professional profiles.`} columns={columns} rows={data.doctors} emptyMessage="No professional profiles found." />
     </div>
   );
 }

@@ -51,8 +51,8 @@ export const adminTestingChecklistGroups = [
     ]
   },
   {
-    title: "Doctor verification",
-    summary: "Confirms provider visibility and doctor-management permissions stay safe.",
+    title: "Professional verification",
+    summary: "Confirms provider visibility and professional-management permissions stay safe.",
     items: [
       {
         id: "QA-DOCTOR-001",
@@ -65,21 +65,21 @@ export const adminTestingChecklistGroups = [
       },
       {
         id: "QA-DOCTOR-002",
-        title: "Doctor Manager can approve doctors",
+        title: "Professional Manager can approve professionals",
         status: "Required",
-        setup: "Create an ACTIVE account with role DOCTOR_MANAGER and a pending doctor profile.",
-        action: "Log in as Doctor Manager and approve the pending doctor.",
-        expectedResult: "Doctor status changes to VERIFIED, doctor receives an approval notification, and an audit log is created.",
+        setup: "Create an ACTIVE account with role DOCTOR_MANAGER and a pending professional profile.",
+        action: "Log in as Professional Manager and approve the pending professional.",
+        expectedResult: "Professional status changes to VERIFIED, professional receives an approval notification, and an audit log is created.",
         evidence: "Screenshot of verified status, notification, and audit log row."
       },
       {
         id: "QA-DOCTOR-003",
-        title: "Content Manager cannot approve doctors",
+        title: "Content Manager cannot approve professionals",
         status: "Required",
-        setup: "Create an ACTIVE account with role CONTENT_MANAGER and a pending doctor profile.",
-        action: "Log in as Content Manager and attempt to access /admin/doctors or submit a doctor approval action.",
-        expectedResult: "The Content Manager cannot access doctor approval workflow and cannot approve/reject doctors.",
-        evidence: "Screenshot of denied route or missing doctor module from sidebar."
+        setup: "Create an ACTIVE account with role CONTENT_MANAGER and a pending professional profile.",
+        action: "Log in as Content Manager and attempt to access /admin/professionals or submit a professional approval action.",
+        expectedResult: "The Content Manager cannot access professional verification workflow and cannot approve/reject professionals.",
+        evidence: "Screenshot of denied route or missing professional module from sidebar."
       }
     ]
   },
@@ -164,12 +164,12 @@ export const adminTestingChecklistGroups = [
       },
       {
         id: "QA-CONTENT-001",
-        title: "Content Manager can manage content but cannot approve doctor workflows",
+        title: "Content Manager can manage content but cannot approve professional workflows",
         status: "Regression",
         setup: "Create an ACTIVE CONTENT_MANAGER account and a draft article.",
-        action: "Create/edit/submit content, then attempt doctor approval workflow.",
-        expectedResult: "Content management works; doctor approval remains inaccessible.",
-        evidence: "Screenshots of content workflow and denied/missing doctor access."
+        action: "Create/edit/submit content, then attempt professional approval workflow.",
+        expectedResult: "Content management works; professional approval remains inaccessible.",
+        evidence: "Screenshots of content workflow and denied/missing professional access."
       },
       {
         id: "QA-TABLE-001",
@@ -197,7 +197,7 @@ export const adminTestingSeedAccounts = [
   { role: "SUPER_ADMIN", purpose: "Full verification, audit logs, settings, and sensitive access governance." },
   { role: "SUPPORT_ADMIN", purpose: "User support, reports, and consultation workflow testing." },
   { role: "MEDICAL_REVIEWER", purpose: "AI safety flag and sensitive health review testing." },
-  { role: "DOCTOR_MANAGER", purpose: "Doctor verification approval/rejection testing." },
+  { role: "DOCTOR_MANAGER", purpose: "Professional verification approval/rejection testing." },
   { role: "CONTENT_MANAGER", purpose: "Article creation, review submission, and content workflow testing." },
   { role: "USER", purpose: "Normal user access-denial and user-facing workflow testing." },
   { role: "DOCTOR", purpose: "Doctor notification and consultation assignment workflow testing." }

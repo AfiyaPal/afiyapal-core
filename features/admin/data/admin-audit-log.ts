@@ -50,9 +50,9 @@ export const adminAuditActionLabels: Record<AdminAuditAction, string> = {
   USER_SUSPENDED: "User suspended",
   USER_STATUS_CHANGED: "User status changed",
   USER_ROLE_CHANGED: "User role changed",
-  DOCTOR_APPROVED: "Doctor approved",
-  DOCTOR_REJECTED: "Doctor rejected",
-  DOCTOR_SUSPENDED: "Doctor suspended",
+  DOCTOR_APPROVED: "Professional approved",
+  DOCTOR_REJECTED: "Professional rejected",
+  DOCTOR_SUSPENDED: "Professional suspended",
   ARTICLE_APPROVED: "Article approved for publishing",
   ARTICLE_CHANGES_REQUESTED: "Article changes requested",
   ARTICLE_REJECTED: "Article rejected",
@@ -76,7 +76,7 @@ export const adminAuditActionLabels: Record<AdminAuditAction, string> = {
 
 export const adminAuditTargetLabels: Record<AdminAuditTargetType, string> = {
   User: "User",
-  DoctorProfile: "Doctor profile",
+  DoctorProfile: "Professional profile",
   Blog: "Article",
   AiInteractionFlag: "AI safety flag",
   ConsultationRequest: "Consultation request",

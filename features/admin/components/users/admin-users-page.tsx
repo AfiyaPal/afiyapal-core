@@ -6,8 +6,9 @@ import { AdminDataTable, type AdminTableColumn } from "@/features/admin/componen
 import { AdminFilters } from "@/features/admin/components/admin-filters";
 import { AdminSectionHeader } from "@/features/admin/components/admin-section-header";
 import { AdminStatusBadge } from "@/features/admin/components/admin-status-badge";
-import { activateUserAction, suspendUserAction, updateUserRoleAction } from "@/features/admin/actions/admin-user-actions";
+import { activateUserAction, suspendUserAction } from "@/features/admin/actions/admin-user-actions";
 import { canCreateAdmin } from "@/server/auth/admin-permissions";
+import { RoleChangeForm } from "./role-change-form";
 
 type SearchParams = { search?: string; role?: string; status?: string };
 type UserRow = Awaited<ReturnType<typeof getAdminUsers>>["users"][number];
@@ -70,16 +71,7 @@ export async function AdminUsersPage({ searchParams, currentUserRole }: { search
               </form>
             )}
           </div>
-          <form action={updateUserRoleAction} className="flex gap-2">
-            <input type="hidden" name="userId" value={user.id} />
-            <select name="role" defaultValue={user.role} className="min-w-0 flex-1 rounded-full border border-emerald-100 px-3 py-1.5 text-xs font-bold text-slate-700 outline-none focus:border-brand-600">
-              {USER_ROLES.map((role) => {
-                const isAdmin = role !== "USER" && role !== "DOCTOR";
-                return <option key={role} value={role} disabled={isAdmin && !canAssignAdminRoles}>{getRoleLabel(role)}</option>;
-              })}
-            </select>
-            <button type="submit" className="rounded-full bg-slate-950 px-3 py-1.5 text-xs font-black text-white transition hover:bg-slate-800">Save</button>
-          </form>
+          <RoleChangeForm userId={user.id} currentRole={user.role} options={USER_ROLES.map((r) => ({ value: r, label: getRoleLabel(r) }))} canAssignAdminRoles={canAssignAdminRoles} />
         </div>
       )
     }

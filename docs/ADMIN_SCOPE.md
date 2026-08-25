@@ -32,14 +32,14 @@ The system now recognizes these role keys:
 - Super Admin
 - Support Admin
 - Medical Reviewer
-- Doctor Manager
+- Professional Manager
 - Content Manager
 
 ## Stage 2 MVP dashboard modules
 
 1. Overview Dashboard
 2. User Management
-3. Doctor Verification
+3. Professional Verification
 4. Symptom Checker Logs
 5. Flagged AI Interactions
 6. Blog / Content Management
@@ -101,7 +101,7 @@ Phase 3 turns the protected admin routes from plain placeholders into a reusable
 
 - `/admin`
 - `/admin/users`
-- `/admin/doctors`
+- `/admin/professionals`
 - `/admin/symptom-checks`
 - `/admin/ai-flags`
 - `/admin/content`
@@ -402,7 +402,7 @@ Super Admins can now manage:
 
 - Supported languages
 - Emergency message text
-- Doctor verification requirements
+- Professional verification requirements
 - AI disclaimer text
 - Default consultation urgency rules
 - Content review interval
@@ -442,7 +442,7 @@ Notifications are stored as privacy-safe summaries in the `Notification` table. 
 
 Admins are notified based on the permissions attached to their role:
 
-- Doctor Managers and Super Admins are notified when a doctor application is submitted.
+- Professional Managers and Super Admins are notified when a professional application is submitted.
 - Medical Reviewers and Super Admins are notified when a critical AI flag is created.
 - Support/Admin consultation handlers are notified when an urgent consultation request needs attention.
 - Medical Reviewers are notified when content is submitted for review.
@@ -474,9 +474,9 @@ The checklist covers:
 
 - Normal user cannot access `/admin`.
 - Suspended user cannot use protected services.
-- Doctor cannot appear publicly before verification.
-- Doctor Manager can approve doctors.
-- Content Manager cannot approve doctors.
+- Professional cannot appear publicly before verification.
+- Professional Manager can approve professionals.
+- Content Manager cannot approve professionals.
 - Medical Reviewer can review AI flags.
 - Support Admin can manage consultation requests.
 - Critical AI flag appears in the admin dashboard.

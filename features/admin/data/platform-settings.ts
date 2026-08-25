@@ -34,8 +34,8 @@ export const platformSettingLabels: Record<PlatformSettingKey, { label: string; 
     description: "Safety guidance shown when AI or admin workflows identify critical risk."
   },
   doctorVerificationRequirements: {
-    label: "Doctor verification requirements",
-    description: "Provider onboarding rules used by doctor managers before approval."
+    label: "Professional verification requirements",
+    description: "Provider onboarding rules used by professional managers before approval."
   },
   aiDisclaimerText: {
     label: "AI disclaimer text",

@@ -6,11 +6,11 @@ import { prisma } from "@/server/db/prisma";
 import { requireAnyAdminPermission } from "@/server/auth/admin-guard";
 import { ADMIN_PERMISSIONS } from "@/server/auth/admin-permissions";
 import { buildAdminAuditLogData } from "@/server/services/admin-audit-log-service";
-import { notifyDoctorApproved, notifyDoctorRejected } from "@/server/services/notification-service";
+import { notifyDoctorApproved, notifyDoctorRejected, notifyDoctorSuspended } from "@/server/services/notification-service";
 
 function parseDoctorId(formData: FormData) {
   const doctorId = Number(formData.get("doctorId"));
-  if (!Number.isInteger(doctorId) || doctorId <= 0) throw new Error("Invalid doctor profile id.");
+  if (!Number.isInteger(doctorId) || doctorId <= 0) throw new Error("Invalid professional profile id.");
   return doctorId;
 }
 
@@ -27,7 +27,7 @@ async function ensureDoctorProfile(doctorId: number) {
     select: { id: true, verificationStatus: true, verifiedById: true, verifiedAt: true, rejectionReason: true, suspensionReason: true }
   });
 
-  if (!doctor) throw new Error("Doctor profile not found.");
+  if (!doctor) throw new Error("Professional profile not found.");
   return doctor;
 }
 
@@ -49,21 +49,21 @@ export async function approveDoctorAction(formData: FormData) {
         targetId: doctorId,
         oldValue: { verificationStatus: existing.verificationStatus, verifiedById: existing.verifiedById, verifiedAt: existing.verifiedAt },
         newValue: { verificationStatus: "VERIFIED", verifiedById: actor.id },
-        reason: "Doctor profile approved from provider verification workflow."
+        reason: "Professional profile approved from verification workflow."
       })
     })
   ]);
 
-  await notifyDoctorApproved(doctorId).catch((error) => console.error("Failed to notify approved doctor", error));
+  await notifyDoctorApproved(doctorId).catch((error) => console.error("Failed to notify approved professional", error));
 
-  revalidatePath(routes.adminDoctors);
+  revalidatePath(routes.adminProfessionals);
   revalidatePath(routes.adminAuditLogs);
 }
 
 export async function rejectDoctorAction(formData: FormData) {
   const actor = await requireAnyAdminPermission([ADMIN_PERMISSIONS.APPROVE_REJECT_DOCTORS]);
   const doctorId = parseDoctorId(formData);
-  const reason = readOptionalText(formData.get("reason")) ?? "Doctor application rejected.";
+  const reason = readOptionalText(formData.get("reason")) ?? "Professional application rejected.";
   const existing = await ensureDoctorProfile(doctorId);
 
   await prisma.$transaction([
@@ -81,16 +81,16 @@ export async function rejectDoctorAction(formData: FormData) {
     })
   ]);
 
-  await notifyDoctorRejected(doctorId, reason).catch((error) => console.error("Failed to notify rejected doctor", error));
+  await notifyDoctorRejected(doctorId, reason).catch((error) => console.error("Failed to notify rejected professional", error));
 
-  revalidatePath(routes.adminDoctors);
+  revalidatePath(routes.adminProfessionals);
   revalidatePath(routes.adminAuditLogs);
 }
 
 export async function suspendDoctorAction(formData: FormData) {
   const actor = await requireAnyAdminPermission([ADMIN_PERMISSIONS.APPROVE_REJECT_DOCTORS]);
   const doctorId = parseDoctorId(formData);
-  const reason = readOptionalText(formData.get("reason")) ?? "Doctor profile suspended.";
+  const reason = readOptionalText(formData.get("reason")) ?? "Professional profile suspended.";
   const existing = await ensureDoctorProfile(doctorId);
 
   await prisma.$transaction([
@@ -108,6 +108,8 @@ export async function suspendDoctorAction(formData: FormData) {
     })
   ]);
 
-  revalidatePath(routes.adminDoctors);
+  await notifyDoctorSuspended(doctorId, reason).catch((error) => console.error("Failed to notify suspended professional", error));
+
+  revalidatePath(routes.adminProfessionals);
   revalidatePath(routes.adminAuditLogs);
 }

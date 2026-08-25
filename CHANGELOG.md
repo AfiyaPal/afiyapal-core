@@ -1,5 +1,24 @@
 # Changelog — login-n-streamline
 
+## 2026-08-25
+
+- **feat(admin): rename doctors → professionals across admin UI + add lifecycle emails**
+  - Route `/admin/doctors` renamed to `/admin/professionals`; all user-facing labels updated ("Professional Verification", "Professional Manager", "Professional applied", etc.).
+  - Internal identifiers (Prisma model `DoctorProfile`, action function names) kept as-is; only display text changed.
+  - File moves: `admin-doctors-page.tsx` → `admin-professionals-page.tsx`, `get-admin-doctors.ts` → `get-admin-professionals.ts`, `admin-doctor-actions.ts` → `admin-professional-actions.ts`.
+  - `NOTIFICATION_TYPES` now includes `DOCTOR_SUSPENDED`; new `notifyDoctorSuspended` function (in-app + email).
+  - `notifyAdminsDoctorApplied`, `notifyDoctorApproved`, `notifyDoctorRejected` all send lifecycle emails after the in-app notification.
+  - New `getProfessionalEmail` helper resolves email from `DoctorProfile.email` falling back to `User.email`.
+  - Callers (`doctor-application-service.ts`, `doctor-profile-actions.ts`) now pass `email` to `notifyAdminsDoctorApplied`.
+
+- **feat(auth): registration tab reads "Professional" instead of "Doctor"**
+  - Registration type nav tab label changed from "Doctor" to "Professional"; stethoscope icon preserved.
+
+- **feat(admin): role-change confirmation modal for admin/super admin assignments**
+  - New `RoleChangeForm` client component with confirmation modal when selecting any admin-level role.
+  - Used in both the users list table and the user detail "Change role" card.
+  - Non-admin role changes (User, Professional) submit immediately without confirmation.
+
 ## 2026-08-15
 
 All commits landed on `login-n-streamline` today (shorthand per feature):
