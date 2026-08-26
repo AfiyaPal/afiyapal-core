@@ -29,7 +29,7 @@ export function UsernameForm({ username }: { username: string }) {
       <div className="mt-4 flex flex-col gap-3 sm:flex-row sm:items-center">
         <Input
           name="username"
-          placeholder="e.g. Edwin Gichira"
+          placeholder="e.g. John Doe"
           defaultValue={username}
           required
           autoComplete="username"
