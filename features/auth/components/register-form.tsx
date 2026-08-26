@@ -44,7 +44,7 @@ function DoctorRegistrationPanel() {
   return (
     <form action={formAction} className="mt-6 space-y-6">
       <AuthFormSection title="Account details" description="Sign-in credentials for your professional account." icon={Stethoscope}>
-        <AuthFormField label="Display name" name="username" placeholder="e.g. Edwin Gichira" hint="Shown on your profile. Use your real name." required autoComplete="username" />
+        <AuthFormField label="Display name" name="username" placeholder="e.g. John Doe" hint="Shown on your profile. Use your real name." required autoComplete="username" />
         <AuthFormField label="Email" name="email" type="email" placeholder="you@clinic.com" required autoComplete="email" />
         <AuthFormField label="Phone" name="phone" type="tel" placeholder="+254 7XX XXX XXX" optional autoComplete="tel" />
         <PasswordField name="password" label="Password" placeholder="At least 8 characters" required autoComplete="new-password" />
