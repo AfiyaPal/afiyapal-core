@@ -13,7 +13,9 @@ const envSchema = z.object({
   SMTP_USER: z.string().optional(),
   SMTP_PASS: z.string().optional(),
   SMTP_FROM: z.string().optional(),
-  CONTACT_EMAIL_TO: z.string().optional()
+  CONTACT_EMAIL_TO: z.string().optional(),
+  RESEND_API_KEY: z.string().optional(),
+  RESEND_FROM: z.string().optional()
 });
 
 export const env = envSchema.parse({
@@ -29,5 +31,7 @@ export const env = envSchema.parse({
   SMTP_USER: process.env.SMTP_USER,
   SMTP_PASS: process.env.SMTP_PASS,
   SMTP_FROM: process.env.SMTP_FROM,
-  CONTACT_EMAIL_TO: process.env.CONTACT_EMAIL_TO
+  CONTACT_EMAIL_TO: process.env.CONTACT_EMAIL_TO,
+  RESEND_API_KEY: process.env.RESEND_API_KEY,
+  RESEND_FROM: process.env.RESEND_FROM
 });
